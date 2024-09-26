@@ -19,7 +19,7 @@ VS Code Icons: This isn’t mandatory, but it adds file icons for better visual 
 
 
 3. Install Node.js
-Download and install Node.js from Node.js. This will include npm (Node Package Manager), which you'll need to install dependencies and run your project.
+Download and install Node.js from [Node.js](https://nodejs.org/en). This will include npm (Node Package Manager), which you'll need to install dependencies and run your project.
 Verify the installation by running:
 node -v
 npm -v
