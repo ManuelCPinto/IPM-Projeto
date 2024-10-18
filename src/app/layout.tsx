@@ -4,7 +4,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: 'MusicBox',
-  description: 'A ranking based music player'
+  description: 'A ratings-based music player'
 }
 
 export default function RootLayout({
