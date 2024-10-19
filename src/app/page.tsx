@@ -5,7 +5,7 @@ import ky from 'ky'
 export default function Home() {
   async function showMusicMessage() {
     const musicName = await ky.get('/api/music').text()
-    alert(musicName)
+    alert('From "musics" table:\n' + musicName)
   }
 
   return (

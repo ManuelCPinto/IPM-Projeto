@@ -1,3 +1,9 @@
+import { turso } from '@/utils/turso'
+
+export const runtime = 'edge'
+
 export async function GET() {
-  return new Response('Rick Astley - Never Gonna Give You Up')
+  const { rows } = await turso.execute('SELECT * FROM musics')
+
+  return Response.json(rows)
 }
