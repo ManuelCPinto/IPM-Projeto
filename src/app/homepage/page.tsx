@@ -1,5 +1,3 @@
-'use client'
-
 import ky from 'ky'
 
 export default function Home() {
@@ -15,5 +13,7 @@ export default function Home() {
         Click Here
       </button>
     </div>
+    
   )
+  
 }
