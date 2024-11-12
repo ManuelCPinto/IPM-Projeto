@@ -18,7 +18,7 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <Link href="/">
           <div className="logo">
-            <Image src="/icons/logo.svg" alt="Logo" width={40} height={40} />
+            <Image src="/logo.png" alt="Logo" width={40} height={40} />
           </div>
         </Link>
         {/* Search Bar */}
@@ -39,29 +39,17 @@ const Navbar: React.FC = () => {
               d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 14.65z"
             />
           </svg>
-          <input
-            type="text"
-            placeholder="Search..."
-            className="search-input"
-          />
+          <input type="text" placeholder="Search..." className="search-input" />
         </div>
 
         {/* Navigation Links */}
         <div className="nav-icons">
           {/* Home Link with Icon */}
-          <Link
-            href="/"
-            className={`nav-link ${isActive('/') ? 'active' : ''}`}
-            aria-label="Home"
-          >
+          <Link href="/" className={`nav-link ${isActive('/') ? 'active' : ''}`} aria-label="Home">
             <FaHome size={25} />
           </Link>
           {/* Profile Link with Icon */}
-          <Link
-            href="/profile"
-            className={`nav-link ${isActive('/profile') ? 'active' : ''}`}
-            aria-label="Profile"
-          >
+          <Link href="/profile" className={`nav-link ${isActive('/profile') ? 'active' : ''}`} aria-label="Profile">
             <FaUser size={25} />
           </Link>
         </div>

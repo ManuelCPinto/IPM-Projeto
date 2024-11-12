@@ -1,5 +1,3 @@
-// src/app/layout.tsx
-
 import '../globals.css'
 import React, { ReactNode } from 'react'
 import Navbar from './components/navbar'
@@ -9,13 +7,8 @@ interface LayoutProps {
   title?: string
 }
 
-const Layout: React.FC<LayoutProps> = ({ children, title = 'MusicBox' }) => (
+const Layout: React.FC<LayoutProps> = ({ children }) => (
   <html lang="en">
-    <head>
-      <title>{title}</title>
-      <meta name="description" content="test" />
-      <link rel="icon" href="/public/icons/favicon.ico" />
-    </head>
     <body>
       <div className="h-screen grid grid-rows-[max-content_1fr_max-content]">
         <Navbar />
