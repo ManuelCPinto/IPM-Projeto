@@ -7,9 +7,9 @@ body, html {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+  height: 100vh;
+  background-color: black;
+  color: white;
 }
 
 /* Navbar */
@@ -17,10 +17,6 @@ body, html {
   background-color: #142087; /* Adjust the color as needed */
   color: white;
   padding: 10px 0;
-  position: fixed; /* Makes the navbar fixed at the top */
-  top: 0;          /* Positions it at the very top of the viewport */
-  width: 100%;     /* Ensures the navbar spans the full width of the page */
-  z-index: 1000;   /* Keeps the navbar on top of other elements */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
 }
 
