@@ -1,0 +1,15 @@
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+  }
+  
+  .userName {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+  
+  .joinDate {
+    color: gray;
+  }
+  

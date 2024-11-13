@@ -1,0 +1,17 @@
+.playlistList {
+    padding: 10px;
+  }
+  
+  .viewMoreButton {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #333;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .viewMoreButton:hover {
+    background-color: #555;
+  }

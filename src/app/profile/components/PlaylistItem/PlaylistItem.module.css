@@ -1,0 +1,13 @@
+.playlistItem {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .playlistName {
+    font-weight: bold;
+  }
+  
+  .playlistDetails {
+    color: gray;
+    font-size: 0.9rem;
+  }
