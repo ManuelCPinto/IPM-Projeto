@@ -1,0 +1,80 @@
+.playlist-container {
+    width: 100%;
+    margin: 0 auto;
+    background-color: #1e1e1eae;
+    color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .song-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+  }
+  
+  .song-info {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 50px;
+    column-gap: 10px;
+  }
+  
+  .song-title {
+    font-weight: bold;
+  }
+  
+  .song-artist {
+    color: #ccc;
+  }
+  
+  .song-album {
+    color: #777;
+  }
+  
+  .song-duration {
+    color: #ccc;
+    text-align: right;
+  }
+  
+  .play-button {
+    background-color: #1db954;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    color: #fff;
+    cursor: pointer;
+  }
+  
+  .header-container {
+    width: 100%;
+    margin: 0 auto;
+    color: #fff;
+    padding: 10px 20px;
+  }
+  
+  .header-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+  }
+  
+  .header-row {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 50px;
+    column-gap: 10px;
+  }
+  
+  .header-title, .header-artist, .header-album, .header-duration {
+    color: #777;
+    text-align: left;
+  }
+  
+  .header-duration {
+    text-align: right;
+  }
+  

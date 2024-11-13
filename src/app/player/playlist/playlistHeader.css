@@ -1,0 +1,30 @@
+.album-header {
+  display: flex;
+  align-items: center;
+  margin-top: 20px;
+  background-color: #1e1e1eae;
+  border-radius: 8px;
+}
+
+.playlist-logo {
+  width: 200px;
+  height: 200px;
+  margin-right: 20px;
+}
+
+.band-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.album-name {
+  font-size: 3.5rem;
+  color: #fff;
+  margin: 0;
+}
+
+.band-name {
+  font-size: 2rem;
+  color: #777;
+  margin: 0;
+}
