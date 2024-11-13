@@ -6,17 +6,21 @@ export default function Playlist() {
       <div style={styles.header}>
         <img src={"/playlistlogo.png"} style={styles.playlistlogo} alt="Playlist Logo"/>
         <div style={styles.bandInfo}>
-          <h1 style={styles.bandName}><strong>Xutos e Pontapés</strong></h1>
-          <h2 style={styles.albumName}><strong>88</strong></h2>
+          <h1 style={styles.albumName}><strong>88</strong></h1>
+          <h2 style={styles.bandName}><strong>Xutos e Pontapés</strong></h2>
         </div>
       </div>
-      <div style={styles.playlistContainer}>
-        <div style={styles.headerRow}>
+      <div style={styles.headerContainer}>
+        <div style={styles.headerItem}>
+          <div style={styles.headerRow}>
             <div style={styles.headerTitle}>Title</div>
             <div style={styles.headerArtist}>Artist</div>
             <div style={styles.headerAlbum}>Album</div>
             <div style={styles.headerDuration}>Duration</div>
+          </div>
         </div>
+      </div>
+      <div style={styles.playlistContainer}>
         <div style={styles.songItem}>
           <div style={styles.songInfo}>
             <div style={styles.songTitle}>A Minha Casinha</div>
@@ -24,7 +28,6 @@ export default function Playlist() {
             <div style={styles.songAlbum}>88</div>
             <div style={styles.songDuration}>2:24</div>
           </div>
-          <button style={styles.playButton}>Play</button>
         </div>
       </div>
     </div>
@@ -88,26 +91,40 @@ const styles: { [key: string]: React.CSSProperties } = {
     display: 'flex',
     flexDirection: 'column',
   },
-  bandName: {
+  albumName: {
     fontSize: '3.5rem',
     color: '#fff',
     margin: 0,
   },
-  albumName: {
+  bandName: {
     fontSize: '2rem',
     color: '#777',
     margin: 0,
   },
-  headerRow: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr 1fr 100px',
-    padding: '10px 0',
-    borderBottom: '2px solid #333',
-    color: '#bbb',
-    fontWeight: 'bold',
+  headerContainer: {
+    width: '100%',
+    margin: '0 auto',
+    color: '#fff',
+    paddingLeft: '20px',
+    paddingRight: '20px',
+    paddingBottom: '10px',
+    paddingTop: '10px',
   },
-  headerTitle: { textAlign: 'left' },
-  headerArtist: { textAlign: 'left' },
-  headerAlbum: { textAlign: 'left' },
-  headerDuration: { textAlign: 'right' }, // Aligns with song duration
+  headerItem: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingLeft: '10px 0',
+    paddingRight: '10px 0',
+  },
+  headerRow: {
+    flex: 1,
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr 1fr 50px',
+    columnGap: '10px',
+  },
+  headerTitle: { color: '#777', textAlign: 'left' },
+  headerArtist: { color: '#777', textAlign: 'left' },
+  headerAlbum: { color: '#777', textAlign: 'left' },
+  headerDuration: { color: '#777', textAlign: 'right' },
 };
