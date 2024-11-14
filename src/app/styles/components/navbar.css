@@ -4,7 +4,7 @@
 
 /* Navbar */
 .navbar {
-  background-color: #2f3cad; /* Adjust the color as needed */
+  @apply bg-blue-900;  /* Adjust the color as needed */
   color: white;
   padding: 10px 0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
