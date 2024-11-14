@@ -1,19 +1,23 @@
 'use client'
 
-import ky from 'ky'
+import Image from 'next/image'
+import Link from 'next/link'
+import Center from '@/components/Center'
+import logo from '@/public/logo.png'
 
 export default function Home() {
-  async function showMusicMessage() {
-    const musicName = await ky.get('/api/music').text()
-    alert('From "musics" table:\n' + musicName)
-  }
-
   return (
-    <div className="h-screen flex flex-col gap-2 items-center justify-center">
-      <p className="text-xl font-bold">Hello World!</p>
-      <button onClick={showMusicMessage} className="px-2 py-1 rounded bg-white/50 hover:bg-white/30 transition">
-        Click Here
-      </button>
-    </div>
+    <Center className="h-screen gap-5">
+      <Image src={logo} height={250} alt="App logo" />
+      <p className="text-4xl font-bold">MusicBox</p>
+      <div className="flex gap-4">
+        <Link href="/login" className="px-4 py-1 rounded bg-white/50 hover:bg-white/35 transition">
+          Login
+        </Link>
+        <Link href="/register" className="px-4 py-1 rounded bg-white/50 hover:bg-white/35 transition">
+          Register
+        </Link>
+      </div>
+    </Center>
   )
 }
