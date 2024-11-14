@@ -24,6 +24,7 @@
   
   .song-title {
     font-weight: bold;
+    padding-left: 10px;
   }
   
   .song-artist {
@@ -37,44 +38,79 @@
   .song-duration {
     color: #ccc;
     text-align: right;
-  }
-  
-  .play-button {
-    background-color: #1db954;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    color: #fff;
-    cursor: pointer;
-  }
-  
-  .header-container {
+  }  
+  .table-header-container {
     width: 100%;
     margin: 0 auto;
     color: #fff;
     padding: 10px 20px;
   }
   
-  .header-item {
+  .table-header-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 10px 0;
   }
   
-  .header-row {
+  .table-header-row {
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 50px;
+    grid-template-columns: 1fr 1fr 1fr 90px;
     column-gap: 10px;
   }
   
-  .header-title, .header-artist, .header-album, .header-duration {
-    color: #777;
-    text-align: left;
+  .table-header-title {
+    padding-left: 32.5px;
   }
   
-  .header-duration {
-    text-align: right;
+  .table-header-artist {
+    text-align: left;
+    padding-left: 22.5px;
   }
+
+  .table-header-album {
+    text-align: left;
+    padding-left: 22.5px;
+  }
+  
+  .table-header-duration {
+    text-align: right;
+    padding-right: 17.5px;
+  }
+
+  .circle-play-button {
+    width: 22.5px;
+    height: 22.5px;
+    border-radius: 10%;
+    background-color: #b2b2b2c6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    padding-left: 2.5px;
+  }
+  
+  .triangle-icon {
+    width: 0;
+    height: 0;
+    border-left: 10px solid #222; /* Black triangle */
+    border-top: 6px solid transparent;
+    border-bottom: 6px solid transparent;
+  }
+  
+  .options-button {
+    background: none;
+    border: none;
+    color: #ccc;
+    cursor: pointer;
+    font-size: 1.2rem;
+    padding-left: 10px;
+  }
+  
+  .options-button:hover {
+    color: #fff;
+  }
+
+  
   

@@ -16,7 +16,7 @@ const songs = [
   { title: 'Circo de Feras', artist: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
 ];
 
-{/* Temporary base example */}
+{/* Temporary base example remove when implemented with the rest*/}
 export default function App() {
   return (
     <Playlist
@@ -43,25 +43,29 @@ function Playlist({ albumName, bandName, logoUrl, songs }: PlaylistProps) {
           <h2 className="band-name"><strong>{bandName}</strong></h2>
         </div>
       </div>
-      <div className="header-container">
-        <div className="header-item">
-          <div className="header-row">
-            <div className="header-title">Title</div>
-            <div className="header-artist">Artist</div>
-            <div className="header-album">Album</div>
-            <div className="header-duration">Duration</div>
+      <div className="table-header-container">
+        <div className="table-header-item">
+          <div className="table-header-row">
+            <div className="table-header-title">Title</div>
+            <div className="table-header-artist">Artist</div>
+            <div className="table-header-album">Album</div>
+            <div className="table-header-duration">Duration</div>
           </div>
         </div>
       </div>
       <div className="playlist-container">
         {songs.map((song, index) => (
           <div key={index} className="song-item">
+            <button className="circle-play-button">
+              <div className="triangle-icon"></div>
+            </button>
             <div className="song-info">
               <div className="song-title">{song.title}</div>
               <div className="song-artist">{song.artist}</div>
               <div className="song-album">{song.album}</div>
               <div className="song-duration">{song.duration}</div>
             </div>
+            <button className="options-button">⋮</button>
           </div>
         ))}
       </div>
