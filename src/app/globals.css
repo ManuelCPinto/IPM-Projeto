@@ -1,13 +1,8 @@
-/* Reset some basic styles */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-body, html {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  height: 100vh;
-  background-color: black;
+body {
+  background: linear-gradient(to right top, #051937, #004d7a, #008793, #00bf72, #a8eb12);
   color: white;
 }
