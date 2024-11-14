@@ -7,6 +7,8 @@ import Image from 'next/image'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import { FaHome, FaUser } from 'react-icons/fa' // Importing icons
+import '../../styles/components/navbar.css' // Importing navbar styles
+
 
 const Navbar: React.FC = () => {
   const pathname = usePathname()
