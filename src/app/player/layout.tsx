@@ -1,7 +1,9 @@
 import '../globals.css'
 import React, { ReactNode } from 'react'
 import Navbar from './components/navbar'
+import MusicPlayerBar from '@/app/player/components/MusicPlayerBar'
 import Sidebar from './components/sidebar'
+
 
 interface LayoutProps {
   children: ReactNode
@@ -15,9 +17,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => (
         <Navbar />
         <Sidebar />
         <main className="container mx-auto p-4">{children}</main>
-        <footer className="text-center p-4 bg-[#142087] text-white">
-          <p> &copy; {new Date().getFullYear()} MusicBox</p>
-        </footer>
+        <MusicPlayerBar />
       </div>
     </body>
   </html>
