@@ -12,6 +12,7 @@
     "deploy": "npm run pages:build && wrangler pages deploy"
   },
   "dependencies": {
+    "musicbox": "file:",
     "next": "^15.0.3",
     "react": "^18",
     "react-dom": "^18",
