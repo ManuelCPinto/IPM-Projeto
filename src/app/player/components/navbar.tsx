@@ -6,6 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import { FaHome, FaUser } from 'react-icons/fa'
+import Image from 'next/image'
 
 const Navbar: React.FC = () => {
   const pathname = usePathname()
@@ -32,7 +33,12 @@ const Navbar: React.FC = () => {
             width={20}
             height={20}
           >
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 14.65z" />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M21 21l-4.35-4.35M16.65 16.65A7.5 7.5 0 1116.65 2a7.5 7.5 0 010 14.65z"
+            />
           </svg>
           <input
             type="text"
@@ -46,7 +52,10 @@ const Navbar: React.FC = () => {
           <Link href="/" className={`${isActive('/') ? 'text-gray-300' : 'text-white'} hover:text-gray-300`}>
             <FaHome size={24} />
           </Link>
-          <Link href="/profile" className={`${isActive('/profile') ? 'text-gray-300' : 'text-white'} hover:text-gray-300`}>
+          <Link
+            href="/profile"
+            className={`${isActive('/profile') ? 'text-gray-300' : 'text-white'} hover:text-gray-300`}
+          >
             <FaUser size={24} />
           </Link>
         </div>
