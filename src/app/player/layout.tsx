@@ -1,10 +1,9 @@
-// src/app/layout.tsx
-
 import '../globals.css'
 import React, { ReactNode } from 'react'
 import Navbar from './components/navbar'
 import MusicPlayerBar from '@/app/player/components/MusicPlayerBar'
 import Sidebar from './components/sidebar'
+
 
 interface LayoutProps {
   children: ReactNode
