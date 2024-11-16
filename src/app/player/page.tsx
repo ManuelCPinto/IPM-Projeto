@@ -19,5 +19,12 @@ export default function PLayer() {
     set([musics[0]])
   }
 
-  return <button onClick={addMusicToMusicPlayer}>Add Music to Music Player</button>
+  return (
+    <button
+      className="self-center bg-green-600 hover:bg-green-500 transition shadow-xl shadow-green-600/50 p-3 rounded"
+      onClick={addMusicToMusicPlayer}
+    >
+      Add BANGER to Music Player
+    </button>
+  )
 }
