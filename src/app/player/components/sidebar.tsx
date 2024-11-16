@@ -8,7 +8,7 @@ import { FiPlusSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import '../../styles/components/sidebar.css'
 
 const Sidebar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen)
@@ -23,8 +23,8 @@ const Sidebar: React.FC = () => {
 
       {/* User Info */}
       <div className="sidebar-header">
-      {/* Depois adicionar foto */}
-      {isOpen && <span className="username">Timothy</span>}
+        {/* Depois adicionar foto */}
+        {isOpen && <span className="username">Timothy</span>}
         {isOpen && <button className="more-options">•••</button>}
       </div>
 
