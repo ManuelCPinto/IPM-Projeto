@@ -70,3 +70,25 @@
   border-bottom: 8px solid transparent;
   margin-left: 2.5px;
 }
+
+.playlist-play-triangle-icon:hover {
+  border-left: 15px solid #3b3bfc;
+}
+
+.playlist-play-triangle-icon:active {
+  border-left: 15px solid #1c1c84;
+}
+
+.playlist-play-button:hover,
+.shuffle-button:hover,
+.playlist-like-button:hover,
+.playlist-options-button:hover {
+  color: #3b3bfc; /* Change color on hover */
+}
+
+.playlist-play-button:active,
+.shuffle-button:active,
+.playlist-like-button:active,
+.playlist-options-button:active {
+  color: #1c1c84; /* Darker on click */
+}

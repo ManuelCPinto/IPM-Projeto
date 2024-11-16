@@ -101,7 +101,11 @@
   }
 
   .triangle-icon:hover {
-    border-left: 10px solid #fff;
+    border-left: 10px solid #3b3bfc;
+  }
+  
+  .triangle-icon:active {
+    border-left: 10px solid #1c1c84;
   }
 
   .like-button {
@@ -114,7 +118,11 @@
   }
 
   .like-button:hover {
-    color: #fff;
+    color: #3b3bfc;
+  }
+
+  .like-button:active {
+    color: #1c1c84;
   }
   
   .options-button {
@@ -127,7 +135,11 @@
   }
   
   .options-button:hover {
-    color: #fff;
+    color: #3b3bfc;
+  }
+
+  .options-button:active {
+    color: #1c1c84;
   }
 
   

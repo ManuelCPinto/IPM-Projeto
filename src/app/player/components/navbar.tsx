@@ -3,7 +3,6 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import React from 'react'
 import { usePathname } from 'next/navigation'
 import { FaHome, FaUser } from 'react-icons/fa' // Importing icons
@@ -18,7 +17,7 @@ const Navbar: React.FC = () => {
         {/* Logo */}
         <Link href="/">
           <div className="logo">
-            <Image src="/icons/logo.svg" alt="Logo" width={40} height={40} />
+            <img src="/logo.png" alt="Logo" width={40} height={40} />
           </div>
         </Link>
         {/* Search Bar */}
