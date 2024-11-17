@@ -12,7 +12,7 @@ interface UserProfileHeaderProps {
 const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ imageSrc, name, joinDate }) => {
   return (
     <div className={styles.userProfileHeader}>
-      <ProfileImage src={imageSrc} size={60} />
+      <ProfileImage src={imageSrc} size={150} />
       <ProfileInfo name={name} joinDate={joinDate} />
     </div>
   );

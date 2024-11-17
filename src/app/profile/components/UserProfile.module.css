@@ -1,0 +1,41 @@
+/* UserProfile.module.css */
+
+.userProfileContainer {
+  display: grid;
+  gap: 20px;
+  padding: 20px;
+  grid-template-areas: 
+    "header"
+    "playlists"
+    "additional";
+}
+
+.headerSection {
+  grid-area: header;
+}
+
+.playlistSection {
+  grid-area: playlists;
+}
+
+.additionalSection {
+  grid-area: additional;
+}
+
+/* Optional: Set background colors or borders for each section to distinguish them visually */
+.headerSection, .playlistSection, .additionalSection {
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #333;
+}
+
+/* For example, you could add media queries to change the layout */
+@media (min-width: 768px) {
+  .userProfileContainer {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "header"
+      "playlists"
+      "additional";
+  }
+}

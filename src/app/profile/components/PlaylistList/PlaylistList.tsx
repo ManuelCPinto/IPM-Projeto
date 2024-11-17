@@ -4,6 +4,7 @@ import styles from './PlaylistList.module.css';
 
 interface Playlist {
   id: number;
+  image: string;
   name: string;
   owner: string;
   date: string;
@@ -16,20 +17,25 @@ interface PlaylistListProps {
 }
 
 const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, onViewMore }) => {
+  // Display only the first 6 playlists
+  const displayedPlaylists = playlists.slice(0, 6);
+
   return (
     <div className={styles.playlistList}>
-      {playlists.map((playlist) => (
+      {displayedPlaylists.map((playlist) => (
         <PlaylistItem
           key={playlist.id}
+          image={playlist.image}
           name={playlist.name}
           owner={playlist.owner}
           date={playlist.date}
           songCount={playlist.songCount}
         />
       ))}
-      <button onClick={onViewMore} className={styles.viewMoreButton}>
-        View All Playlists
-      </button>
+      {/* Display the "View All Playlists" button as the 7th item if there are more than 6 playlists */}
+        <button onClick={onViewMore} className={styles.viewMoreButton}>
+          View All Playlists
+        </button>
     </div>
   );
 };

@@ -1,13 +1,36 @@
 .playlistItem {
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .playlistName {
-    font-weight: bold;
-  }
-  
-  .playlistDetails {
-    color: gray;
-    font-size: 0.9rem;
-  }
+  padding: 10px;
+  width: 200px;
+  background-color: black;
+  border: 3px solid gray;
+  border-radius: 10px;
+  text-align: center; /* Center-align text content */
+  color: white;
+  margin-left: 3px;
+  margin-right: 3px;
+}
+
+.imageWrapper {
+  width: 140px; 
+  height: 140px;
+  margin: 0 auto; 
+  overflow: hidden;
+  border-radius: 5px; 
+  border: 1px solid white;
+}
+
+.playlistImage {
+  object-fit: cover; /* Ensures image is not stretched */
+  width: 100%; /* Fills the wrapper */
+  height: 100%; /* Fills the wrapper */
+}
+
+.playlistName {
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+.playlistDetails {
+  color: gray;
+  font-size: 0.7rem;
+}
