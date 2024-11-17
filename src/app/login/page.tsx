@@ -46,7 +46,9 @@ export default function Login() {
             <ErrorMessage name="password" component="p" className="text-red-700" />
           </div>
           <div className="mt-2">
-            <button className="border-2 rounded py-1 px-4">Login</button>
+            <button type="submit" className="border-2 rounded py-1 px-4">
+              Login
+            </button>
           </div>
         </Form>
       </Formik>
