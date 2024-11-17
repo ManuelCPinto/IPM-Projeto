@@ -2,9 +2,10 @@
 
 'use client'
 import React, { useState } from 'react'
-import { FaHome, FaCompass, FaVideo, FaMusic, FaHeart } from 'react-icons/fa'
+import { FaHome, FaCompass, FaVideo, FaMusic, FaHeart, FaStar } from 'react-icons/fa'
 import { IoMdMusicalNotes, IoMdPerson } from 'react-icons/io'
 import { FiPlusSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
+import Link from 'next/link'
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
@@ -38,10 +39,10 @@ const Sidebar: React.FC = () => {
             <FaCompass size={isOpen ? 16 : 24} />
             {isOpen && <span>Explore</span>}
           </div>
-          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
-            <FaVideo size={isOpen ? 16 : 24} />
-            {isOpen && <span>Videos</span>}
-          </div>
+          <Link href="/player/ratings" className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
+            <FaStar size={isOpen ? 16 : 24} />
+            {isOpen && <span>Ratings</span>}
+          </Link>
         </div>
 
         {/* Collection Section */}
