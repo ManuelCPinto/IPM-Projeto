@@ -1,63 +1,22 @@
-'use client'
-import React from 'react'
-import cureCover from './cure.webp'
-import tylerCover from './tyler.webp'
-import mountEerieCover from './Mount-Eerie-Night-Palace.webp'
-import coolWorldCover from './coolworld.jpg'
+'use client';
+import React from 'react';
+import albumData from './albumData';
 
 const NewReleases: React.FC = () => {
-  const releases = [
-    {
-      name: 'Songs of a Lost World',
-      artist: 'The Cure',
-      releaseDate: '1 November 2024',
-      genres: 'Gothic Rock, Alternative Rock',
-      rating: 3.91,
-      rated: 9467,
-      cover: cureCover.src,
-    },
-    {
-      name: 'Chromakopia',
-      artist: 'Tyler, the Creator',
-      releaseDate: '28 October 2024',
-      genres: 'West Coast Hip Hop, Neo-Soul',
-      rating: 3.67,
-      rated: 19545,
-      cover: tylerCover.src,
-    },
-    {
-      name: 'Night Palace',
-      artist: 'Mount Eerie',
-      releaseDate: '1 November 2024',
-      genres: 'Slacker Rock, Avant-Folk, Post-Rock',
-      rating: 3.99,
-      rated: 6094,
-      cover: mountEerieCover.src,
-    },
-    {
-      name: 'Cool World',
-      artist: 'Chat Pile',
-      releaseDate: '11 October 2024',
-      genres: 'Noise Rock, Sludge Metal',
-      rating: 3.82,
-      rated: 6330,
-      cover: coolWorldCover.src,
-    },
-  ]
+  const releases = albumData.filter((album) => !album.review);
 
   return (
-    <div className="bg-neutral-800 rounded-lg shadow-lg p-6 max-h-[820px] space-y-6">
+    <div className="bg-gray-900 rounded-lg shadow-lg p-6 max-h-[640px] space-y-6">
       <h2 className="text-xl font-bold text-white border-b border-gray-700 pb-2">
         New Releases
       </h2>
 
       {/* Release Items */}
       <div className="space-y-4">
-        {releases.map((release, index) => (
+        {releases.map((release) => (
           <div
-            key={index}
-            className="flex items-start gap-4 hover:bg-gray-700 p-4 rounded-lg transition"
-          >
+            key={release.id}
+            className="flex items-start gap-4 hover:bg-gray-700 p-4 rounded-lg transition">
             {/* Album Cover */}
             <img
               src={release.cover}
@@ -72,7 +31,7 @@ const NewReleases: React.FC = () => {
                 <span className="block">{release.artist}</span>
                 <span>{release.releaseDate}</span>
               </p>
-              <p className="text-gray-500 text-sm mt-1">{release.genres}</p>
+              <p className="text-gray-500 text-sm mt-1">{release.genres.join(', ')}</p>
             </div>
 
             {/* Stats */}
@@ -93,7 +52,7 @@ const NewReleases: React.FC = () => {
         View All Releases
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default NewReleases
+export default NewReleases;

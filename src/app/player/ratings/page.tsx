@@ -13,8 +13,8 @@ const RatingsPage: React.FC = () => {
 
       {/* Main Content */}
       <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6">
-        <FeaturedReviews />
-        <NewReleases />
+        <FeaturedReviews/>
+        <NewReleases/>
         <br/>
       </div>
     </div>
