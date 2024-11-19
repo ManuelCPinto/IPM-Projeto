@@ -13,7 +13,7 @@
 
 ## 📚 Sync Database (Drizzle ORM)
 
-2. Run command: `drizzle-kit push` everytime you change `src/database/schema.ts`
+2. Run command: `npx drizzle-kit push` everytime you change `src/database/schema.ts`
 
 ## 🧬 Frameworks & Platforms
 
