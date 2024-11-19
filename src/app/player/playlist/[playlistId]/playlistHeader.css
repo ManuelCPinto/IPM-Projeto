@@ -62,15 +62,15 @@
 .shuffle-button,
 .playlist-like-button,
 .playlist-options-button {
-  width: 40px; /* Increased from 25px */
-  height: 40px; /* Increased from 25px */
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: background-color 0.2s;
-  padding: 8px; /* New padding for larger button */
+  padding: 8px;
   font-size: 1.5rem;
 }
 
@@ -84,7 +84,7 @@
 .playlist-play-triangle-icon {
   width: 0;
   height: 0;
-  border-left: 15px solid #fff; /* Black triangle */
+  border-left: 15px solid #fff;
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
   margin-left: 2.5px;
@@ -102,12 +102,12 @@
 .shuffle-button:hover,
 .playlist-like-button:hover,
 .playlist-options-button:hover {
-  color: #3b3bfc; /* Change color on hover */
+  color: #3b3bfc;
 }
 
 .playlist-play-button:active,
 .shuffle-button:active,
 .playlist-like-button:active,
 .playlist-options-button:active {
-  color: #1c1c84; /* Darker on click */
+  color: #1c1c84;
 }

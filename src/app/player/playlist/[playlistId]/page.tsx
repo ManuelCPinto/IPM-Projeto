@@ -5,51 +5,78 @@ import './playlist.css';
 import './playlistHeader.css';
 
 interface PlaylistProps {
-  albumName: string;
-  bandName: string;
-  logoUrl: string;
-  songs: { title: string; artist: string; album: string; duration: string }[];
+  name: string;
+  author: string;
+  imageURL: string;
+  songs: { name: string; author: string; album: string; duration: string }[];
 }
 
 {/* Temporary base example */}
 const songs = [
-  { title: 'A Minha Casinha', artist: 'Xutos e Pontapés', album: '88', duration: '2:24' },
-  { title: 'Contentores', artist: 'Xutos e Pontapés', album: '88', duration: '3:30' },
-  { title: 'Circo de Feras', artist: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
+  { name: 'A Minha Casinha', author: 'Xutos e Pontapés', album: '88', duration: '2:24' },
+  { name: 'Contentores', author: 'Xutos e Pontapés', album: '88', duration: '3:30' },
+  { name: 'Circo de Feras', author: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
 ];
 
 {/* Temporary base example remove when implemented with the rest*/}
 export default function App() {
   return (
     <Playlist
-      albumName="88"
-      bandName="Xutos e Pontapés"
-      logoUrl="/playlistlogo.png"
+      name="88"
+      author="Xutos e Pontapés"
+      imageURL="/playlistlogo.png"
       songs={songs}
     />
   );
 }
 
-function Playlist({ albumName, bandName, logoUrl, songs }: PlaylistProps) {
+function Playlist({ name, author, imageURL, songs }: PlaylistProps) {
+  const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
   const [activePopup, setActivePopup] = useState<number | null>(null);
 
-  const togglePopup = (index: number) => {
-    setActivePopup(activePopup === index ? null : index);
+  const togglePopup = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
+    if (activePopup === index) {
+      // Close popup
+      setActivePopup(null);
+      setPopupPosition(null);
+    } else {
+      // Open popup and calculate position
+      const buttonRect = event.currentTarget.getBoundingClientRect();
+
+    // Calculate initial position
+    let top = buttonRect.bottom + window.scrollY;
+    let left = buttonRect.left + window.scrollX;
+
+    // Adjust position if popup exceeds viewport
+    const popupWidth = 150; // Set a reasonable estimated width for the popup
+    const popupHeight = 100; // Set a reasonable estimated height for the popup
+
+    if (left + popupWidth > window.innerWidth) {
+      left = window.innerWidth - popupWidth - 10; // Move left to fit, with 10px padding
+    }
+
+    if (top + popupHeight > window.innerHeight) {
+      top = window.innerHeight - popupHeight - 10; // Move up to fit, with 10px padding
+    }
+
+    setPopupPosition({ top, left });
+    setActivePopup(index);
+    }
   };
 
   if (!songs) return <div>Loading...</div>;
   if (songs.length === 0) return <div>No songs found</div>;
-  if (!albumName || !bandName) return <div>Missing album or band name</div>;
-  if (!logoUrl) return <div>Missing logo URL</div>;
+  if (!name || !author) return <div>Missing album or band name</div>;
+  if (!imageURL) return <div>Missing logo URL</div>;
 
   return (
     <div className="main">
       <div className="album-header">
         <div className="album-info">
-          <img src={logoUrl} className="playlist-logo" alt="Playlist Logo" />
+          <img src={imageURL} className="playlist-logo" alt="Playlist Logo" />
           <div className="band-info">
-            <h1 className="album-name">{albumName}</h1>
-            <h2 className="band-name"><strong>{bandName}</strong></h2>
+            <h1 className="album-name">{name}</h1>
+            <h2 className="band-name"><strong>{author}</strong></h2>
           </div>
         </div>
         <div className="playlist-options">
@@ -66,8 +93,8 @@ function Playlist({ albumName, bandName, logoUrl, songs }: PlaylistProps) {
       <div className="table-header-container">
         <div className="table-header-item">
           <div className="table-header-row">
-            <div className="table-header-title">Title</div>
-            <div className="table-header-artist">Artist</div>
+            <div className="table-header-name">name</div>
+            <div className="table-header-author">author</div>
             <div className="table-header-album">Album</div>
             <div className="table-header-duration">Duration</div>
           </div>
@@ -80,20 +107,27 @@ function Playlist({ albumName, bandName, logoUrl, songs }: PlaylistProps) {
               <div className="triangle-icon"></div>
             </button>
             <div className="song-info">
-              <div className="song-title">{song.title}</div>
-              <div className="song-artist">{song.artist}</div>
+              <div className="song-name">{song.name}</div>
+              <div className="song-author">{song.author}</div>
               <div className="song-album">{song.album}</div>
               <div className="song-duration">{song.duration}</div>
             </div>
             <button className="like-button">♥</button>
             <button
               className="options-button"
-              onClick={() => togglePopup(index)}
+              onClick={(e) => togglePopup(index, e)}
             >
               ⋮
-            </button>
-            {activePopup === index && (
-              <div className="popup-menu">
+              </button>
+            {activePopup === index && popupPosition && (
+              <div
+                className="popup-menu"
+                style={{
+                  top: popupPosition.top,
+                  left: popupPosition.left,
+                  position: 'absolute',
+                }}
+              >
                 <div className="popup-item">Add to Playlist</div>
                 <div className="popup-item">Share</div>
                 <div className="popup-item">Remove</div>

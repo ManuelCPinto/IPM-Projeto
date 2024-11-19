@@ -23,3 +23,21 @@ export const musicsTable = sqliteTable(
   }
 )
 export type Music = typeof musicsTable.$inferInsert
+
+export const playlistsTable = sqliteTable(
+  'playlists',
+  {
+    name: text().notNull(),
+    author: text()
+      .notNull()
+      .references(() => usersTable.username, { onDelete: 'cascade' }),
+    imageURL: text().notNull(),
+    songs: text().notNull()
+  },
+  (table) => {
+    return {
+      pk: primaryKey({ columns: [table.name, table.author] })
+    }
+  }
+)
+export type Playlist = typeof playlistsTable.$inferInsert
