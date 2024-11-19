@@ -25,6 +25,7 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, onViewMore }) =>
       {displayedPlaylists.map((playlist) => (
         <PlaylistItem
           key={playlist.id}
+          id={playlist.id}
           image={playlist.image}
           name={playlist.name}
           owner={playlist.owner}

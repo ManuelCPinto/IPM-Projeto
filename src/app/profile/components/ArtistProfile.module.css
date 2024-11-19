@@ -1,0 +1,37 @@
+.profileContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px 30px;
+    padding: 20px;
+    background-color: #1F2937;
+    min-height: 100vh;
+    align-content: flex-start;
+  }
+  
+  .headerSection {
+    order: 1; 
+    flex-basis: 100%;
+  }
+  
+  .graphSection {
+    order: 2;
+    flex: 0 0 30%;
+  }
+  
+  .mapSection {
+    order: 3; 
+    flex: 0 0 30%;
+  }
+  
+  .playlistSection {
+    order: 4; 
+    flex-basis: 100%;
+  }
+
+
+  .headerSection,.graphSection,.mapSection,.playlistSection {
+    background-color: #111827;
+    padding: 15px;
+    border-radius: 8px;
+  }
+  

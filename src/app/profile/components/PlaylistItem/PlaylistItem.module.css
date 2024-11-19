@@ -1,13 +1,24 @@
+/* Removes default link styles */
+.linkWrapper {
+  text-decoration: none; /* Remove underline */
+  color: inherit; /* Inherit text color */
+}
+
 .playlistItem {
   padding: 10px;
   width: 200px;
-  background-color: black;
-  border: 3px solid gray;
+  background-color: #111827;  
+  border: 3px solid white;
   border-radius: 10px;
   text-align: center; /* Center-align text content */
   color: white;
   margin-left: 3px;
   margin-right: 3px;
+  transition: transform 0.2s ease; /* Add a hover effect */
+}
+
+.playlistItem:hover {
+  transform: scale(1.05); /* Slightly scale up on hover */
 }
 
 .imageWrapper {

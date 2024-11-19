@@ -9,12 +9,13 @@
   width: 100px;
   height: 60px;
   padding: 5px; /* Reduces padding for a smaller button appearance */
-  background-color: #333;
   color: white;
   align-self: center; /* Aligns button to center of container */
   border: none;
   cursor: pointer;
+  border: 1px solid white;
   transition: background-color 0.3s;
+  border-radius: 5px;
 }
 
 .viewMoreButton:hover {
