@@ -1,5 +1,3 @@
-// src/app/layout.tsx
-
 import '../globals.css'
 import React, { ReactNode } from 'react'
 import Navbar from './components/navbar'
