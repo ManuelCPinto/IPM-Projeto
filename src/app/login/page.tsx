@@ -4,6 +4,7 @@ import ky from 'ky'
 import * as Yup from 'yup'
 import { ErrorMessage, Field, Form, Formik } from 'formik'
 import Center from '@/components/Center'
+import { useRouter } from 'next/navigation'
 
 interface LoginForm {
   username: string
@@ -21,9 +22,13 @@ const validationSchema: Yup.ObjectSchema<LoginForm> = Yup.object().shape({
 })
 
 export default function Login() {
+  const router = useRouter()
+
   async function createUser(values: LoginForm) {
-    const success = await ky.post('/api/user', { json: values }).json()
-    alert('Success?: ' + success)
+    const success = (await ky.post('/api/user', { json: values }).json()) as boolean
+    if (success) {
+      router.replace('/player')
+    }
   }
 
   return (
@@ -41,7 +46,9 @@ export default function Login() {
             <ErrorMessage name="password" component="p" className="text-red-700" />
           </div>
           <div className="mt-2">
-            <button className="border-2 rounded py-1 px-4">Login</button>
+            <button type="submit" className="border-2 rounded py-1 px-4">
+              Login
+            </button>
           </div>
         </Form>
       </Formik>
