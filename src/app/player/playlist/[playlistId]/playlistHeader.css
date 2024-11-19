@@ -1,23 +1,39 @@
+.main {
+  width: 100%;
+}
+
 .album-header {
-  display: flex;
+  display: block;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
   background-color: #1e1e1eae;
   border-radius: 8px;
-  height: 200px;
+  height: 260px;
+  width: 100%;
+}
+
+.album-info {
+  display: flex;
+  align-items: left;
+  order: 0;
 }
 
 .playlist-logo {
+  display: flex;
+  order: 0;
   width: 180px;
   height: 180px;
   margin-right: 40px;
-  margin-left: 10px;
+  margin-left: 25px;
+  margin-top: 25px;
   border-radius: 8px;
 }
 
 .band-info {
   display: flex;
+  order: 1;
   flex-direction: column;
+  justify-content: center;
 }
 
 .album-name {
@@ -34,9 +50,12 @@
 
 .playlist-options {
   display: flex;
+  align-items: left;
+  order: 1;
   align-items: center;
-  justify-content: flex-start;
-  margin-top: 20px;
+  margin-top: 5px;
+  margin-left: 15px;
+  margin-bottom: 25px;
 }
 
 .playlist-play-button,
