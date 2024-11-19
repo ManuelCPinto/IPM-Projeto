@@ -64,7 +64,7 @@ const FeaturedReviews: React.FC = () => {
                 </span>
               </div>
               <blockquote className="italic text-gray-400 mt-4">
-                "{review.review.quote}"
+                &quot;{review.review.quote}&quot;
               </blockquote>
               <p className="text-gray-300 mt-4 leading-relaxed">
                 {review.review.content}

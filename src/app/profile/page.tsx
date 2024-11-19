@@ -1,10 +1,8 @@
 'use client';
 
 import React from 'react';
-import UserProfileHeader from './components/UserProfileHeader/UserProfileHeader';
-import PlaylistList from './components/PlaylistList/PlaylistList';
-import StreamsGraph from './components/StreamsGraph/StreamsGraph';
-import AudienceMap from './components/AudienceMap/AudienceMap';
+import Image from 'next/image';
+import Link from 'next/link';
 import userStyles from './components/UserProfile.module.css';
 import artistStyles from './components/ArtistProfile.module.css';
 
@@ -12,6 +10,9 @@ const user = {
   profileImage: '/Squidward.jpeg',
   name: 'John Doe',
   joinDate: 'January 15, 2021',
+  followers: 1000,
+  weeklyListeners: 5000,
+  isArtist: true,
 };
 
 const playlists = [
@@ -34,31 +35,126 @@ const artistData = {
 };
 
 export default function ProfilePage() {
-  const isArtist = true; // Toggle between user and artist profile
-  const styles = isArtist ? artistStyles : userStyles;
+  const styles = user.isArtist ? artistStyles : userStyles;
+
+  const displayedPlaylists = playlists.slice(0, 6);
+  const handleViewMore = () => {
+    console.log('View all playlists');
+  };
 
   return (
     <div className={styles.profileContainer}>
+      {/* Header Section */}
       <div className={styles.headerSection}>
-        <UserProfileHeader
-          imageSrc={user.profileImage}
-          name={user.name}
-          joinDate={user.joinDate}
-        />
+        <div className={styles.userProfileHeader}>
+          <div className={styles.profileImageWrapper} style={{
+              width: `${150}px`,
+              height: `${150}px`,
+            }}>
+            <Image
+              src={user.profileImage}
+              alt={`${user.name}'s profile`}
+              width={150}
+              height={150}
+              className={styles.profileImage}
+            />
+          </div>
+          <div className={styles.profileInfo}>
+            <div className={styles.NameDate}>
+              <h2 className={styles.userName}>{user.name}</h2>
+              <p className={styles.joinDate}>Joined on {user.joinDate}</p>
+            </div>
+            <div className={styles.info}>
+              <div className={styles.followers}>
+                <span className={styles.followersLabel}>Followers: </span>
+                <span className={styles.followersCount}>{user.followers}</span>
+              </div>
+              {user.isArtist && (
+                <div className={styles.followersItem}>
+                  <span className={styles.followersLabel}>Weekly Listeners: </span>
+                  <span className={styles.followersCount}>{user.weeklyListeners}</span>
+                </div>
+              )}
+            </div>
+            <div className={styles.actions}>
+              <button className={styles.actionButton}>Friends</button>
+              <button className={styles.actionButton}>Message</button>
+            </div>
+            <div className={styles.settingsButton}>
+                <Image
+                  src="/settings.png"
+                  alt="Settings"
+                  width={40}
+                  height={40}
+                />
+            </div>
+          </div>
+        </div>
       </div>
 
+      {/* Playlist Section */}
       <div className={styles.playlistSection}>
-        <PlaylistList playlists={playlists} onViewMore={() => console.log('View More Playlists')} />
+        <div className={styles.playlistList}>
+          {displayedPlaylists.map((playlist) => (
+            <Link key={playlist.id} href={`/playlist/${playlist.id}`} className={styles.linkWrapper}>
+              <div className={styles.playlistItem}>
+                <div className={styles.imageWrapper}>
+                  <Image
+                    src={playlist.image}
+                    alt={`${playlist.name} cover`}
+                    width={100}
+                    height={100}
+                    className={styles.playlistImage}
+                  />
+                </div>
+                <h3 className={styles.playlistName}>{playlist.name}</h3>
+                <div className={styles.playlistDetails}>
+                  <p>{playlist.owner} • {playlist.songCount} songs</p>
+                  <p>Created on {playlist.date}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+          <button onClick={handleViewMore} className={styles.viewMoreButton}>
+            View All Playlists
+          </button>
+        </div>
       </div>
 
       {/* Artist-Specific Sections */}
-      {isArtist && (
+      {user.isArtist && (
         <>
           <div className={styles.graphSection}>
-            <StreamsGraph data={artistData.streams} />
+            <div className={styles.graphContainer}>
+              <h2 className={styles.title}>Streams Over Time</h2>
+              <div className={styles.graph}>
+                {artistData.streams.map((point, index) => (
+                  <div
+                    key={index}
+                    className={styles.graphBar}
+                    style={{ height: `${point.streams / 1000}px` }}
+                  >
+                    <span className={styles.label}>{point.streams}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
           <div className={styles.mapSection}>
-            <AudienceMap countries={artistData.countries} />
+            <div className={styles.mapContainer}>
+              <h2 className={styles.title}>Audience Distribution</h2>
+              <div className={styles.map}>
+                {artistData.countries.map((country, index) => (
+                  <div
+                    key={index}
+                    className={styles.country}
+                    style={{ fontSize: `${country.listeners / 1000}px` }}
+                  >
+                    {country.name}
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </>
       )}

@@ -1,15 +1,63 @@
 .profileInfo {
-    display: flex;
-    flex-direction: column;
-    margin-left: 10px;
-  }
-  
-  .userName {
-    font-size: 1.5rem;
-    font-weight: bold;
-  }
-  
-  .joinDate {
-    color: gray;
-  }
-  
+  display: flex; /* Keep containers in a row */
+  flex-direction: row;
+  justify-content: space-between; /* Space out containers evenly */
+  align-items: flex-start; /* Align containers to the top */
+  gap: 20px; /* Add spacing between containers */
+  flex: 1;
+}
+
+.NameDate, .info, .actions {
+  display: flex; /* Stack contents vertically inside each container */
+  flex-direction: column;
+  align-items: flex-start; /* Align content to the start within each container */
+  flex-grow: 0.1;
+}
+
+.NameDate {
+  margin-left: 10px;
+}
+
+.userName {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.info {
+  gap: 8px; /* Add spacing between rows in the Info section */
+}
+
+.followers, .followersItem {
+  display: flex;
+  align-self: flex-start;
+  flex-direction: row;
+  width: 100%;
+}
+
+.followersLabel, .joinDate {
+  color: gray;
+}
+
+.followersCount {
+  margin-left: auto; /* Push the count to the far right */
+}
+
+.actions {
+  display: flex; /* Stack buttons vertically */
+  flex-direction: column;
+  gap: 10px; /* Add spacing between buttons */
+  align-items: flex-end; /* Align buttons to the right */
+}
+
+.actionButton {
+  padding: 8px 12px;
+  border: none;
+  color: white;
+  border: 1px solid white;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actionButton:hover {
+  background-color: #0056b3;
+}

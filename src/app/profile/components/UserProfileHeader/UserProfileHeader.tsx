@@ -7,13 +7,16 @@ interface UserProfileHeaderProps {
   imageSrc: string;
   name: string;
   joinDate: string;
+  followers: number;
+  weeklyListeners: number;
+  isArtist: boolean;
 }
 
-const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ imageSrc, name, joinDate }) => {
+const UserProfileHeader: React.FC<UserProfileHeaderProps> = ({ imageSrc, name, joinDate, followers, weeklyListeners, isArtist }) => {
   return (
     <div className={styles.userProfileHeader}>
       <ProfileImage src={imageSrc} size={150} />
-      <ProfileInfo name={name} joinDate={joinDate} />
+      <ProfileInfo name={name} joinDate={joinDate} followers={followers} weeklyListeners={weeklyListeners} isArtist={isArtist} />
     </div>
   );
 };

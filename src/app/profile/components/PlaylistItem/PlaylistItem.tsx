@@ -21,8 +21,8 @@ const PlaylistItem: React.FC<PlaylistItemProps> = ({ id, image, name, owner, dat
           <Image
             src={image}
             alt={`${name} cover`}
-            width={100} // Fixed size for square image
-            height={100} // Fixed size for square image
+            width={100} 
+            height={100}
             className={styles.playlistImage}
           />
         </div>

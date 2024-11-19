@@ -1,24 +1,24 @@
-import React from 'react';
-import PlaylistItem from '../PlaylistItem/PlaylistItem';
-import styles from './PlaylistList.module.css';
+import React from 'react'
+import PlaylistItem from '../PlaylistItem/PlaylistItem'
+import styles from './PlaylistList.module.css'
 
 interface Playlist {
-  id: number;
-  image: string;
-  name: string;
-  owner: string;
-  date: string;
-  songCount: number;
+  id: number
+  image: string
+  name: string
+  owner: string
+  date: string
+  songCount: number
 }
 
 interface PlaylistListProps {
-  playlists: Playlist[];
-  onViewMore: () => void;
+  playlists: Playlist[]
+  onViewMore: () => void
 }
 
 const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, onViewMore }) => {
   // Display only the first 6 playlists
-  const displayedPlaylists = playlists.slice(0, 6);
+  const displayedPlaylists = playlists.slice(0, 6)
 
   return (
     <div className={styles.playlistList}>
@@ -34,11 +34,11 @@ const PlaylistList: React.FC<PlaylistListProps> = ({ playlists, onViewMore }) =>
         />
       ))}
       {/* Display the "View All Playlists" button as the 7th item if there are more than 6 playlists */}
-        <button onClick={onViewMore} className={styles.viewMoreButton}>
-          View All Playlists
-        </button>
+      <button onClick={onViewMore} className={styles.viewMoreButton}>
+        View All Playlists
+      </button>
     </div>
-  );
-};
+  )
+}
 
-export default PlaylistList;
+export default PlaylistList
