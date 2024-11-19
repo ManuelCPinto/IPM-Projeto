@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import './playlist.css';
 import './playlistHeader.css';
 
@@ -29,42 +31,33 @@ export default function App() {
 }
 
 function Playlist({ albumName, bandName, logoUrl, songs }: PlaylistProps) {
+  const [activePopup, setActivePopup] = useState<number | null>(null);
+
+  const togglePopup = (index: number) => {
+    setActivePopup(activePopup === index ? null : index);
+  };
+
   if (!songs) return <div>Loading...</div>;
   if (songs.length === 0) return <div>No songs found</div>;
   if (!albumName || !bandName) return <div>Missing album or band name</div>;
   if (!logoUrl) return <div>Missing logo URL</div>;
 
   return (
-    <div className='main'>
+    <div className="main">
       <div className="album-header">
-        <div className='album-info'>
+        <div className="album-info">
           <img src={logoUrl} className="playlist-logo" alt="Playlist Logo" />
           <div className="band-info">
             <h1 className="album-name">{albumName}</h1>
             <h2 className="band-name"><strong>{bandName}</strong></h2>
           </div>
         </div>
-        <div className='playlist-options'>
+        <div className="playlist-options">
           <button className="playlist-play-button">
             <div className="playlist-play-triangle-icon"></div>
           </button>
           <button className="shuffle-button">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20" height="20" /* Adjust size as needed */
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <polyline points="16 3 21 3 21 8"></polyline>
-              <line x1="4" y1="20" x2="21" y2="3"></line>
-              <polyline points="21 16 21 21 16 21"></polyline>
-              <line x1="15" y1="15" x2="21" y2="21"></line>
-              <line x1="4" y1="4" x2="9" y2="9"></line>
-            </svg>
+            {/* Shuffle Icon */}
           </button>
           <button className="playlist-like-button">♥</button>
           <button className="playlist-options-button">⋮</button>
@@ -89,14 +82,23 @@ function Playlist({ albumName, bandName, logoUrl, songs }: PlaylistProps) {
             <div className="song-info">
               <div className="song-title">{song.title}</div>
               <div className="song-artist">{song.artist}</div>
-              <div>
-                <div className="song-album">{song.album}</div>
-                
-              </div>
+              <div className="song-album">{song.album}</div>
               <div className="song-duration">{song.duration}</div>
             </div>
             <button className="like-button">♥</button>
-            <button className="options-button">⋮</button>
+            <button
+              className="options-button"
+              onClick={() => togglePopup(index)}
+            >
+              ⋮
+            </button>
+            {activePopup === index && (
+              <div className="popup-menu">
+                <div className="popup-item">Add to Playlist</div>
+                <div className="popup-item">Share</div>
+                <div className="popup-item">Remove</div>
+              </div>
+            )}
           </div>
         ))}
       </div>
