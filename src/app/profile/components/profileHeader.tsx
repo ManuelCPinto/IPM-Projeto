@@ -2,9 +2,10 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ProfileHeader = ({ user }: { user: any }) => (
-  <div className="w-full max-w-5xl bg-gray-900 p-6 rounded-lg shadow-md">
+  <div className="w-full max-w-5xl bg-gray-900 p-6 rounded-lg shadow-md relative">
     <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
       {/* Profile Image */}
       <div className="w-36 h-36 flex-shrink-0 rounded-full overflow-hidden border-4 border-blue-500">
@@ -20,6 +21,18 @@ const ProfileHeader = ({ user }: { user: any }) => (
         </div>
       </div>
     </div>
+    {/* Settings Button */}
+    <Link href={`/profile/${user.id}/settings`}>
+      <div className="absolute top-6 right-6 cursor-pointer">
+        <Image
+          src="/Settings.png" // Replace with your cogwheel image path
+          alt="Settings"
+          width={32}
+          height={32}
+          className="hover:opacity-80 transition-opacity"
+        />
+      </div>
+    </Link>
   </div>
 );
 
