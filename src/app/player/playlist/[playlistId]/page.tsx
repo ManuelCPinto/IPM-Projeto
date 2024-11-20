@@ -84,7 +84,22 @@ function Playlist({ name, author, imageURL, songs }: PlaylistProps) {
             <div className="playlist-play-triangle-icon"></div>
           </button>
           <button className="shuffle-button">
-            {/* Shuffle Icon */}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20" height="20" /* Adjust size as needed */
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="16 3 21 3 21 8"></polyline>
+              <line x1="4" y1="20" x2="21" y2="3"></line>
+              <polyline points="21 16 21 21 16 21"></polyline>
+              <line x1="15" y1="15" x2="21" y2="21"></line>
+              <line x1="4" y1="4" x2="9" y2="9"></line>
+            </svg>
           </button>
           <button className="playlist-like-button">♥</button>
           <button className="playlist-options-button">⋮</button>
@@ -93,8 +108,8 @@ function Playlist({ name, author, imageURL, songs }: PlaylistProps) {
       <div className="table-header-container">
         <div className="table-header-item">
           <div className="table-header-row">
-            <div className="table-header-name">name</div>
-            <div className="table-header-author">author</div>
+            <div className="table-header-title">Title</div>
+            <div className="table-header-artist">Artist</div>
             <div className="table-header-album">Album</div>
             <div className="table-header-duration">Duration</div>
           </div>
@@ -128,9 +143,10 @@ function Playlist({ name, author, imageURL, songs }: PlaylistProps) {
                   position: 'absolute',
                 }}
               >
+                <div className="popup-item">Add to Liked</div>
                 <div className="popup-item">Add to Playlist</div>
-                <div className="popup-item">Share</div>
-                <div className="popup-item">Remove</div>
+                <div className="popup-item">Review</div>
+                <div className="popup-item">Go to Artist</div>
               </div>
             )}
           </div>
