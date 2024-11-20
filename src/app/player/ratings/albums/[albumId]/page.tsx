@@ -6,6 +6,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { Album, Descriptor, Genre, Review, Song } from '@/database/schema';
+import Image from 'next/image';
+
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -207,7 +209,8 @@ const AlbumPage = () => {
 
   const resetHoverRating = () => setHoverRating(0);
 
-  const sortedReviews = [...reviews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+const sortedReviews = [...reviews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
 
   return (
     <div className="p-8 text-white">
@@ -217,11 +220,12 @@ const AlbumPage = () => {
         <div className="space-y-8 bg-gray-900 p-6 rounded-lg">
           {/* Album Cover */}
           <div className="flex justify-center">
-            <img
-              src='/covers/utopia.webp'
-              alt={`${album.name} Cover`}
-              className="rounded-lg object-cover w-full h-auto"
-            />
+          <Image
+            src={album.cover} // Dynamically use album.cover
+            alt={`${album.name} Cover`} // Use the album name for accessibility
+            width={500} // Add appropriate width for optimization
+            height={500} // Add appropriate height for optimization
+            className="rounded-lg object-cover w-full h-auto" />
           </div>
           {/* Tracklist */}
           <div>
