@@ -1,7 +1,7 @@
 'use client'
 
 import { FaShuffle, FaBackwardStep, FaCirclePause, FaCirclePlay, FaForwardStep } from 'react-icons/fa6'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useEvent } from 'react-use'
 import { IconButton, Slider } from '@mui/material'
 import { audio, RepeatMode, useMusicPlayerStore } from '@/stores/musicPlayerStore'
@@ -20,7 +20,7 @@ function formatDuration(seconds: number) {
   return result
 }
 
-export default function AudioControl({ onPlay }: { onPlay?: (isPlaying: boolean) => void }) {
+export default function AudioControl() {
   const { next, previous } = useMusicPlayerStore()
   const repeatMode = useMusicPlayerStore((state) => state.repeatMode)
   const isShuffled = useMusicPlayerStore((state) => state.isShuffled)
@@ -45,10 +45,6 @@ export default function AudioControl({ onPlay }: { onPlay?: (isPlaying: boolean)
     },
     audio
   )
-
-  useEffect(() => {
-    onPlay?.(isPlaying)
-  }, [isPlaying])
 
   return (
     <div

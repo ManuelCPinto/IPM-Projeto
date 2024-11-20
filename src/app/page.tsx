@@ -10,10 +10,10 @@ export default function Home() {
       <Image src="/logo.png" height={250} width={250} alt="App logo" />
       <p className="text-4xl font-bold">MusicBox</p>
       <div className="flex gap-4">
-        <Link href="/login" className="px-4 py-1 rounded bg-white/50 hover:bg-white/35 transition">
+        <Link href="/login" className="px-4 py-1 rounded bg-white/45 hover:bg-white/35 transition">
           Login
         </Link>
-        <Link href="/register" className="px-4 py-1 rounded bg-white/50 hover:bg-white/35 transition">
+        <Link href="/register" className="px-4 py-1 rounded bg-white/45 hover:bg-white/35 transition">
           Register
         </Link>
       </div>

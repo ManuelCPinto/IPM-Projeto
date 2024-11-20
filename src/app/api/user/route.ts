@@ -1,11 +1,12 @@
 import { db } from '@/database'
 import { User, usersTable } from '@/database/schema'
-import { NextApiRequest } from 'next'
+import { NextRequest } from 'next/server'
 
-export async function POST(req: NextApiRequest) {
+export async function POST(req: NextRequest) {
   try {
-    await db.insert(usersTable).values(req.query as User)
-    return Response.json(true)
+    const user = (await req.json()) as User
+    const res = await db.insert(usersTable).values(user)
+    return Response.json(res.rowsAffected > 0)
   } catch {
     return Response.json(false)
   }

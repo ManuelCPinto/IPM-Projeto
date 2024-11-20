@@ -21,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => (
       {children}
     </main>
     {/* Music Player */}
-    <footer className="col-span-2 overflow-hidden">
+    <footer className="col-span-2">
       <MusicPlayerBar />
     </footer>
   </div>
