@@ -2,29 +2,42 @@
 
 import ky from 'ky'
 import { useMusicPlayerStore } from '@/stores/musicPlayerStore'
-import { Music } from '@/database/schema'
+import { Song } from '@/database/entities/song'
+import { useAsync } from 'react-use'
+import { SongCard } from '@/app/player/components/SongCard'
 
-export default function PLayer() {
+export default function Home() {
   const set = useMusicPlayerStore((state) => state.set)
 
-  async function addMusicToMusicPlayer() {
-    const musics = (await ky
-      .get('/api/music', {
+  const songs = useAsync(getSongs)
+
+  async function getSongs() {
+    return (await ky
+      .get('/api/songs', {
         searchParams: {
-          name: 'FE!N'
+          query: ''
         }
       })
-      .json()) as Music[]
-
-    set([musics[0]])
+      .json()) as Song[]
   }
 
   return (
-    <button
-      className="self-center bg-green-600 hover:bg-green-500 transition shadow-xl shadow-green-600/50 p-3 rounded"
-      onClick={addMusicToMusicPlayer}
-    >
-      Add BANGER to Music Player
-    </button>
+    <div className="flex flex-col gap-4">
+      <p className="text-4xl font-bold">Home</p>
+      <div className="flex flex-col gap-3">
+        <p className="text-xl font-bold">Recommendation</p>
+        <div className="flex flex-wrap gap-4">
+          {songs.loading ? (
+            <p className="opacity-50">Loading...</p>
+          ) : (
+            songs.value?.map((song, idx) => (
+              <div key={idx} onClick={() => set([song])}>
+                <SongCard song={song} />
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+    </div>
   )
 }
