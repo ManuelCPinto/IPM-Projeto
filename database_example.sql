@@ -55,11 +55,11 @@ INSERT INTO descriptors (id, name) VALUES
 
 -- Insert albums
 INSERT INTO albums (name, artist, type, release_date, recorded, rating, rated, ranked, cover, language) VALUES
-                                                                                                                          ('Utopia', 'travisscott', 'album', '28 July 2023', '2019 - 2023', 3.44, 20229, '#253 for 2023', 'covers/utopiaCover.jpg', 'English'),
-                                                                                                                          ('Disintegration', 'thecure', 'album', 'May 2, 1989', '1988–1989', 4.5, 50000, 'Ranked #543', 'covers/cureCover.webp', 'English'),
-                                                                                                                          ('Chromakopia', 'tyler', 'album', '28 October 2024', '', 3.67, 19545, '', 'covers/tylerCover.webp', 'English'),
-                                                                                                                          ('Night Palace', 'mounteerie', 'album', '1 November 2024', '', 3.99, 6094, '', 'covers/mountEerieCover.webp', 'English'),
-                                                                                                                          ('Cool World', 'chatpile', 'album', '11 October 2024', '', 3.82, 6330, '', 'covers/coolWorldCover.jpg', 'English');
+                                                                                                                          ('Utopia', 'travisscott', 'album', '28 July 2023', '2019 - 2023', 3.44, 20229, '#253 for 2023', '/covers/utopia.webp', 'English'),
+                                                                                                                          ('Disintegration', 'thecure', 'album', 'May 2, 1989', '1988–1989', 4.5, 50000, 'Ranked #543', '/covers/cure.webp', 'English'),
+                                                                                                                          ('Chromakopia', 'tyler', 'album', '28 October 2024', '', 3.67, 19545, '', '/covers/tyler.webp', 'English'),
+                                                                                                                          ('Night Palace', 'mounteerie', 'album', '1 November 2024', '', 3.99, 6094, '', '/covers/mountEerie.webp', 'English'),
+                                                                                                                          ('Cool World', 'chatpile', 'album', '11 October 2024', '', 3.82, 6330, '', '/covers/coolworld.jpg', 'English');
 -- Insert users (artists)
 INSERT INTO users (username, name, email, password, type) VALUES
                                  ('admin', 'MusicBox', 'admin@example.com', 'admin123', 'user'),

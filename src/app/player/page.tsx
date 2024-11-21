@@ -5,6 +5,9 @@ import { useMusicPlayerStore } from '@/stores/musicPlayerStore'
 import { Song } from '@/database/entities/song'
 import { useAsync } from 'react-use'
 import { SongCard } from '@/app/player/components/SongCard'
+import { Album } from '@/database/entities/album'
+import { User } from '@/database/entities/user'
+import { getExtendedSong } from '@/database/utils/getExtendedSong'
 
 export default function Home() {
   const set = useMusicPlayerStore((state) => state.set)
@@ -18,7 +21,7 @@ export default function Home() {
           query: ''
         }
       })
-      .json()) as Song[]
+      .json()) as { song: Song; album: Album; author: User }[]
   }
 
   return (
@@ -30,11 +33,14 @@ export default function Home() {
           {songs.loading ? (
             <p className="opacity-50">Loading...</p>
           ) : (
-            songs.value?.map((song, idx) => (
-              <div key={idx} onClick={() => set([song])}>
-                <SongCard song={song} />
-              </div>
-            ))
+            songs.value?.map(({ song, album, author }, idx) => {
+              const extendedSong = getExtendedSong(song, album, author)
+              return (
+                <div key={idx} onClick={() => set([extendedSong])}>
+                  <SongCard song={extendedSong} />
+                </div>
+              )
+            })
           )}
         </div>
       </div>
