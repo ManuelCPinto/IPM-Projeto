@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { produce } from 'immer'
 import { random } from 'lodash'
-import { Music } from '@/database/schema'
 import { subscribeWithSelector } from 'zustand/middleware'
+import { ExtendedSong } from '@/database/utils/getExtendedSong'
 
 export enum RepeatMode {
   NONE,
@@ -11,20 +11,21 @@ export enum RepeatMode {
 }
 
 interface MusicPlayerStore {
-  queue: Music[]
+  queue: ExtendedSong[]
   currentMusicIndex: number | null
   repeatMode: RepeatMode
   isShuffled: boolean
 
-  currentMusic(): Music | null
+  currentMusic(): ExtendedSong | null
 
-  add(music: Music): void
-  set(newQueue: Music[]): void
+  add(song: ExtendedSong): void
+  set(newQueue: ExtendedSong[]): void
   next(): Promise<number | null>
   previous(): Promise<number | null>
 }
 
-export const audio = new Audio()
+// Client-side code only
+export const audio = typeof window !== 'undefined' ? new Audio() : undefined
 
 export const useMusicPlayerStore = create(
   subscribeWithSelector<MusicPlayerStore>((set, get) => ({
@@ -38,17 +39,17 @@ export const useMusicPlayerStore = create(
       return state.currentMusicIndex !== null ? state.queue[state.currentMusicIndex] : null
     },
 
-    add(music: Music) {
+    add(song: ExtendedSong) {
       set(
         produce((draft: MusicPlayerStore) => {
-          draft.queue.push(music)
+          draft.queue.push(song)
           if (draft.currentMusicIndex === null && draft.queue.length > 0) {
             draft.currentMusicIndex = 0
           }
         })
       )
     },
-    set(newQueue: Music[]) {
+    set(newQueue: ExtendedSong[]) {
       set({
         queue: newQueue,
         currentMusicIndex: newQueue.length > 0 ? 0 : null
@@ -94,7 +95,7 @@ export const useMusicPlayerStore = create(
 useMusicPlayerStore.subscribe(
   (state) => state.currentMusic(),
   async (currentMusic) => {
-    const audioURL = currentMusic?.audioURL
+    const audioURL = currentMusic?.audio
     if (audioURL) {
       audio.src = audioURL
       await audio.play()
@@ -105,7 +106,7 @@ useMusicPlayerStore.subscribe(
   }
 )
 
-audio.addEventListener('ended', async () => {
+audio?.addEventListener('ended', async () => {
   const musicPlayerStore = useMusicPlayerStore.getState()
   switch (musicPlayerStore.repeatMode) {
     case RepeatMode.NONE: {

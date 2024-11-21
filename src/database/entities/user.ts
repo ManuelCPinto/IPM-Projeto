@@ -1,17 +1,13 @@
 // user.ts
 
-import { sqliteTable, integer, text, uniqueIndex } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-export const usersTable = sqliteTable(
-  'users',
-  {
-    id: integer('id').primaryKey({autoIncrement: true}),
-    username: text('username').notNull(),
-    password: text('password').notNull(),
-  },
-  (table) => ({
-    uniqueUsername: uniqueIndex('unique_username').on(table.username),
-  })
-);
+export const usersTable = sqliteTable('users', {
+  username: text('username').primaryKey(),
+  name: text('name').notNull(),
+  email: text('email').notNull(),
+  password: text('password', { length: 6 }).notNull(),
+  type: text().$type<'user' | 'artist'>().default('user')
+})
 
-export type User = typeof usersTable.$inferSelect;
+export type User = typeof usersTable.$inferSelect
