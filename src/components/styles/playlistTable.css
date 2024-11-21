@@ -5,8 +5,9 @@
     color: #fff;
     padding: 20px;
     border-radius: 8px;
+    overflow-y: auto;
   }
-  
+    
   .song-item {
     display: flex;
     align-items: center;

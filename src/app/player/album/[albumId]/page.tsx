@@ -3,7 +3,6 @@
 import React from 'react';
 import '@/components/styles/PlaylistTable.css';
 import '@/components/styles/playlistHeader.css';
-import { Playlist } from '@/database/schema';
 import { PlaylistHeader } from "@/components/PlaylistHeader";
 import { PlaylistTable } from "@/components/PlaylistTable";
 
@@ -28,6 +27,12 @@ interface PlaylistProps {
 
 {/* Temporary base example */}
 const songs = [
+  { name: 'A Minha Casinha', author: 'Xutos e Pontapés', album: '88', duration: '2:24' },
+  { name: 'Contentores', author: 'Xutos e Pontapés', album: '88', duration: '3:30' },
+  { name: 'Circo de Feras', author: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
+  { name: 'A Minha Casinha', author: 'Xutos e Pontapés', album: '88', duration: '2:24' },
+  { name: 'Contentores', author: 'Xutos e Pontapés', album: '88', duration: '3:30' },
+  { name: 'Circo de Feras', author: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
   { name: 'A Minha Casinha', author: 'Xutos e Pontapés', album: '88', duration: '2:24' },
   { name: 'Contentores', author: 'Xutos e Pontapés', album: '88', duration: '3:30' },
   { name: 'Circo de Feras', author: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
@@ -64,6 +69,7 @@ const PlaylistPage = () => {
   }
 }
 */
+
 function Playlist({ name, author, imageURL, songs }: PlaylistProps) {
   if (!songs) return <div>Loading...</div>;
   if (songs.length === 0) return <div>No songs found</div>;
