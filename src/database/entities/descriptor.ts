@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text, primaryKey } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
 
 export const descriptorsTable = sqliteTable('descriptors', {
   id: integer('id').primaryKey({ autoIncrement: true }),
