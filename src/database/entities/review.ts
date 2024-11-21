@@ -1,14 +1,14 @@
-import { sqliteTable, integer, text, real } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, integer, text} from 'drizzle-orm/sqlite-core';
 import { albumsTable } from './album';
 
 export const reviewsTable = sqliteTable('reviews', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  albumId: integer('album_id')
+  albumId: text('album_id')
     .notNull()
-    .references(() => albumsTable.id, { onDelete: 'cascade' }),
+    .references(() => albumsTable.albumId, { onDelete: 'cascade' }),
   user: text('user').notNull(),
   date: text('date').notNull(),
-  stars: real('stars').notNull(),
+  stars: integer('stars').notNull(),
   content: text('content').notNull(),
 });
 

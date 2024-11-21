@@ -1,10 +1,13 @@
 import { sqliteTable, integer, text, real } from 'drizzle-orm/sqlite-core';
+import { usersTable } from './user';
 
 export const albumsTable = sqliteTable('albums', {
   id: integer('id').primaryKey({ autoIncrement: true }),
   albumId: text('album_id').notNull().unique(),
   name: text('name').notNull(),
-  artist: text('artist').notNull(),
+  artist: integer('id')
+  .notNull()
+  .references(() => usersTable.id, { onDelete: 'cascade' }),
   type: text('type').notNull(),
   releaseDate: text('release_date').notNull(),
   recorded: text('recorded').notNull(),

@@ -58,15 +58,7 @@ const NewReleases: React.FC<NewReleasesProps> = ({ Albums, error }) => {
           </Link>
         ))}
       </div>
-
-      {/* View All Releases Button */}
-      <Link href="/player/ratings/albums">
-        <button className="mt-4 bg-blue-800 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition w-full">
-          View All Releases
-        </button>
-      </Link>
     </div>
   )
 }
-
 export default NewReleases
