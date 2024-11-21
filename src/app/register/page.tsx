@@ -6,57 +6,57 @@ import { Field, Form, Formik } from 'formik'
 import Center from '@/components/Center'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-hot-toast'
-import { Alert, Button } from '@mui/material'
+import { Button } from '@mui/material'
 import { TextField } from 'formik-mui'
 import { clsx } from 'clsx'
 import Link from 'next/link'
 
-interface LoginForm {
+interface RegisterForm {
   username: string
+  email: string
   password: string
 }
 
-const initialValues: LoginForm = {
+const initialValues: RegisterForm = {
   username: '',
+  email: '',
   password: ''
 }
 
-const validationSchema: Yup.ObjectSchema<LoginForm> = Yup.object().shape({
+const validationSchema: Yup.ObjectSchema<RegisterForm> = Yup.object().shape({
   username: Yup.string().required('Username is required'),
-  password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required')
+  email: Yup.string().required('Email is required').email('Email is invalid'),
+  password: Yup.string().required('Password is required').min(6, 'Password must be at least 6 characters')
 })
 
-export default function Login() {
+export default function Register() {
   const router = useRouter()
 
-  async function loginUser(values: LoginForm) {
-    const success = (await ky.get('/api/user/login', { searchParams: { ...values } }).json()) as boolean
+  async function createUser(values: RegisterForm) {
+    const success = (await ky.post('/api/user', { json: values }).json()) as boolean
     if (success) {
-      router.replace('/player')
+      router.replace('/login')
     } else {
-      toast.error('Invalid username or password')
+      toast.error('Username already exists')
     }
   }
 
   return (
     <Center className="h-full gap-8">
-      <Alert severity="info">
-        <p>Username: admin</p>
-        <p>Password: admin123</p>
-      </Alert>
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={loginUser}>
+      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={createUser}>
         {({ isSubmitting }) => (
           <Form className={clsx('flex flex-col gap-4 w-80', isSubmitting && 'pointer-events-none')}>
             <Field type="text" label="Username" name="username" component={TextField} />
+            <Field type="email" label="Email" name="email" component={TextField} />
             <Field type="password" label="Password" name="password" component={TextField} />
             <Button type="submit" variant="contained">
-              Login
+              Register
             </Button>
           </Form>
         )}
       </Formik>
-      <Link href="/register" className="hover:underline text-xs">
-        Create account
+      <Link href="/login" className="hover:underline text-xs">
+        Login
       </Link>
     </Center>
   )
