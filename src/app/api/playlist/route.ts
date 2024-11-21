@@ -1,16 +1,16 @@
 import { db } from '@/database'
-import { musicsTable } from '@/database/schema'
+import { playlistsTable } from '@/database/schema'
 import { like } from 'drizzle-orm'
 import { NextRequest } from 'next/server'
 
 export async function POST(req: NextRequest) {
   try {
     const queries = req.nextUrl.searchParams
-    await db.insert(musicsTable).values({
+    await db.insert(playlistsTable).values({
       name: queries.get('name')!,
       author: queries.get('author')!,
       imageURL: queries.get('imageURL')!,
-      audioURL: queries.get('audioURL')!
+      songs: queries.get('songs')!
     })
     return Response.json(true)
   } catch {
@@ -20,8 +20,8 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   const queries = req.nextUrl.searchParams
-  const musics = await db.query.musicsTable.findMany({
-    where: like(musicsTable.name, `%${queries.get('name') || ''}%`)
+  const playlists = await db.query.playlistsTable.findMany({
+    where: like(playlistsTable.name, `%${queries.get('name') || ''}%`)
   })
-  return Response.json(musics)
+  return Response.json(playlists)
 }

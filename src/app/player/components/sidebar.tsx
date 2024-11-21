@@ -2,7 +2,7 @@
 
 'use client'
 import React, { useState } from 'react'
-import { FaHome, FaCompass, FaVideo, FaMusic, FaHeart, FaStar } from 'react-icons/fa'
+import { FaHome, FaCompass, FaMusic, FaHeart, FaStar } from 'react-icons/fa'
 import { IoMdMusicalNotes, IoMdPerson } from 'react-icons/io'
 import { FiPlusSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import Link from 'next/link'

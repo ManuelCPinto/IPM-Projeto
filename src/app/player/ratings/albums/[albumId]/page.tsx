@@ -1,42 +1,175 @@
-// AlbumPage.jsx
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import albumData from '../../albumData';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { Album, Descriptor, Genre, Review, Song } from '@/database/schema';
+import Image from 'next/image';
 
-const AlbumPage: React.FC = () => {
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+};
+
+const AlbumPage = () => {
   const { albumId } = useParams();
-  const album = albumData.find((item) => item.id === albumId);
-  const [userRating, setUserRating] = useState(0);
-  const [userReview, setUserReview] = useState('');
-  const [hoverRating, setHoverRating] = useState(0);
-  const [reviews, setReviews] = useState(album ? album.reviews : []);
+  const [album, setAlbum] = useState<Album>(); 
+  const [tracklist, setTracklist] = useState<Song[]>([]);
+  const [genres, setGenres] = useState<Genre[]>([]);
+  const [descriptors, setDescriptors] = useState<Descriptor[]>([]);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [userRating, setUserRating] = useState<number>(0);
+  const [userReview, setUserReview] = useState<string>('');
+  const [hoverRating, setHoverRating] = useState<number>(0);
+  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  if (!album) {
-    return <div className="text-white">Album not found</div>;
+  useEffect(() => {
+    fetchAlbum();
+    fetchTracklist();
+    fetchGenres();
+    fetchDescriptors();
+    fetchReviews();
+  }, [albumId]);
+
+  // Fetch Album Data
+  const fetchAlbum = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`/api/albums/${albumId}`);
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Error fetching album');
+      }
+      const data = await res.json();
+      setAlbum(data);
+
+    } catch (error: any) {
+      console.error('Error fetching album:', error.message || error);
+      setError(error.message || 'Error fetching album');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch Tracklist
+  const fetchTracklist = async () => {
+    try {
+      const res = await fetch(`/api/albums/${albumId}/tracklist`);
+      if (!res.ok) {
+        throw new Error('Error fetching tracklist');
+      }
+      const data = await res.json();
+      setTracklist(data);
+    } catch (error) {
+      console.error('Error fetching tracklist:', error);
+    }
+  };
+
+  // Fetch Genres
+  const fetchGenres = async () => {
+    try {
+      const res = await fetch(`/api/albums/${albumId}/genres`);
+      if (!res.ok) {
+        throw new Error('Error fetching genres');
+      }
+      const data = await res.json();
+      setGenres(data);
+    } catch (error) {
+      console.error('Error fetching genres:', error);
+    }
+  };
+
+  // Fetch Descriptors
+  const fetchDescriptors = async () => {
+    try {
+      const res = await fetch(`/api/albums/${albumId}/descriptors`);
+      if (!res.ok) {
+        throw new Error('Error fetching descriptors');
+      }
+      const data = await res.json();
+      setDescriptors(data);
+    } catch (error) {
+      console.error('Error fetching descriptors:', error);
+    }
+  };
+
+  // Fetch Reviews
+  const fetchReviews = async () => {
+    try {
+      const res = await fetch(`/api/albums/${albumId}/reviews`);
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || 'Error fetching reviews');
+      }
+      const data = await res.json();
+      setReviews(data);
+    } catch (error: any) {
+      console.error('Error fetching reviews:', error.message || error);
+    }
+  };
+
+  if (isLoading) {
+    return <div className="text-white">Loading...</div>;
   }
 
-  // Calculate total number of reviews
-  const totalReviews = reviews.length;
+  if (error) {
+    return <div className="text-red-500">{error}</div>;
+  }
 
-  // Function to handle review submission
-  const handleReviewSubmit = () => {
+  if (!album) {
+    return <div className="text-white">No album data available.</div>;
+  }
+  const handleReviewSubmit = async () => {
     if (userReview.trim() !== '') {
-      const newReview = {
-        user: 'Current User', // depois mudar com bd
-        date: new Date().toLocaleDateString(),
-        stars: userRating,
-        content: userReview,
-      };
-      setReviews([newReview, ...reviews]);
-      setUserRating(0);
-      setUserReview('');
+      try {
+        const res = await fetch(`/api/albums/${albumId}/reviews`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: 'Current User', // Replace with actual user data
+            stars: userRating,
+            content: userReview,
+            date: new Date().toISOString(), // Add date on submission
+          }),
+        });
+  
+        if (!res.ok) {
+          const errorData = await res.json();
+          alert(`Error: ${errorData.error}`);
+          return;
+        }
+  
+        // Clear form inputs
+        setUserRating(0);
+        setUserReview('');
+  
+        // Re-fetch reviews to get updated and complete data
+        await fetchReviews();
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        alert('An error occurred while submitting your review.');
+      }
     } else {
       alert('Please write a review before submitting.');
     }
   };
+  
+  
+
+  // Calculate total number of reviews
+  const totalReviews = reviews.length;
 
   // Function to render stars with half-star support
   const renderStars = (rating: number) => {
@@ -76,6 +209,9 @@ const AlbumPage: React.FC = () => {
 
   const resetHoverRating = () => setHoverRating(0);
 
+const sortedReviews = [...reviews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+
   return (
     <div className="p-8 text-white">
       {/* Main Content */}
@@ -84,24 +220,24 @@ const AlbumPage: React.FC = () => {
         <div className="space-y-8 bg-gray-900 p-6 rounded-lg">
           {/* Album Cover */}
           <div className="flex justify-center">
-            <img
-              src={album.cover}
-              alt={`${album.name} Cover`}
-              className="rounded-lg object-cover w-full h-auto"
-            />
+          <Image
+            src={album.cover} // Dynamically use album.cover
+            alt={`${album.name} Cover`} // Use the album name for accessibility
+            width={500} // Add appropriate width for optimization
+            height={500} // Add appropriate height for optimization
+            className="rounded-lg object-cover w-full h-auto" />
           </div>
-
           {/* Tracklist */}
           <div>
             <h2 className="text-xl font-bold text-gray-200 border-b border-gray-500 pb-3">
               Tracklist
             </h2>
             <ul className="mt-4 divide-y divide-gray-700">
-              {album.tracklist.map((track, index) => (
-                <li key={index} className="py-3">
+              {tracklist.map((track) => (
+                <li key={track.id} className="py-3">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-200 font-medium">
-                      {index + 1}. {track.name}
+                      {track.trackNumber}. {track.name}
                       {track.feature && (
                         <span className="text-gray-400 ml-2">
                           (feat. {track.feature})
@@ -157,11 +293,11 @@ const AlbumPage: React.FC = () => {
             </div>
             <div className="mt-4">
               <h3 className="font-bold uppercase text-gray-400">Genres</h3>
-              <p className="text-gray-200">{album.genres.join(', ')}</p>
+              <p className="text-gray-200">{genres.join(', ')}</p>
             </div>
             <div className="mt-4">
               <h3 className="font-bold uppercase text-gray-400">Descriptors</h3>
-              <p className="text-gray-200">{album.descriptors.join(', ')}</p>
+              <p className="text-gray-200">{descriptors.join(', ')}</p>
             </div>
           </div>
 
@@ -199,6 +335,14 @@ const AlbumPage: React.FC = () => {
                         onClick={(e) => handleStarClick(e, starValue)}
                         onMouseMove={(e) => handleStarHover(e, starValue)}
                         onMouseLeave={resetHoverRating}
+                        role="button"
+                        aria-label={`Rate ${starValue} stars`}
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            handleStarClick(e as any, starValue);
+                          }
+                        }}
                       >
                         {isFilled === 'full' && <FaStar className="text-yellow-400 w-6 h-6" />}
                         {isFilled === 'half' && <FaStarHalfAlt className="text-yellow-400 w-6 h-6" />}
@@ -231,33 +375,38 @@ const AlbumPage: React.FC = () => {
               <button
                 className="mt-4 px-4 py-2 bg-gray-600 hover:bg-blue-700 rounded-md"
                 onClick={handleReviewSubmit}
+                disabled={isLoading}
               >
                 Submit Review
               </button>
             </div>
 
             {/* Reviews List */}
-            {reviews.map((review, index) => (
-              <div key={index} className="mt-6 border-b border-gray-800 pb-6">
-                <div className="flex items-center">
-                  {/* Profile Picture */}
-                  <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-gray-200 font-bold">
-                    {/* Placeholder initials */}
-                    {review.user.charAt(0).toUpperCase()}
+            {reviews.length === 0 ? (
+              <p className="text-gray-300 mt-6">No reviews yet. Be the first to review!</p>
+            ) : (
+              sortedReviews.map((review, index) => (
+                <div key={index} className="mt-6 border-b border-gray-800 pb-6">
+                  <div className="flex items-center">
+                    {/* Profile Picture */}
+                    <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center text-gray-200 font-bold">
+                      {/* Placeholder initials */}
+                      {review.user.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="ml-4">
+                      <p className="text-gray-200 font-semibold">{review.user}</p>
+                      <p className="text-gray-300 text-sm">{formatDate(review.date)}</p>
+                    </div>
                   </div>
-                  <div className="ml-4">
-                    <p className="text-gray-200 font-semibold">{review.user}</p>
-                    <p className="text-gray-300 text-sm">{review.date}</p>
+                  {/* Star Rating */}
+                  <div className="flex items-center mt-2">
+                    {renderStars(review.stars)}
                   </div>
+                  {/* Review Content */}
+                  <p className="text-gray-200 mt-4 leading-relaxed">{review.content}</p>
                 </div>
-                {/* Star Rating */}
-                <div className="flex items-center mt-2">
-                  {renderStars(review.stars)}
-                </div>
-                {/* Review Content */}
-                <p className="text-gray-200 mt-4 leading-relaxed">{review.content}</p>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
