@@ -66,7 +66,7 @@ const FeaturedReviews: React.FC<FeaturedReviewsProps> = ({ featuredReviews, erro
               <div className="flex items-center mt-2">
                 <span className="text-yellow-400 text-lg">{featuredReview.stars}</span>
               </div>
-              <blockquote className="italic text-gray-400 mt-4">"{featuredReview.content}"</blockquote>
+              <blockquote className="italic text-gray-400 mt-4">&quot;{featuredReview.content}&quot;</blockquote>
             </div>
           )}
         </div>

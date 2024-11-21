@@ -1,9 +1,24 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { Album, Descriptor, Genre, Review, Song } from '@/database/schema';
+import Image from 'next/image';
+
+
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(date);
+};
 
 const AlbumPage = () => {
   const { albumId } = useParams();
@@ -114,43 +129,44 @@ const AlbumPage = () => {
   if (!album) {
     return <div className="text-white">No album data available.</div>;
   }
-
- // Fetch the created review from the API response
-const handleReviewSubmit = async () => {
-  if (userReview.trim() !== '') {
-    try {
-      const res = await fetch(`/api/albums/${albumId}/reviews`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user: 'Current User', // Replace with actual user data
-          stars: userRating,
-          content: userReview,
-        }),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        alert(`Error: ${errorData.error}`);
-        return;
+  const handleReviewSubmit = async () => {
+    if (userReview.trim() !== '') {
+      try {
+        const res = await fetch(`/api/albums/${albumId}/reviews`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: 'Current User', // Replace with actual user data
+            stars: userRating,
+            content: userReview,
+            date: new Date().toISOString(), // Add date on submission
+          }),
+        });
+  
+        if (!res.ok) {
+          const errorData = await res.json();
+          alert(`Error: ${errorData.error}`);
+          return;
+        }
+  
+        // Clear form inputs
+        setUserRating(0);
+        setUserReview('');
+  
+        // Re-fetch reviews to get updated and complete data
+        await fetchReviews();
+      } catch (error) {
+        console.error('Error submitting review:', error);
+        alert('An error occurred while submitting your review.');
       }
-
-      const createdReview: Review = await res.json(); // Ensure the API returns the full review object
-
-      setReviews([createdReview, ...reviews]); // Add the new review with all required properties
-      setUserRating(0);
-      setUserReview('');
-    } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('An error occurred while submitting your review.');
+    } else {
+      alert('Please write a review before submitting.');
     }
-  } else {
-    alert('Please write a review before submitting.');
-  }
-};
-
+  };
+  
+  
 
   // Calculate total number of reviews
   const totalReviews = reviews.length;
@@ -193,6 +209,9 @@ const handleReviewSubmit = async () => {
 
   const resetHoverRating = () => setHoverRating(0);
 
+const sortedReviews = [...reviews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+
   return (
     <div className="p-8 text-white">
       {/* Main Content */}
@@ -201,11 +220,12 @@ const handleReviewSubmit = async () => {
         <div className="space-y-8 bg-gray-900 p-6 rounded-lg">
           {/* Album Cover */}
           <div className="flex justify-center">
-            <img
-              src='/covers/utopia.webp'
-              alt={`${album.name} Cover`}
-              className="rounded-lg object-cover w-full h-auto"
-            />
+          <Image
+            src={album.cover} // Dynamically use album.cover
+            alt={`${album.name} Cover`} // Use the album name for accessibility
+            width={500} // Add appropriate width for optimization
+            height={500} // Add appropriate height for optimization
+            className="rounded-lg object-cover w-full h-auto" />
           </div>
           {/* Tracklist */}
           <div>
@@ -365,7 +385,7 @@ const handleReviewSubmit = async () => {
             {reviews.length === 0 ? (
               <p className="text-gray-300 mt-6">No reviews yet. Be the first to review!</p>
             ) : (
-              reviews.map((review, index) => (
+              sortedReviews.map((review, index) => (
                 <div key={index} className="mt-6 border-b border-gray-800 pb-6">
                   <div className="flex items-center">
                     {/* Profile Picture */}
@@ -375,7 +395,7 @@ const handleReviewSubmit = async () => {
                     </div>
                     <div className="ml-4">
                       <p className="text-gray-200 font-semibold">{review.user}</p>
-                      <p className="text-gray-300 text-sm">{review.date}</p>
+                      <p className="text-gray-300 text-sm">{formatDate(review.date)}</p>
                     </div>
                   </div>
                   {/* Star Rating */}
