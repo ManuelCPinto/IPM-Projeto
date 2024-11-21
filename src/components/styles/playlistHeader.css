@@ -53,14 +53,25 @@
   align-items: left;
   order: 1;
   align-items: center;
-  margin-top: 5px;
   margin-left: 15px;
   margin-bottom: 25px;
 }
 
 .playlist-play-button,
 .shuffle-button,
-.playlist-like-button,
+.playlist-like-button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  padding: 8px;
+  font-size: 1.8rem;
+}
+
 .playlist-options-button {
   width: 40px;
   height: 40px;
@@ -72,12 +83,14 @@
   transition: background-color 0.2s;
   padding: 8px;
   font-size: 1.5rem;
+  margin-left: 20px;
 }
 
 .shuffle-button {
-  background-size: 20px 20px;
+  background-size: 18px 18px;
   background-repeat: no-repeat;
   background-position: center;
+  margin-top: 5px;
 }
 
 .playlist-play-triangle-icon {
@@ -87,6 +100,7 @@
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
   margin-left: 2.5px;
+  margin-top: 5px;
 }
 
 .playlist-play-triangle-icon:hover {

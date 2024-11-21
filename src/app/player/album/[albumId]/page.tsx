@@ -3,6 +3,7 @@
 import React from 'react';
 import '@/components/styles/PlaylistTable.css';
 import '@/components/styles/playlistHeader.css';
+import { Playlist } from '@/database/schema';
 import { PlaylistHeader } from "@/components/PlaylistHeader";
 import { PlaylistTable } from "@/components/PlaylistTable";
 
