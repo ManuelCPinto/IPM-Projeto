@@ -1,12 +1,10 @@
-// /app/api/search/route.ts
-
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
 import { albumsTable, songsTable, usersTable } from '@/database/schema';
 import { like } from 'drizzle-orm';
 
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(req: NextRequest) {
+  const { searchParams } = req.nextUrl;
   const query = searchParams.get('query') || '';
 
   if (!query.trim()) {
@@ -16,7 +14,7 @@ export async function GET(request: Request) {
   try {
     // Fetch matching albums
     const albums = await db
-      .select({ id: albumsTable.albumId, name: albumsTable.name })
+      .select({ id: albumsTable.id, name: albumsTable.name })
       .from(albumsTable)
       .where(like(albumsTable.name, `%${query}%`))
       .then((rows) => rows.map((row) => ({ ...row, type: 'Album' })));
@@ -30,7 +28,7 @@ export async function GET(request: Request) {
 
     // Fetch matching artists
     const artists = await db
-      .select({ id: usersTable.id, name: usersTable.username })
+      .select({ id: usersTable.username, name: usersTable.name })
       .from(usersTable)
       .where(like(usersTable.username, `%${query}%`))
       .then((rows) => rows.map((row) => ({ ...row, type: 'Artist' })));
