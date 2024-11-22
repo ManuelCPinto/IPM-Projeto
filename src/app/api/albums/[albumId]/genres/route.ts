@@ -1,15 +1,14 @@
-// /app/api/albums/[albumId]/genres/route.ts
-
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
 import { genresTable, albumsTable, albumGenresTable } from '@/database/schema';
 import { eq } from 'drizzle-orm';
 
 export async function GET(
-  request: Request,
-  { params }: { params: { albumId: string } }
+  request: NextRequest,
+  context: { params: { albumId: string } }
 ) {
-  const { albumId } = params;
+  const { params } = context;
+  const { albumId } = await params;
 
   try {
     // Fetch album to get internal ID

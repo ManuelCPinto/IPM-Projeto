@@ -1,15 +1,14 @@
-///app/api/playlists/[name]/songs/route.ts
-
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
-import { playlistTable, playlistSongsTable, songsTable} from '@/database/schema';
+import { playlistTable, playlistSongsTable, songsTable } from '@/database/schema';
 import { eq } from 'drizzle-orm';
 
 export async function GET(
-  request: Request,
-  { params }: { params: { name: string } }
+  req: NextRequest,
+  context: { params: { name: string } }
 ) {
-  const { name } = params;
+  const { params } = context;
+  const { name } = await params;
 
   try {
     // Fetch playlist to get internal ID
@@ -29,15 +28,15 @@ export async function GET(
       .from(playlistSongsTable)
       .leftJoin(songsTable, eq(playlistSongsTable.songId, songsTable.id))
       .where(eq(playlistSongsTable.playlistId, playlist.id))
-      .orderBy(songsTable.trackNumber)  // assuming trackNumber exists in songs table
+      .orderBy(songsTable.trackNumber) // Assuming trackNumber exists in songs table
       .all();
 
     const songs = songsData.map((songData) => ({
       id: songData.songs?.id,
       title: songData.songs?.name,
-      artist: songData.songs?.artist,
-      trackNumber: songData.songs?.trackNumber,  // assuming track number exists in songs table
-      duration: songData.songs?.duration,  // assuming duration exists in songs table
+      artist: songData.songs?.author,
+      trackNumber: songData.songs?.trackNumber,
+      duration: songData.songs?.duration,
     }));
 
     return NextResponse.json(songs);

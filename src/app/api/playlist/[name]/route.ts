@@ -1,30 +1,28 @@
-// /app/api/playlist/[playlistId]/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
 import { playlistTable } from '@/database/schema';
-import { eq } from 'drizzle-orm'; 
+import { eq } from 'drizzle-orm';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { name: string } }
+  context: { params: { playlistId: string } }
 ) {
-  const { name } = params;
-  console.log(`Fetching playlist with name: ${name}`);
+  const { params } = context;
+  const { playlistId } = await params;
 
   try {
-    const playlist = await db.query.albumsTable.findFirst({
-      where: eq(playlistTable.name, name),
-    });
+    const playlist = await db
+      .select()
+      .from(playlistTable)
+      .where(eq(playlistTable.id, parseInt(playlistId)))
+      .get();
 
     if (!playlist) {
-      console.log(`Playlist not found: ${name}`);
       return NextResponse.json({ error: 'Playlist not found' }, { status: 404 });
     }
 
-    console.log(`Playlist found: ${JSON.stringify(playlist)}`);
     return NextResponse.json(playlist);
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error fetching playlist:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

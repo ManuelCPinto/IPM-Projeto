@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// /app/api/albums/[albumId]/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
 import { albumsTable, usersTable } from '@/database/schema';
@@ -8,10 +5,10 @@ import { eq } from 'drizzle-orm';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { albumId: string } }
+  context: { params: { albumId: string } }
 ) {
-  const { albumId } = params;
-  console.log(`Fetching album with albumId: ${albumId}`);
+  const { params } = context;
+  const { albumId } = await params;
 
   try {
     const albumWithArtist = await db
@@ -29,7 +26,7 @@ export async function GET(
         language: albumsTable.language,
       })
       .from(albumsTable)
-      .leftJoin(usersTable, eq(albumsTable.artist, usersTable.username)) 
+      .leftJoin(usersTable, eq(albumsTable.artist, usersTable.username))
       .where(eq(albumsTable.id, parseInt(albumId)))
       .limit(1);
 
@@ -38,7 +35,6 @@ export async function GET(
       return NextResponse.json({ error: 'Album not found' }, { status: 404 });
     }
 
-    console.log(`Album found: ${JSON.stringify(albumWithArtist[0])}`);
     return NextResponse.json(albumWithArtist[0]);
   } catch (error: any) {
     console.error('Error fetching album:', error);

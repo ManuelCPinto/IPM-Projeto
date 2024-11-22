@@ -60,7 +60,7 @@ const RatingsPage: React.FC = () => {
 
         setFeaturedReviews(featuredData);
       } catch (err: any) {
-        setFeaturedReviewsError(err.message || 'Error fetching featured reviews');
+        setFeaturedReviewsError(err.message || 'Error Fetching featured reviews');
       } finally {
         setFeaturedReviewsLoading(false);
       }

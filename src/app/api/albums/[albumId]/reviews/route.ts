@@ -1,21 +1,21 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
 import { reviewsTable, albumsTable } from '@/database/schema';
 import { eq } from 'drizzle-orm';
 
 export async function GET(
-  request: Request,
-  { params }: { params: { albumId: string } }
+  request: NextRequest,
+  context: { params: { albumId: string } }
 ) {
-  try {
-    const { albumId } = params;
+  const { params } = context;
+  const { albumId } = await params;
 
+  try {
     const data = await db
       .select()
       .from(albumsTable)
       .innerJoin(reviewsTable, eq(albumsTable.id, reviewsTable.albumId))
-      .where(eq(albumsTable.id, parseInt(albumId))) 
+      .where(eq(albumsTable.id, parseInt(albumId)))
       .orderBy(reviewsTable.date)
       .all();
 
@@ -46,10 +46,11 @@ export async function GET(
 }
 
 export async function POST(
-  request: Request,
-  { params }: { params: { albumId: string } }
+  request: NextRequest,
+  context: { params: { albumId: string } }
 ) {
-  const { albumId } = params;
+  const { params } = context;
+  const { albumId } = await params;
 
   try {
     const { user, stars, content } = await request.json();
@@ -78,7 +79,7 @@ export async function POST(
       stars,
       content,
     });
-    
+
     return NextResponse.json({ success: true }, { status: 201 });
   } catch (error: any) {
     console.error('Error inserting review:', error);

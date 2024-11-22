@@ -1,22 +1,18 @@
-// /app/api/albums/[albumId]/descriptors/route.ts
-
 import { NextResponse } from 'next/server';
 import { db } from '@/database';
 import { descriptorsTable, albumsTable, albumDescriptorsTable } from '@/database/schema';
 import { eq } from 'drizzle-orm';
 
-export async function GET(
-  request: Request,
-  { params }: { params: { albumId: string } }
-) {
-   const { albumId } = params;
-
+export async function GET(request: Request, context: { params: { albumId: string } }) {
   try {
+    // Wait for the params to be properly available
+    const { albumId } = await context.params;
+
     // Fetch album to get internal ID
     const album = await db
       .select()
       .from(albumsTable)
-      .where(eq(albumsTable.id, parseInt(albumId)))
+      .where(eq(albumsTable.id, parseInt(albumId, 10)))
       .get();
 
     if (!album) {
@@ -36,9 +32,6 @@ export async function GET(
     return NextResponse.json(descriptors);
   } catch (error) {
     console.error('Error fetching descriptors:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
