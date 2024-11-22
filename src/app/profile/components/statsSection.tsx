@@ -1,8 +1,8 @@
-'use client';
+'use client'
 
-import React from 'react';
+import React from 'react'
 
-const StatsSection = ({ artistData }: { artistData: any }) => (
+const StatsSection = ({ artistData }) => (
   <div className="w-full max-w-5xl bg-gray-900 p-6 rounded-lg shadow-md">
     <h3 className="text-2xl font-semibold text-white mb-4">Audience Stats</h3>
     <div className="flex justify-between">
@@ -22,6 +22,6 @@ const StatsSection = ({ artistData }: { artistData: any }) => (
       ))}
     </div>
   </div>
-);
+)
 
-export default StatsSection;
+export default StatsSection

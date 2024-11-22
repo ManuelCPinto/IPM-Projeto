@@ -1,20 +1,16 @@
 // services/reviewService.ts
 
-import { db } from '@/database';
-import { reviewsTable, albumsTable } from '@/database/schema';
-import { eq } from 'drizzle-orm';
+import { db } from '@/database'
+import { reviewsTable, albumsTable } from '@/database/schema'
+import { eq } from 'drizzle-orm'
 
 // Function to insert a review
-export async function insertReview(albumId: string, user: string, stars: number, content: string) {
+export async function insertReview(albumId: number, user: string, stars: number, content: string) {
   // Check if the album exists
-  const album = await db
-    .select({ id: albumsTable.id })
-    .from(albumsTable)
-    .where(eq(albumsTable.albumId, albumId))
-    .get();
+  const album = await db.select({ id: albumsTable.id }).from(albumsTable).where(eq(albumsTable.id, albumId)).get()
 
   if (!album) {
-    throw new Error('Album not found');
+    throw new Error('Album not found')
   }
 
   // Insert the review into the database
@@ -23,21 +19,17 @@ export async function insertReview(albumId: string, user: string, stars: number,
     user,
     date: new Date().toISOString(),
     stars,
-    content,
-  });
+    content
+  })
 }
 
 // Function to get reviews for an album
-export async function getReviews(albumId: string) {
+export async function getReviews(albumId: number) {
   // Fetch album to get internal id
-  const album = await db
-    .select()
-    .from(albumsTable)
-    .where(eq(albumsTable.albumId, albumId))
-    .get();
+  const album = await db.select().from(albumsTable).where(eq(albumsTable.id, albumId)).get()
 
   if (!album) {
-    throw new Error('Album not found');
+    throw new Error('Album not found')
   }
 
   // Fetch reviews
@@ -46,7 +38,7 @@ export async function getReviews(albumId: string) {
     .from(reviewsTable)
     .where(eq(reviewsTable.albumId, album.id))
     .orderBy(reviewsTable.date)
-    .all();
+    .all()
 
-  return reviews;
+  return reviews
 }

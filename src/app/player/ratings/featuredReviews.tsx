@@ -31,7 +31,7 @@ const FeaturedReviews: React.FC<FeaturedReviewsProps> = ({ featuredReviews, erro
     <div className="space-y-6">
       {featuredReviews.map(({ album, genres, descriptors, featuredReview }) => (
         <div
-          key={album.albumId}
+          key={album.id}
           className="grid grid-cols-1 lg:grid-cols-[1fr_2fr] gap-6 bg-gray-900 p-6 rounded-lg shadow-lg"
         >
           {/* Album Details */}
@@ -56,7 +56,7 @@ const FeaturedReviews: React.FC<FeaturedReviewsProps> = ({ featuredReviews, erro
           {/* Featured User Review */}
           {featuredReview && (
             <div>
-              <Link href={`/player/ratings/albums/${album.albumId}`}>
+              <Link href={`/player/ratings/albums/${album.id}`}>
                 <h1 className="text-2xl font-semibold text-blue-400 hover:underline cursor-pointer">{album.name}</h1>
               </Link>
               <h2 className="text-xl text-gray-300 mt-1">{album.artist}</h2>

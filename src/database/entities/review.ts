@@ -3,7 +3,7 @@ import { albumsTable } from './album'
 
 export const reviewsTable = sqliteTable('reviews', {
   id: integer('id').primaryKey({ autoIncrement: true }),
-  albumId: text('album_id')
+  albumId: integer('album_id')
     .notNull()
     .references(() => albumsTable.id, { onDelete: 'cascade' }),
   user: text('user').notNull(),

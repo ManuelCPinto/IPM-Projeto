@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 
-const PlaylistGrid = ({ playlists }: { playlists: any[] }) => (
+const PlaylistGrid = ({ playlists }) => (
   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
     {playlists.map((playlist) => (
       <Link key={playlist.id} href={`/playlist/${playlist.id}`}>
@@ -19,6 +19,6 @@ const PlaylistGrid = ({ playlists }: { playlists: any[] }) => (
       </Link>
     ))}
   </div>
-);
+)
 
-export default PlaylistGrid;
+export default PlaylistGrid

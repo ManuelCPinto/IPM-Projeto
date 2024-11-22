@@ -3,6 +3,8 @@ import { and, eq } from 'drizzle-orm'
 import { usersTable } from '@/database/schema'
 import { NextRequest } from 'next/server'
 
+export const runtime = 'edge'
+
 export async function GET(req: NextRequest) {
   try {
     const queries = req.nextUrl.searchParams

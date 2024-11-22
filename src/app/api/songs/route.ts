@@ -5,6 +5,8 @@ import { albumsTable } from '@/database/entities/album'
 import { usersTable } from '@/database/entities/user'
 import { eq, like, sql } from 'drizzle-orm'
 
+export const runtime = 'edge'
+
 export async function GET(req: NextRequest) {
   try {
     const queries = req.nextUrl.searchParams

@@ -16,13 +16,15 @@ class MainController {
     // Simulate some business logic
     const response: MainControllerResponse = {
       message: 'Button was clicked successfully!',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     }
     return response
   }
 }
 
 const mainController = new MainController()
+
+export const runtime = 'edge'
 
 // Handler for GET requests to /api/mainController
 export async function GET(req: NextRequest) {
@@ -31,9 +33,6 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(data, { status: 200 })
   } catch (error) {
     console.error('Error in mainController:', error)
-    return NextResponse.json(
-      { error: 'Failed to process the request.' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to process the request.' }, { status: 500 })
   }
 }

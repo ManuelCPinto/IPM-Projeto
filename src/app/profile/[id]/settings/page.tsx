@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import React, { useState } from 'react';
-import Image from 'next/image';
+import React, { useState } from 'react'
+import Image from 'next/image'
 
 const settingsTabs = [
   {
@@ -10,8 +10,8 @@ const settingsTabs = [
       { id: 'edit-profile', name: 'Edit Profile' },
       { id: 'followers', name: 'Followers' },
       { id: 'blocked-accounts', name: 'Blocked/Muted Accounts' },
-      { id: 'privacy-safety', name: 'Privacy & Safety' },
-    ],
+      { id: 'privacy-safety', name: 'Privacy & Safety' }
+    ]
   },
   {
     group: 'App Settings',
@@ -19,14 +19,14 @@ const settingsTabs = [
       { id: 'language', name: 'Language' },
       { id: 'video', name: 'Video' },
       { id: 'social', name: 'Social' },
-      { id: 'streaming', name: 'Streaming' },
-    ],
-  },
-];
+      { id: 'streaming', name: 'Streaming' }
+    ]
+  }
+]
 
-const SettingsPage = ({ params }: { params: { id: string } }) => {
-  const [activeTab, setActiveTab] = useState('edit-profile'); // Default active tab
-  const [followersTab, setFollowersTab] = useState<'followers' | 'following'>('followers'); // For followers toggle
+const SettingsPage = () => {
+  const [activeTab, setActiveTab] = useState('edit-profile') // Default active tab
+  const [followersTab, setFollowersTab] = useState<'followers' | 'following'>('followers') // For followers toggle
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -48,10 +48,7 @@ const SettingsPage = ({ params }: { params: { id: string } }) => {
                 </div>
                 <div>
                   <label className="block text-gray-300 mb-2">Profile Picture</label>
-                  <input
-                    type="file"
-                    className="block w-full text-white bg-gray-800 border border-gray-700 rounded"
-                  />
+                  <input type="file" className="block w-full text-white bg-gray-800 border border-gray-700 rounded" />
                 </div>
               </div>
 
@@ -86,7 +83,7 @@ const SettingsPage = ({ params }: { params: { id: string } }) => {
               </div>
             </div>
           </div>
-        );
+        )
       case 'followers':
         return (
           <div>
@@ -98,9 +95,7 @@ const SettingsPage = ({ params }: { params: { id: string } }) => {
                 onClick={() => setFollowersTab('followers')}
                 className={`${
                   followersTab === 'followers' ? 'text-white' : 'text-gray-400'
-                } font-bold border-b-2 pb-2 ${
-                  followersTab === 'followers' ? 'border-white' : 'border-transparent'
-                }`}
+                } font-bold border-b-2 pb-2 ${followersTab === 'followers' ? 'border-white' : 'border-transparent'}`}
               >
                 Followers
               </button>
@@ -108,9 +103,7 @@ const SettingsPage = ({ params }: { params: { id: string } }) => {
                 onClick={() => setFollowersTab('following')}
                 className={`${
                   followersTab === 'following' ? 'text-white' : 'text-gray-400'
-                } font-bold border-b-2 pb-2 ${
-                  followersTab === 'following' ? 'border-white' : 'border-transparent'
-                }`}
+                } font-bold border-b-2 pb-2 ${followersTab === 'following' ? 'border-white' : 'border-transparent'}`}
               >
                 Following
               </button>
@@ -121,11 +114,11 @@ const SettingsPage = ({ params }: { params: { id: string } }) => {
                 : 'List of people this user follows.'}
             </div>
           </div>
-        );
+        )
       default:
-        return <div className="text-gray-400">Settings content here</div>;
+        return <div className="text-gray-400">Settings content here</div>
     }
-  };
+  }
 
   return (
     <div className="flex justify-center items-center h-screen bg-neutral-900 bg-[radial-gradient(ellipse_75%_75%_at_50%_50%,rgba(30,30,50,0.6),rgba(15,15,30,1),rgba(5,5,15,1))] shadow-lg text-white">
@@ -167,7 +160,7 @@ const SettingsPage = ({ params }: { params: { id: string } }) => {
         Back
       </button>
     </div>
-  );
-};
+  )
+}
 
-export default SettingsPage;
+export default SettingsPage

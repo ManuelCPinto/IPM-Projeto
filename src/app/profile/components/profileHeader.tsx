@@ -1,15 +1,21 @@
-'use client';
+'use client'
 
-import React from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
+import React from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
 
-const ProfileHeader = ({ user }: { user: any }) => (
+const ProfileHeader = ({ user }) => (
   <div className="w-full max-w-5xl bg-gray-900 p-6 rounded-lg shadow-md relative">
     <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
       {/* Profile Image */}
       <div className="w-36 h-36 flex-shrink-0 rounded-full overflow-hidden border-4 border-blue-500">
-        <Image src={user.profileImage} alt={user.name} width={144} height={144} className="object-cover w-full h-full" />
+        <Image
+          src={user.profileImage}
+          alt={user.name}
+          width={144}
+          height={144}
+          className="object-cover w-full h-full"
+        />
       </div>
       {/* Profile Info */}
       <div className="flex flex-col gap-4">
@@ -34,6 +40,6 @@ const ProfileHeader = ({ user }: { user: any }) => (
       </div>
     </Link>
   </div>
-);
+)
 
-export default ProfileHeader;
+export default ProfileHeader

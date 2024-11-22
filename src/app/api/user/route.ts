@@ -2,6 +2,8 @@ import { db } from '@/database'
 import { User, usersTable } from '@/database/schema'
 import { NextRequest } from 'next/server'
 
+export const runtime = 'edge'
+
 export async function POST(req: NextRequest) {
   try {
     const user = (await req.json()) as User
