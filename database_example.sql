@@ -78,7 +78,7 @@ INSERT INTO songs (album_id, author, track_number, name, duration, feature) VALU
                                                                                 (1, 'travisscott', 5, 'Gods Country', '2:08', NULL),
                                                                                 (1, 'travisscott', 6, 'Sirens', '3:24', NULL),
                                                                                 (1, 'travisscott', 7, 'Meltdown', '4:06', 'Drake'),
-                                                                                (1, 'travisscott', 8, 'Fe!n', '3:12', 'Playboi Carti'),
+                                                                                (1, 'travisscott', 8, 'FE!N', '3:12', 'Playboi Carti'),
                                                                                 (1, 'travisscott', 9, 'Delresto (Echoes)', '4:34', 'Beyoncé'),
                                                                                 (1, 'travisscott', 10, 'I Know ?', '3:32', NULL),
                                                                                 (1, 'travisscott', 11, 'Topia Twins', '3:43', 'Rob49 & 21 Savage'),
