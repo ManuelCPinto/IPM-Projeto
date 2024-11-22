@@ -24,7 +24,7 @@ const RatingsPage: React.FC = () => {
     // Fetch FeaturedReviews
     const fetchFeaturedReviews = async () => {
       try {
-        const featuredAlbumIds = ['utopia', 'cure'];
+        const featuredAlbumIds = [1, 2];
         const featuredData: FeaturedAlbumReview[] = [];
 
         const fetchPromises = featuredAlbumIds.map(async (albumId) => {
