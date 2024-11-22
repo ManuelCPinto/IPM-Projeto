@@ -84,7 +84,6 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
                   position: "absolute",
                 }}
               >
-                <div className="popup-item">Add to Liked</div>
                 <div className="popup-item">Add to Playlist</div>
                 <div className="popup-item">Review</div>
                 <div className="popup-item">Go to Artist</div>

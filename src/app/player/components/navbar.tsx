@@ -3,18 +3,28 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { FaHome, FaUser } from 'react-icons/fa';
-import SearchBar from '@/app/player/search/SearchBar'; // Import SearchBar from the correct path
+import SearchBar from '@/app/player/search/SearchBar';
+import { IoArrowBackCircleOutline } from 'react-icons/io5';
 
 const Navbar: React.FC = () => {
   return (
     <nav className="bg-neutral-900 bg-[radial-gradient(ellipse_80%_80%_at_50%_50%,rgba(15,20,50,1),rgba(5,10,40,0.9))] text-white shadow-lg border-b border-gray-700">
       <div className="container mx-auto flex items-center justify-between py-3 px-4">
-        {/* Logo */}
-        <Link href="/player">
-          <div className="flex items-center cursor-pointer">
-          <Image src="/logo.png" alt="Logo" width={40} height={40}/>
-          </div>
-        </Link>
+        <div className="flex items-center justify-between w-auto gap-4">
+          {/* Back Button */}
+          <button
+            className="flex bg-transparent text-white p-2 rounded-full hover:bg-gray-700 hover:opacity-90 transition focus:outline-none"
+            onClick={() => window.history.back()}
+          >
+            <IoArrowBackCircleOutline size={32} />
+          </button>
+          {/* Logo */}
+          <Link href="/player">
+            <div className="flex items-center cursor-pointer">
+            <Image src="/logo.png" alt="Logo" width={40} height={40}/>
+            </div>
+          </Link>
+        </div>
 
         {/* Search Bar */}
         <div className="flex-1 mx-4">
