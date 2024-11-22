@@ -1,10 +1,12 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import { FaHome, FaCompass, FaMusic, FaHeart, FaStar } from 'react-icons/fa';
 import { IoMdMusicalNotes, IoMdPerson } from 'react-icons/io';
 import { FiPlusSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
+import { User } from '@/database/schema';
 
 interface Playlist {
   id: string;
@@ -14,23 +16,21 @@ interface Playlist {
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [user, setUser] = useState<User | null>(null);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  // Fetch playlists from user session
+  // Fetch playlists for the user
   const fetchPlaylists = async () => {
-    const storedUser = localStorage.getItem('user');
-    const user = storedUser ? JSON.parse(storedUser) : null;
-
     if (!user) {
       toast.error('User not logged in');
       return;
     }
 
     try {
-      const res = await fetch(`/api/user/${user.id}/playlists`);
+      const res = await fetch(`/api/user/${user.username}/playlists`);
       if (!res.ok) {
         throw new Error('Failed to fetch playlists');
       }
@@ -42,42 +42,56 @@ const Sidebar: React.FC = () => {
     }
   };
 
-  // Add a new playlist
   const addPlaylist = async () => {
     const playlistName = prompt('Enter playlist name:');
     if (!playlistName) return;
-
-    const storedUser = localStorage.getItem('user');
-    const user = storedUser ? JSON.parse(storedUser) : null;
-
+  
     if (!user) {
       toast.error('User not logged in');
       return;
     }
-
+  
     try {
-      const res = await fetch(`/api/user/${user.id}/playlists`, {
+      const res = await fetch(`/api/user/${user.username}/playlists`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ name: playlistName }),
       });
+  
       if (!res.ok) {
-        throw new Error('Failed to create playlist');
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to create playlist');
       }
-      const newPlaylist = await res.json();
-      setPlaylists((prev) => [...prev, newPlaylist]);
+  
+      const { playlist } = await res.json();
+  
+      setPlaylists((prev) => [...prev, playlist]);
       toast.success('Playlist created!');
     } catch (error) {
       console.error('Error creating playlist:', error);
-      toast.error('Error creating playlist');
+      toast.error(error.message || 'Error creating playlist');
     }
   };
+  
 
+  // Fetch user data from localStorage
   useEffect(() => {
-    fetchPlaylists();
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      toast.error('User not logged in');
+    }
   }, []);
+
+  // Fetch playlists whenever the user is set
+  useEffect(() => {
+    if (user) {
+      fetchPlaylists();
+    }
+  }, [user]);
 
   return (
     <div
@@ -87,7 +101,7 @@ const Sidebar: React.FC = () => {
     >
       {/* Header Section */}
       <div className="flex items-center justify-between p-4">
-        {isOpen && <span className="text-lg font-semibold">Timothy</span>}
+        {isOpen && <span className="text-lg font-semibold">{user?.username || 'Guest'}</span>}
         <button
           className="bg-gray-700 rounded-full p-1 text-white hover:bg-gray-600 transition-colors"
           onClick={toggleSidebar}
@@ -149,17 +163,12 @@ const Sidebar: React.FC = () => {
             {isOpen && <span>Create new playlist</span>}
           </div>
           {playlists.map((playlist) => (
-            <Link
+            <div
               key={playlist.id}
-              href={`/playlist/${playlist.id}`}
-              className="py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition"
+              className="p-2 bg-gray-800 rounded-md flex items-center justify-between text-gray-300 hover:bg-gray-700 cursor-pointer"
             >
-              {isOpen ? (
-                <span className="pl-8">{playlist.name}</span>
-              ) : (
-                <div className="flex items-center w-4 h-4 bg-gray-400 rounded-full"></div>
-              )}
-            </Link>
+              <span className="truncate">{playlist.name}</span>
+            </div>
           ))}
         </div>
       </div>

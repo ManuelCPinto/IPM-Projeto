@@ -1,55 +1,59 @@
-'use client'
+'use client';
 
-import ky from 'ky'
-import * as Yup from 'yup'
-import { Field, Form, Formik } from 'formik'
-import Center from '@/components/Center'
-import { useRouter } from 'next/navigation'
-import { toast } from 'react-hot-toast'
-import { Alert, Button } from '@mui/material'
-import { TextField } from 'formik-mui'
-import { clsx } from 'clsx'
-import Link from 'next/link'
+import ky from 'ky';
+import * as Yup from 'yup';
+import { Field, Form, Formik } from 'formik';
+import Center from '@/components/Center';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
+import { Alert, Button } from '@mui/material';
+import { TextField } from 'formik-mui';
+import { clsx } from 'clsx';
+import Link from 'next/link';
 
 interface LoginForm {
-  username: string
-  password: string
+  username: string;
+  password: string;
 }
 
 const initialValues: LoginForm = {
   username: '',
   password: '',
-}
+};
 
 const validationSchema: Yup.ObjectSchema<LoginForm> = Yup.object().shape({
   username: Yup.string().required('Username is required'),
   password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
-})
+});
 
 export default function Login() {
-  const router = useRouter()
+  const router = useRouter();
 
   async function loginUser(values: LoginForm) {
     try {
+      // Convert `LoginForm` to a compatible format for `searchParams`
+      const searchParams = new URLSearchParams({
+        username: values.username,
+        password: values.password,
+      });
+  
       const response = await ky
-        .post('/api/user/login', {
-          json: values,
-        })
-        .json<{ success: boolean; message?: string; user?: { id: string; username: string } }>()
-
+        .get('/api/user/login', { searchParams }) // Use transformed searchParams
+        .json<{ success: boolean; message?: string; user?: { username: string; name: string; email: string; type: string; password: string } }>();
+  
       if (response.success && response.user) {
-        localStorage.setItem('user', JSON.stringify(response.user)) // Save user session in localStorage
-        toast.success('Login successful')
-        router.replace('/player') // Redirect to player page
+        localStorage.setItem('user', JSON.stringify(response.user));
+        toast.success('Login successful');
+        router.replace('/player'); 
       } else {
-        toast.error(response.message || 'Invalid username or password')
+        toast.error(response.message || 'Invalid username or password');
       }
     } catch (error) {
-      toast.error('Network error or server unavailable')
-      console.error(error)
+      toast.error('Network error or server unavailable');
+      console.error(error);
     }
   }
-
+    
   return (
     <Center className="h-full gap-8">
       <Alert severity="info">
@@ -71,5 +75,5 @@ export default function Login() {
         Create account
       </Link>
     </Center>
-  )
+  );
 }
