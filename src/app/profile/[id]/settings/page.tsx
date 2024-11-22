@@ -24,9 +24,9 @@ const settingsTabs = [
   },
 ];
 
-const SettingsPage = ({ params }: { params: { id: string } }) => {
-  const [activeTab, setActiveTab] = useState('edit-profile'); // Default active tab
-  const [followersTab, setFollowersTab] = useState<'followers' | 'following'>('followers'); // For followers toggle
+const SettingsPage = ({ }: { params: { id: string } }) => {
+  const [activeTab, setActiveTab] = useState('edit-profile');
+  const [followersTab, setFollowersTab] = useState<'followers' | 'following'>('followers');
 
   const renderTabContent = () => {
     switch (activeTab) {

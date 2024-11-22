@@ -117,7 +117,16 @@ const AlbumPage = () => {
   if (!album) {
     return <div className="text-white">No album data available.</div>;
   }
+  
   const handleReviewSubmit = async () => {
+    const storedUser = localStorage.getItem('user');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+  
+    if (!user) {
+      alert('You must be logged in to submit a review.');
+      return;
+    }
+  
     if (userReview.trim() !== '') {
       try {
         const res = await fetch(`/api/albums/${albumId}/reviews`, {
@@ -126,7 +135,7 @@ const AlbumPage = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            user: 'Current User', // Replace with actual user data
+            user: user.username, // Use the username from localStorage
             stars: userRating,
             content: userReview,
             date: new Date().toISOString(),
