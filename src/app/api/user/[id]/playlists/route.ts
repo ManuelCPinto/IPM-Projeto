@@ -25,7 +25,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const username = params.id
-    const { name } = await req.json()
+    const { name, coverImage } = await req.json()
 
     if (!username || !name) {
       return NextResponse.json({ success: false, message: 'User ID and playlist name are required' }, { status: 400 })
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     const result = await db.insert(playlistTable).values({
       name,
       author: username,
-      cover: '/default-cover.png' // Default cover
+      cover: coverImage
     })
 
     if (result.rowsAffected === 0) {
