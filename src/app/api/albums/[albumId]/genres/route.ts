@@ -1,14 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/database';
-import { genresTable, albumsTable, albumGenresTable } from '@/database/schema';
-import { eq } from 'drizzle-orm';
+import { NextRequest, NextResponse } from 'next/server'
+import { db } from '@/database'
+import { genresTable, albumsTable, albumGenresTable } from '@/database/schema'
+import { eq } from 'drizzle-orm'
 
-export async function GET(
-  request: NextRequest,
-  context: { params: { albumId: string } }
-) {
-  const { params } = context;
-  const { albumId } = await params;
+export async function GET(request: NextRequest, res: NextResponse, context: { params: { albumId: string } }) {
+  const { params } = context
+  const { albumId } = await params
 
   try {
     // Fetch album to get internal ID
@@ -16,10 +13,10 @@ export async function GET(
       .select()
       .from(albumsTable)
       .where(eq(albumsTable.id, parseInt(albumId)))
-      .get();
+      .get()
 
     if (!album) {
-      return NextResponse.json({ error: 'Album not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Album not found' }, { status: 404 })
     }
 
     // Fetch genres
@@ -28,16 +25,13 @@ export async function GET(
       .from(albumGenresTable)
       .leftJoin(genresTable, eq(albumGenresTable.genreId, genresTable.id))
       .where(eq(albumGenresTable.albumId, album.id))
-      .all();
+      .all()
 
-    const genres = genresData.map((g) => g.name);
+    const genres = genresData.map((g) => g.name)
 
-    return NextResponse.json(genres);
+    return NextResponse.json(genres)
   } catch (error) {
-    console.error('Error fetching genres:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('Error fetching genres:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
