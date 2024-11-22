@@ -1,30 +1,41 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// /app/api/albums/[albumId]/route.ts
-
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
-import { albumsTable } from '@/database/schema';
-import { eq } from 'drizzle-orm'; 
+import { albumsTable, usersTable } from '@/database/schema';
+import { eq } from 'drizzle-orm';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { albumId: string } }
+  context: { params: { albumId: string } }
 ) {
-  const { albumId } = params;
-  console.log(`Fetching album with albumId: ${albumId}`);
+  const { params } = context;
+  const { albumId } = await params;
 
   try {
-    const album = await db.query.albumsTable.findFirst({
-      where: eq(albumsTable.albumId, albumId),
-    });
+    const albumWithArtist = await db
+      .select({
+        id: albumsTable.id,
+        name: albumsTable.name,
+        artist: usersTable.name,
+        type: albumsTable.type,
+        releaseDate: albumsTable.releaseDate,
+        recorded: albumsTable.recorded,
+        rating: albumsTable.rating,
+        rated: albumsTable.rated,
+        ranked: albumsTable.ranked,
+        cover: albumsTable.cover,
+        language: albumsTable.language,
+      })
+      .from(albumsTable)
+      .leftJoin(usersTable, eq(albumsTable.artist, usersTable.username))
+      .where(eq(albumsTable.id, parseInt(albumId)))
+      .limit(1);
 
-    if (!album) {
+    if (!albumWithArtist || albumWithArtist.length === 0) {
       console.log(`Album not found: ${albumId}`);
       return NextResponse.json({ error: 'Album not found' }, { status: 404 });
     }
 
-    console.log(`Album found: ${JSON.stringify(album)}`);
-    return NextResponse.json(album);
+    return NextResponse.json(albumWithArtist[0]);
   } catch (error: any) {
     console.error('Error fetching album:', error);
     return NextResponse.json(
