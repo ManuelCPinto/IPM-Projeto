@@ -1,37 +1,42 @@
-// /app/api/albums/[albumId]/reviews/route.ts
-
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
 import { reviewsTable, albumsTable } from '@/database/schema';
 import { eq } from 'drizzle-orm';
 
 export async function GET(
-  request: Request,
-  { params }: { params: { albumId: string } }
+  request: NextRequest,
+  context: { params: { albumId: string } }
 ) {
-  const { albumId } = params;
+  const { params } = context;
+  const { albumId } = await params;
 
   try {
-    // Fetch album to get internal ID
-    const album = await db
+    const data = await db
       .select()
       .from(albumsTable)
-      .where(eq(albumsTable.albumId, albumId))
-      .get();
-
-    if (!album) {
-      return NextResponse.json({ error: 'Album not found' }, { status: 404 });
-    }
-
-    // Fetch reviews associated with the album
-    const reviews = await db
-      .select()
-      .from(reviewsTable)
-      .where(eq(reviewsTable.albumId, album.id))
+      .innerJoin(reviewsTable, eq(albumsTable.id, reviewsTable.albumId))
+      .where(eq(albumsTable.id, parseInt(albumId)))
+      .orderBy(reviewsTable.date)
       .all();
 
-    return NextResponse.json(reviews);
-  } catch (error: any) {
+    if (data.length === 0) {
+      return NextResponse.json({ error: 'Album not found or has no reviews' }, { status: 404 });
+    }
+
+    const reviews = data.map((entry) => ({
+      reviewId: entry.reviews.id,
+      user: entry.reviews.user,
+      stars: entry.reviews.stars,
+      content: entry.reviews.content,
+      date: entry.reviews.date,
+    }));
+
+    return NextResponse.json({
+      albumId: data[0].albums.id,
+      albumTitle: data[0].albums.name,
+      reviews,
+    });
+  } catch (error) {
     console.error('Error fetching reviews:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
@@ -41,15 +46,15 @@ export async function GET(
 }
 
 export async function POST(
-  request: Request,
-  { params }: { params: { albumId: string } }
+  request: NextRequest,
+  context: { params: { albumId: string } }
 ) {
-  const { albumId } = params;
+  const { params } = context;
+  const { albumId } = await params;
 
   try {
     const { user, stars, content } = await request.json();
 
-    // Input validation
     if (!user || stars === undefined || !content) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -57,18 +62,16 @@ export async function POST(
       );
     }
 
-    // Fetch album to get internal ID
     const album = await db
       .select()
       .from(albumsTable)
-      .where(eq(albumsTable.albumId, albumId))
+      .where(eq(albumsTable.id, parseInt(albumId)))
       .get();
 
     if (!album) {
       return NextResponse.json({ error: 'Album not found' }, { status: 404 });
     }
 
-    // Insert the new review
     await db.insert(reviewsTable).values({
       albumId: album.id,
       user,

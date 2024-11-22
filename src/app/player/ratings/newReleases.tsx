@@ -25,7 +25,7 @@ const NewReleases: React.FC<NewReleasesProps> = ({ Albums, error }) => {
       <h2 className="text-xl font-bold text-white border-b border-gray-700 pb-2">New Releases</h2>
       <div className="space-y-4">
         {Albums.map((album) => (
-          <Link key={album.albumId} href={`/player/ratings/albums/${album.albumId}`} passHref>
+          <Link key={album.id} href={`/player/ratings/albums/${album.id}`} passHref>
             <div className="flex items-start gap-4 hover:bg-gray-700 p-4 rounded-lg transition cursor-pointer">
               {/* Album Cover */}
               <Image

@@ -10,7 +10,8 @@ export async function GET(req: NextRequest) {
     const searchParams = req.nextUrl.searchParams;
     const query = searchParams.get('query');
 
-    // Validar o parâmetro query
+
+    // Validate query parameter
     if (!query || query.trim() === '') {
       return NextResponse.json({ results: [] });
     }
@@ -33,6 +34,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json([]);
     }
 
+    // Return the results
     return NextResponse.json(results);
   } catch (error) {
     console.error('Error fetching search results:', error);

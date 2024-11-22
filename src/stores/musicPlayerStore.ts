@@ -24,7 +24,8 @@ interface MusicPlayerStore {
   previous(): Promise<number | null>
 }
 
-export const audio = new Audio()
+// Client-side code only
+export const audio = typeof window !== 'undefined' ? new Audio() : undefined
 
 export const useMusicPlayerStore = create(
   subscribeWithSelector<MusicPlayerStore>((set, get) => ({
@@ -105,7 +106,7 @@ useMusicPlayerStore.subscribe(
   }
 )
 
-audio.addEventListener('ended', async () => {
+audio?.addEventListener('ended', async () => {
   const musicPlayerStore = useMusicPlayerStore.getState()
   switch (musicPlayerStore.repeatMode) {
     case RepeatMode.NONE: {
