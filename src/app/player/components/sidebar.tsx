@@ -191,20 +191,22 @@ const Sidebar: React.FC = () => {
                 isOpen ? 'w-20 h-20' : 'w-12 h-12'
               }`}
             >
-              {/* Display playlist cover */}
-              <Image
-                src={playlist.cover || '/covers/default.png'}
-                alt={`${playlist.name} Cover`}
-                width={isOpen ? 80 : 24} // Adjust size based on sidebar state
-                height={isOpen ? 80 : 24}
-                className="rounded-md object-cover" // Added margin-left to move the icon more to the right
-              />
-              
-              <div
-                className="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              >
-                {isOpen && <span className="text-sm font-medium px-3">{playlist.name}</span>} {/* Added padding to playlist name */}
-              </div>
+              <Link href={`/player/playlist/${playlist.id}`}>
+                {/* Display playlist cover */}
+                <Image
+                  src={playlist.cover || '/covers/default.png'}
+                  alt={`${playlist.name} Cover`}
+                  width={isOpen ? 80 : 24}
+                  height={isOpen ? 80 : 24}
+                  className="rounded-md object-cover"
+                />
+                
+                <div
+                  className="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  {isOpen && <span className="text-sm font-medium px-3">{playlist.name}</span>} {/* Added padding to playlist name */}
+                </div>
+              </Link>
             </div>
           ))}
         </div>
