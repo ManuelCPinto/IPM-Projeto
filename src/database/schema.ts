@@ -8,3 +8,5 @@ export * from './entities/genre';
 export * from './entities/tbcGenre';
 export * from './entities/tbcDescriptor';
 export * from './entities/tbcPlaylist';
+export * from './entities/follow';
+export * from './entities/like';

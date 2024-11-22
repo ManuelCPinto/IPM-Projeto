@@ -33,7 +33,10 @@ export async function POST(req: NextRequest) {
       password: user.password, 
       name: user.name || user.username,
       type: user.type || 'user', 
-      picture: 'covers/manuel.png'
+      picture: 'covers/manuel.png',
+      followers: 0,
+      following: 0,
+      monthlyListeners: 0
     });
 
     return NextResponse.json({ success: true });

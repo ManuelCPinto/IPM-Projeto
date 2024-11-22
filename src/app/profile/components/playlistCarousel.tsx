@@ -2,14 +2,8 @@
 
 import React, { useRef, useState, useEffect } from 'react';
 import Image from 'next/image';
-
-interface Playlist {
-  id: number;
-  image: string;
-  name: string;
-  owner: string;
-  songCount: number;
-}
+import Link from 'next/link';
+import { Playlist } from '@/database/schema';
 
 const PlaylistCarousel = ({ playlists }: { playlists: Playlist[] }) => {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -30,10 +24,7 @@ const PlaylistCarousel = ({ playlists }: { playlists: Playlist[] }) => {
     if (scrollContainerRef.current) {
       const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current;
 
-      // Show/hide left arrow
       setShowLeftArrow(scrollLeft > 0);
-
-      // Show/hide right arrow
       setShowRightArrow(scrollLeft + clientWidth < scrollWidth);
     }
   };
@@ -41,12 +32,8 @@ const PlaylistCarousel = ({ playlists }: { playlists: Playlist[] }) => {
   useEffect(() => {
     const container = scrollContainerRef.current;
     if (container) {
-      // Attach scroll event listener to update arrow visibility
       container.addEventListener('scroll', updateArrowVisibility);
-
-      // Initial check for arrow visibility
       updateArrowVisibility();
-
       return () => {
         container.removeEventListener('scroll', updateArrowVisibility);
       };
@@ -61,26 +48,24 @@ const PlaylistCarousel = ({ playlists }: { playlists: Playlist[] }) => {
         className="flex space-x-6 overflow-x-auto scrollbar-hide p-2"
       >
         {playlists.map((playlist) => (
-          <div
-            key={playlist.id}
-            className="min-w-[200px] flex-shrink-0 bg-gray-800 rounded-lg shadow hover:shadow-lg transition-transform cursor-pointer"
-          >
-            {/* Playlist Cover */}
-            <div className="relative w-full h-36">
-              <Image
-                src={playlist.image}
-                alt={playlist.name}
-                layout="fill"
-                objectFit="cover"
-                className="rounded-t-lg"
-              />
+          <Link key={playlist.id} href={`/playlist/${playlist.id}`}>
+            <div className="min-w-[200px] flex-shrink-0 bg-gray-800 rounded-lg shadow hover:shadow-lg transition-transform cursor-pointer">
+              {/* Playlist Cover */}
+              <div className="relative w-full h-36">
+                <Image
+                  src={playlist.cover}
+                  alt={playlist.name}
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-t-lg"
+                />
+              </div>
+              {/* Playlist Info */}
+              <div className="p-4">
+                <h4 className="text-lg font-semibold truncate text-white">{playlist.name}</h4>
+              </div>
             </div>
-            {/* Playlist Info */}
-            <div className="p-4">
-              <h4 className="text-lg font-semibold truncate text-white">{playlist.name}</h4>
-              <p className="text-sm text-gray-400">{playlist.songCount} songs</p>
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
 

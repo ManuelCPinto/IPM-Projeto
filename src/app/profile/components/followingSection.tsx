@@ -2,8 +2,10 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { User } from '@/database/schema';
 
-const FollowingSection = ({ following }: { following: Array<{ id: number; profileImage: string; name: string; followers: number }> }) => {
+const FollowingSection = ({ following }: { following: User[] }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredFollowing = following.filter((user) =>
@@ -27,13 +29,21 @@ const FollowingSection = ({ following }: { following: Array<{ id: number; profil
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredFollowing.length > 0 ? (
           filteredFollowing.map((user) => (
-            <div key={user.id} className="flex flex-col items-center bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition-transform">
-              <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-500">
-                <Image src={user.profileImage} alt={user.name} width={80} height={80} className="object-cover" />
+            <Link key={user.username} href={`/profile/${user.username}`}>
+              <div className="flex flex-col items-center bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition-transform cursor-pointer">
+                <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-500">
+                  <Image
+                    src={user.picture || '/default-profile.png'}
+                    alt={user.name}
+                    width={80}
+                    height={80}
+                    className="object-cover"
+                  />
+                </div>
+                <h3 className="mt-3 text-white font-semibold">{user.name}</h3>
+                <p className="text-sm text-gray-400">{user.followers} followers</p>
               </div>
-              <h3 className="mt-3 text-white font-semibold">{user.name}</h3>
-              <p className="text-sm text-gray-400">{user.followers} followers</p>
-            </div>
+            </Link>
           ))
         ) : (
           <p className="text-gray-500 text-center col-span-full">No following found.</p>
