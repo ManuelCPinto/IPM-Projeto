@@ -1,6 +1,5 @@
-// src/app/components/Sidebar.tsx
-
 'use client'
+
 import React, { useState } from 'react'
 import { FaHome, FaCompass, FaMusic, FaHeart, FaStar } from 'react-icons/fa'
 import { IoMdMusicalNotes, IoMdPerson } from 'react-icons/io'
@@ -31,14 +30,14 @@ const Sidebar: React.FC = () => {
       <div className="flex-grow overflow-y-auto px-4 max-h-[calc(100vh-175px)] scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900">
         {/* Main Links */}
         <div className={`space-y-2 ${!isOpen ? 'text-center' : ''}`}>
-          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
+          <Link href="/player/home" className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
             <FaHome size={isOpen ? 16 : 24} />
             {isOpen && <span>Home</span>}
-          </div>
-          <div className="flex items-center gap-3 py-2 cursor-pointe hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
+          </Link>
+          <Link href="/player/explore" className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
             <FaCompass size={isOpen ? 16 : 24} />
             {isOpen && <span>Explore</span>}
-          </div>
+          </Link>
           <Link href="/player/ratings" className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
             <FaStar size={isOpen ? 16 : 24} />
             {isOpen && <span>Ratings</span>}
@@ -48,22 +47,22 @@ const Sidebar: React.FC = () => {
         {/* Collection Section */}
         {isOpen && <p className="mt-6 text-xs font-bold text-gray-400 uppercase">My Collection</p>}
         <div className={`space-y-2 mt-2 ${!isOpen ? 'text-center' : ''}`}>
-          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
+          <Link href="/player/my-mix" className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
             <IoMdMusicalNotes size={isOpen ? 16 : 24} />
             {isOpen && <span>My Mix</span>}
-          </div>
-          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
+          </Link>
+          <Link href="/player/playlists" className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
             <FaMusic size={isOpen ? 16 : 24} />
             {isOpen && <span>Playlists</span>}
-          </div>
-          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
+          </Link>
+          <Link href="/player/albums" className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
             <FaHeart size={isOpen ? 16 : 24} />
             {isOpen && <span>Albums</span>}
-          </div>
-          <div className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
+          </Link>
+          <Link href="/player/artists" className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
             <IoMdPerson size={isOpen ? 16 : 24} />
             {isOpen && <span>Artists</span>}
-          </div>
+          </Link>
         </div>
 
         {/* Playlists Section */}
@@ -89,7 +88,7 @@ const Sidebar: React.FC = () => {
           </div>
           <div className="py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition">
             {isOpen ? (
-              <span className="pl-8">Playlist 2</span>
+              <span className="pl-8">Playlist 3</span>
             ) : (
               <div className="items-center w-4 h-4 bg-gray-400 rounded-full"></div>
             )}
