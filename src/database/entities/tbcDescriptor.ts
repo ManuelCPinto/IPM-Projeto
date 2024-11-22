@@ -1,4 +1,4 @@
-import { sqliteTable, integer, text, primaryKey } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, integer, primaryKey } from 'drizzle-orm/sqlite-core'
 import { albumsTable } from './album'
 import { descriptorsTable } from './descriptor'
 

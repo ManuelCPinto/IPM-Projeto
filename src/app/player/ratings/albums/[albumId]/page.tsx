@@ -7,7 +7,7 @@ import { useParams } from 'next/navigation';
 import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { Album, Descriptor, Genre, Review, Song } from '@/database/schema';
 import Image from 'next/image';
-
+import LoadingSpinner from '@/components/loading';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -22,7 +22,7 @@ const formatDate = (dateString: string) => {
 
 const AlbumPage = () => {
   const { albumId } = useParams();
-  const [album, setAlbum] = useState<Album>(); 
+  const [album, setAlbum] = useState<Album | null>(null);
   const [tracklist, setTracklist] = useState<Song[]>([]);
   const [genres, setGenres] = useState<Genre[]>([]);
   const [descriptors, setDescriptors] = useState<Descriptor[]>([]);
@@ -41,7 +41,6 @@ const AlbumPage = () => {
     fetchReviews();
   }, [albumId]);
 
-  // Fetch Album Data
   const fetchAlbum = async () => {
     try {
       setIsLoading(true);
@@ -52,7 +51,6 @@ const AlbumPage = () => {
       }
       const data = await res.json();
       setAlbum(data);
-
     } catch (error: any) {
       console.error('Error fetching album:', error.message || error);
       setError(error.message || 'Error fetching album');
@@ -61,13 +59,10 @@ const AlbumPage = () => {
     }
   };
 
-  // Fetch Tracklist
   const fetchTracklist = async () => {
     try {
       const res = await fetch(`/api/albums/${albumId}/tracklist`);
-      if (!res.ok) {
-        throw new Error('Error fetching tracklist');
-      }
+      if (!res.ok) throw new Error('Error fetching tracklist');
       const data = await res.json();
       setTracklist(data);
     } catch (error) {
@@ -75,13 +70,10 @@ const AlbumPage = () => {
     }
   };
 
-  // Fetch Genres
   const fetchGenres = async () => {
     try {
       const res = await fetch(`/api/albums/${albumId}/genres`);
-      if (!res.ok) {
-        throw new Error('Error fetching genres');
-      }
+      if (!res.ok) throw new Error('Error fetching genres');
       const data = await res.json();
       setGenres(data);
     } catch (error) {
@@ -89,13 +81,10 @@ const AlbumPage = () => {
     }
   };
 
-  // Fetch Descriptors
   const fetchDescriptors = async () => {
     try {
       const res = await fetch(`/api/albums/${albumId}/descriptors`);
-      if (!res.ok) {
-        throw new Error('Error fetching descriptors');
-      }
+      if (!res.ok) throw new Error('Error fetching descriptors');
       const data = await res.json();
       setDescriptors(data);
     } catch (error) {
@@ -103,7 +92,6 @@ const AlbumPage = () => {
     }
   };
 
-  // Fetch Reviews
   const fetchReviews = async () => {
     try {
       const res = await fetch(`/api/albums/${albumId}/reviews`);
@@ -112,14 +100,14 @@ const AlbumPage = () => {
         throw new Error(errorData.error || 'Error fetching reviews');
       }
       const data = await res.json();
-      setReviews(data);
+      setReviews(data.reviews || []);
     } catch (error: any) {
       console.error('Error fetching reviews:', error.message || error);
     }
   };
 
   if (isLoading) {
-    return <div className="text-white">Loading...</div>;
+    return <LoadingSpinner/>
   }
 
   if (error) {
@@ -150,21 +138,18 @@ const AlbumPage = () => {
             user: user.username, // Use the username from localStorage
             stars: userRating,
             content: userReview,
-            date: new Date().toISOString(), // Add date on submission
+            date: new Date().toISOString(),
           }),
         });
-  
+
         if (!res.ok) {
           const errorData = await res.json();
           alert(`Error: ${errorData.error}`);
           return;
         }
-  
-        // Clear form inputs
+
         setUserRating(0);
         setUserReview('');
-  
-        // Re-fetch reviews to get updated and complete data
         await fetchReviews();
       } catch (error) {
         console.error('Error submitting review:', error);
@@ -174,8 +159,7 @@ const AlbumPage = () => {
       alert('Please write a review before submitting.');
     }
   };
-
-
+  
   // Calculate total number of reviews
   const totalReviews = reviews.length;
 
@@ -229,10 +213,10 @@ const sortedReviews = [...reviews].sort((a, b) => new Date(b.date).getTime() - n
           {/* Album Cover */}
           <div className="flex justify-center">
           <Image
-            src={album.cover} // Dynamically use album.cover
-            alt={`${album.name} Cover`} // Use the album name for accessibility
-            width={500} // Add appropriate width for optimization
-            height={500} // Add appropriate height for optimization
+            src={album.cover}
+            alt={`${album.name} Cover`} 
+            width={500}
+            height={500}
             className="rounded-lg object-cover w-full h-auto" />
           </div>
           {/* Tracklist */}
