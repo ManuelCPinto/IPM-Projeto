@@ -7,13 +7,13 @@ import SearchBar from '@/app/player/search/SearchBar'; // Import SearchBar from 
 import { useEffect, useState } from 'react';
 
 const Navbar: React.FC = () => {
-  const [userId, setUserId] = useState<string | null>(null);
+  const [username, setUsername] = useState<string | null>(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
       const user = JSON.parse(storedUser);
-      setUserId(user.id);
+      setUsername(user.username);
     }
   }, []);
 
@@ -37,8 +37,8 @@ const Navbar: React.FC = () => {
           <Link href="/player" className="hover:text-gray-300">
             <FaHome size={20} />
           </Link>
-          {userId ? (
-            <Link href={`/profile/${userId}`} className="hover:text-gray-300">
+          {username ? (
+            <Link href={`/profile/${username}`} className="hover:text-gray-300">
               <FaUser size={20} />
             </Link>
           ) : (
