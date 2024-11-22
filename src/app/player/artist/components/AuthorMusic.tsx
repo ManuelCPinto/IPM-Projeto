@@ -72,6 +72,7 @@ export const AuthorMusic: React.FC<AuthorMusicTableProps> = ({ songs }) => {
 
   return (
     <div className="AuthorMusic-table">
+        <h1 className="AuthorMusic-table-title">Top Songs</h1>
       {/* Table Header */}
       <div className="table-header-container">
         <div className="table-header-item">
