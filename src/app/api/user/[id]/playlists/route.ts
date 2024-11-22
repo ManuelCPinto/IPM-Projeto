@@ -4,7 +4,7 @@ import { playlistTable } from '@/database/schema'
 import { eq, and } from 'drizzle-orm'
 
 // GET Method: Fetch User Playlists
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { id: string } }) {
   try {
     const username = params.id
 
@@ -22,7 +22,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 // POST Method: Create a New Playlist
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, res: NextResponse, { params }: { params: { id: string } }) {
   try {
     const username = params.id
     const { name, coverImage } = await req.json()
