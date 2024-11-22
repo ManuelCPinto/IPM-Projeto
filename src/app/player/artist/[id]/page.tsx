@@ -16,7 +16,7 @@ export default function ArtistPage() {
 
   useEffect(() => {
     if (username) {
-      fetchArtistData(username as string)
+      fetchArtistData(username)
     } else {
       console.error('Username not found in URL parameters')
       setLoading(false)
@@ -33,7 +33,7 @@ export default function ArtistPage() {
 
       setArtist(data.artist)
       setSongs(data.songs.slice(0, 5))
-      setAlbums(data.albums)
+      setAlbums(data.albums) 
     } catch (error) {
       console.error('Error fetching artist data:', error)
       toast.error('Failed to load artist information.')
@@ -95,7 +95,7 @@ export default function ArtistPage() {
               <div className="flex-grow flex justify-between items-center">
                 <div>
                   <p className="font-semibold">{song.name}</p>
-                  <p className="text-sm text-gray-400">{song.albumId}</p>
+                  <p className="text-sm text-gray-400">{song.albumName}</p>
                 </div>
                 <p className="text-sm text-gray-400">{song.duration}</p>
               </div>
@@ -111,7 +111,7 @@ export default function ArtistPage() {
             <div
               key={index}
               className="flex flex-col items-center bg-gray-800 p-3 rounded-md shadow-lg hover:bg-gray-700 transition"
-              style={{ width: '180px' }}
+              style={{ width: '180px' }} 
             >
               <Image
                 src={album.cover || '/default-album.png'}

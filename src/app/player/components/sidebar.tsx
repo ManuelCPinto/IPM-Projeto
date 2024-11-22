@@ -1,114 +1,119 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import { FaHome, FaCompass, FaMusic, FaHeart, FaStar } from 'react-icons/fa'
-import { IoMdMusicalNotes, IoMdPerson } from 'react-icons/io'
-import { FiPlusSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-import Link from 'next/link'
-import { toast } from 'react-hot-toast'
-import { Playlist, User } from '@/database/schema'
-import Image from 'next/image'
+import React, { useEffect, useState } from 'react';
+import { FaHome, FaCompass, FaMusic, FaHeart, FaStar } from 'react-icons/fa';
+import { IoMdMusicalNotes, IoMdPerson } from 'react-icons/io';
+import { FiPlusSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import Link from 'next/link';
+import { toast } from 'react-hot-toast';
+import { Playlist, User } from '@/database/schema';
+import Image from 'next/image';
 
 const Sidebar: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(true)
-  const [playlists, setPlaylists] = useState<Playlist[]>([])
-  const [user, setUser] = useState<User | null>(null)
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [playlistName, setPlaylistName] = useState('')
-  const [selectedCover, setSelectedCover] = useState<string | null>(null)
+  const [isOpen, setIsOpen] = useState(true);
+  const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [user, setUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [playlistName, setPlaylistName] = useState('');
+  const [selectedCover, setSelectedCover] = useState<string | null>(null);
 
-  const predefinedCovers = ['/covers/Album 1.png', '/covers/Album 2.png', '/covers/Album 3.png', '/covers/Album 4.png']
+  const predefinedCovers = [
+    '/covers/Album 1.png',
+    '/covers/Album 2.png',
+    '/covers/Album 3.png',
+    '/covers/Album 4.png',
+  ];
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen)
-  }
+    setIsOpen(!isOpen);
+  };
 
   const toggleModal = () => {
-    setIsModalOpen(!isModalOpen)
-    setPlaylistName('')
-    setSelectedCover(null)
-  }
+    setIsModalOpen(!isModalOpen);
+    setPlaylistName('');
+    setSelectedCover(null);
+  };
 
   const handleAddPlaylist = async () => {
     if (!playlistName.trim()) {
-      toast.error('Playlist name cannot be empty')
-      return
+      toast.error('Playlist name cannot be empty');
+      return;
     }
 
     if (!user) {
-      toast.error('User not logged in')
-      return
+      toast.error('User not logged in');
+      return;
     }
 
     if (!selectedCover) {
-      toast.error('Please select a cover image')
-      return
+      toast.error('Please select a cover image');
+      return;
     }
 
     try {
       const res = await fetch(`/api/user/${user.username}/playlists`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: playlistName,
-          coverImage: selectedCover
-        })
-      })
+          coverImage: selectedCover,
+        }),
+      });
 
       if (!res.ok) {
-        const errorData = await res.json()
-        throw new Error(errorData.message || 'Failed to create playlist')
+        const errorData = await res.json();
+        throw new Error(errorData.message || 'Failed to create playlist');
       }
 
-      const { playlist } = await res.json()
+      const { playlist } = await res.json();
 
-      setPlaylists((prev) => [...prev, playlist])
-      toast.success('Playlist created successfully')
-      toggleModal() // Close modal
+      setPlaylists((prev) => [...prev, playlist]);
+      toast.success('Playlist created successfully');
+      toggleModal(); // Close modal
     } catch (error) {
-      console.error('Error creating playlist:', error)
-      toast.error(error.message || 'Error creating playlist')
+      console.error('Error creating playlist:', error);
+      toast.error(error.message || 'Error creating playlist');
     }
-  }
+  };
 
   // Fetch playlists for the user
   const fetchPlaylists = async () => {
     if (!user) {
-      toast.error('User not logged in')
-      return
+      toast.error('User not logged in');
+      return;
     }
 
     try {
-      const res = await fetch(`/api/user/${user.username}/playlists`)
+      const res = await fetch(`/api/user/${user.username}/playlists`);
       if (!res.ok) {
-        throw new Error('Failed to fetch playlists')
+        throw new Error('Failed to fetch playlists');
       }
-      const data = await res.json()
-      setPlaylists(data.playlists || [])
+      const data = await res.json();
+      setPlaylists(data.playlists || []);
     } catch (error) {
-      console.error('Error fetching playlists:', error)
-      toast.error('Error fetching playlists')
+      console.error('Error fetching playlists:', error);
+      toast.error('Error fetching playlists');
     }
-  }
+  };
 
   // Fetch user data from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem('user')
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser))
+      setUser(JSON.parse(storedUser));
     } else {
-      toast.error('User not logged in')
+      toast.error('User not logged in');
     }
-  }, [])
+  }, []);
 
   // Fetch playlists whenever the user is set
   useEffect(() => {
     if (user) {
-      fetchPlaylists()
+      fetchPlaylists();
     }
-  })
+  }, [user]);
 
   return (
     <div
@@ -171,9 +176,7 @@ const Sidebar: React.FC = () => {
 
         {/* Playlists Section */}
         {isOpen && <p className="mt-6 text-xs font-bold text-gray-400 uppercase">My Playlists</p>}
-        <div className={`space-y-4 mt-2 ${!isOpen ? 'text-center' : ''}`}>
-          {' '}
-          {/* Increased gap between playlist cards */}
+        <div className={`space-y-4 mt-2 ${!isOpen ? 'text-center' : ''}`}> {/* Increased gap between playlist cards */}
           <div
             className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition"
             onClick={toggleModal}
@@ -184,7 +187,9 @@ const Sidebar: React.FC = () => {
           {playlists.map((playlist) => (
             <div
               key={playlist.id}
-              className={`relative group cursor-pointer transition-transform ${isOpen ? 'w-20 h-20' : 'w-12 h-12'}`}
+              className={`relative group cursor-pointer transition-transform ${
+                isOpen ? 'w-20 h-20' : 'w-12 h-12'
+              }`}
             >
               <Link href={`/player/playlist/${playlist.id}`}>
                 {/* Display playlist cover */}
@@ -195,10 +200,11 @@ const Sidebar: React.FC = () => {
                   height={isOpen ? 80 : 24}
                   className="rounded-md object-cover"
                 />
-
-                <div className="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {isOpen && <span className="text-sm font-medium px-3">{playlist.name}</span>}{' '}
-                  {/* Added padding to playlist name */}
+                
+                <div
+                  className="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  {isOpen && <span className="text-sm font-medium px-3">{playlist.name}</span>} {/* Added padding to playlist name */}
                 </div>
               </Link>
             </div>
@@ -226,12 +232,21 @@ const Sidebar: React.FC = () => {
                   }`}
                   onClick={() => setSelectedCover(cover)}
                 >
-                  <Image src={cover} alt="Cover Option" width={80} height={80} className="rounded-md object-cover" />
+                  <Image
+                    src={cover}
+                    alt="Cover Option"
+                    width={80}
+                    height={80}
+                    className="rounded-md object-cover"
+                  />
                 </div>
               ))}
             </div>
             <div className="flex justify-end gap-4">
-              <button className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500" onClick={toggleModal}>
+              <button
+                className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500"
+                onClick={toggleModal}
+              >
                 Cancel
               </button>
               <button
@@ -245,7 +260,7 @@ const Sidebar: React.FC = () => {
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;

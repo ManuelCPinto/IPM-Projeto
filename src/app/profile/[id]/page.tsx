@@ -12,7 +12,7 @@ import { User } from '@/database/schema'
 const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null)
   const [profile, setProfile] = useState<User | null>(null)
-  const [playlists, setPlaylists] = useState([])
+  const [playlists, setPlaylists] = useState<any[]>([])
   const [followers, setFollowers] = useState<User[]>([])
   const [following, setFollowing] = useState<User[]>([])
   const [isFollowing, setIsFollowing] = useState(false)
@@ -84,7 +84,7 @@ const ProfilePage = () => {
       toast.error('Failed to fetch profile')
     }
   }
-
+  
   // Check if the logged-in user is following the profile user
   const checkIfFollowing = async (follower: string, following: string) => {
     try {

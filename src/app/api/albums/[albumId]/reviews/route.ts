@@ -1,11 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { db } from '@/database'
-import { reviewsTable, albumsTable } from '@/database/schema'
-import { eq } from 'drizzle-orm'
+import { NextRequest, NextResponse } from 'next/server';
+import { db } from '@/database';
+import { reviewsTable, albumsTable } from '@/database/schema';
+import { eq } from 'drizzle-orm';
 
-export async function GET(request: NextRequest, res: NextResponse, context: { params: { albumId: string } }) {
-  const { params } = context
-  const { albumId } = await params
+export async function GET(
+  request: NextRequest,
+  context: { params: { albumId: string } }
+) {
+  const { params } = context;
+  const { albumId } = await params;
 
   try {
     const data = await db
@@ -14,10 +17,10 @@ export async function GET(request: NextRequest, res: NextResponse, context: { pa
       .innerJoin(reviewsTable, eq(albumsTable.id, reviewsTable.albumId))
       .where(eq(albumsTable.id, parseInt(albumId)))
       .orderBy(reviewsTable.date)
-      .all()
+      .all();
 
     if (data.length === 0) {
-      return NextResponse.json({ error: 'Album not found or has no reviews' }, { status: 404 })
+      return NextResponse.json({ error: 'Album not found or has no reviews' }, { status: 404 });
     }
 
     const reviews = data.map((entry) => ({
@@ -25,39 +28,48 @@ export async function GET(request: NextRequest, res: NextResponse, context: { pa
       user: entry.reviews.user,
       stars: entry.reviews.stars,
       content: entry.reviews.content,
-      date: entry.reviews.date
-    }))
+      date: entry.reviews.date,
+    }));
 
     return NextResponse.json({
       albumId: data[0].albums.id,
       albumTitle: data[0].albums.name,
-      reviews
-    })
+      reviews,
+    });
   } catch (error) {
-    console.error('Error fetching reviews:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('Error fetching reviews:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
-export async function POST(request: NextRequest, res: NextResponse, context: { params: { albumId: string } }) {
-  const { params } = context
-  const { albumId } = await params
+export async function POST(
+  request: NextRequest,
+  context: { params: { albumId: string } }
+) {
+  const { params } = context;
+  const { albumId } = await params;
 
   try {
-    const { user, stars, content } = await request.json()
+    const { user, stars, content } = await request.json();
 
     if (!user || stars === undefined || !content) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
     }
 
     const album = await db
       .select()
       .from(albumsTable)
       .where(eq(albumsTable.id, parseInt(albumId)))
-      .get()
+      .get();
 
     if (!album) {
-      return NextResponse.json({ error: 'Album not found' }, { status: 404 })
+      return NextResponse.json({ error: 'Album not found' }, { status: 404 });
     }
 
     await db.insert(reviewsTable).values({
@@ -65,12 +77,15 @@ export async function POST(request: NextRequest, res: NextResponse, context: { p
       user,
       date: new Date().toISOString(),
       stars,
-      content
-    })
+      content,
+    });
 
-    return NextResponse.json({ success: true }, { status: 201 })
-  } catch (error) {
-    console.error('Error inserting review:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json({ success: true }, { status: 201 });
+  } catch (error: any) {
+    console.error('Error inserting review:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
