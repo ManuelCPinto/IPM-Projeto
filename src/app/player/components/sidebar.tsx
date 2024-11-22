@@ -6,14 +6,8 @@ import { IoMdMusicalNotes, IoMdPerson } from 'react-icons/io';
 import { FiPlusSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import Link from 'next/link';
 import { toast } from 'react-hot-toast';
-import { User } from '@/database/schema';
+import { Playlist, User } from '@/database/schema';
 import Image from 'next/image';
-
-interface Playlist {
-  id: string;
-  name: string;
-  coverImage: string;
-}
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true);
@@ -182,7 +176,7 @@ const Sidebar: React.FC = () => {
 
         {/* Playlists Section */}
         {isOpen && <p className="mt-6 text-xs font-bold text-gray-400 uppercase">My Playlists</p>}
-        <div className={`space-y-2 mt-2 ${!isOpen ? 'text-center' : ''}`}>
+        <div className={`space-y-4 mt-2 ${!isOpen ? 'text-center' : ''}`}> {/* Increased gap between playlist cards */}
           <div
             className="flex items-center gap-3 py-2 cursor-pointer hover:text-blue-600 hover:bg-gray-800 rounded-xl transition"
             onClick={toggleModal}
@@ -193,17 +187,24 @@ const Sidebar: React.FC = () => {
           {playlists.map((playlist) => (
             <div
               key={playlist.id}
-              className="p-2 bg-gray-800 rounded-md flex items-center justify-between text-gray-300 hover:bg-gray-700 cursor-pointer"
+              className={`relative group cursor-pointer transition-transform ${
+                isOpen ? 'w-20 h-20' : 'w-12 h-12'
+              }`}
             >
               {/* Display playlist cover */}
               <Image
-                src={playlist.coverImage || '/covers/default.png'}  // Use a default image if cover is not available
+                src={playlist.cover || '/covers/default.png'}
                 alt={`${playlist.name} Cover`}
-                width={40}  // Set the width of the image
-                height={40} // Set the height of the image
-                className="rounded-md object-cover"
+                width={isOpen ? 80 : 24} // Adjust size based on sidebar state
+                height={isOpen ? 80 : 24}
+                className="rounded-md object-cover" // Added margin-left to move the icon more to the right
               />
-              <span className="truncate">{playlist.name}</span>
+              
+              <div
+                className="absolute inset-0 bg-black bg-opacity-50 text-white flex items-center justify-center rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              >
+                {isOpen && <span className="text-sm font-medium px-3">{playlist.name}</span>} {/* Added padding to playlist name */}
+              </div>
             </div>
           ))}
         </div>
