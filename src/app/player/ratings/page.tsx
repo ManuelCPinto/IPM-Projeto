@@ -23,7 +23,8 @@ const RatingsPage: React.FC = () => {
   useEffect(() => {
     const fetchFeaturedReviews = async () => {
       try {
-        const featuredAlbumIds = [1, 2]; // Example album IDs
+        const featuredAlbumIds = [1, 2];
+
         const featuredData: FeaturedAlbumReview[] = [];
 
         for (const albumId of featuredAlbumIds) {
