@@ -10,7 +10,8 @@ import { User } from '@/database/entities/user'
 import { getExtendedSong } from '@/database/utils/getExtendedSong'
 import { getExtendedAlbum } from '@/database/utils/getExtendedAlbum'
 import Center from '@/components/Center'
-import { AlbumCard } from '@/app/player/components/AlbumCard'
+import { AlbumCard } from './components/AlbumCard'
+import { ArtistCard } from './components/ArtistCard'
 
 async function getSongs(albumId?: number, limit = 10) {
   return (await ky
@@ -35,11 +36,23 @@ async function getAlbums() {
     .json()) as { album: Album; artist: User }[]
 }
 
+async function getArtists() {
+  return (await ky
+    .get('/api/artists', {
+      searchParams: {
+        query: '',
+        limit: 10
+      }
+    })
+    .json()) as User[]
+}
+
 export default function Home() {
   const set = useMusicPlayerStore((state) => state.set)
 
   const songs = useAsync(getSongs)
   const albums = useAsync(getAlbums)
+  const artists = useAsync(getArtists)
 
   async function playAlbumSongs(albumId: number) {
     const songs = await getSongs(albumId, undefined)
@@ -55,7 +68,7 @@ export default function Home() {
         <p className="text-lg text-gray-300 mt-4">Discover your next favorite song or album.</p>
       </Center>
       <div className="flex flex-col gap-3 w-full">
-        <p className="text-xl font-bold">Songs</p>
+        <p className="text-xl font-bold">Recommended Songs</p>
         <div className="flex gap-4 overflow-x-auto overflow-y-hidden">
           {songs.loading ? (
             <p className="opacity-50">Loading...</p>
@@ -72,7 +85,7 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col gap-3 w-full">
-        <p className="text-xl font-bold">Albums</p>
+        <p className="text-xl font-bold">Recommended Albums</p>
         <div className="flex gap-4 overflow-x-auto overflow-y-hidden">
           {albums.loading ? (
             <p className="opacity-50">Loading...</p>
@@ -85,6 +98,20 @@ export default function Home() {
                 </div>
               )
             })
+          )}
+        </div>
+      </div>
+      <div className="flex flex-col gap-3 w-full">
+        <p className="text-xl font-bold">Recommended Artists</p>
+        <div className="flex gap-4 overflow-x-auto overflow-y-hidden">
+          {artists.loading ? (
+            <p className="opacity-50">Loading...</p>
+          ) : (
+            artists.value?.map((artist, idx) => (
+              <div key={idx}>
+                <ArtistCard artist={artist} />
+              </div>
+            ))
           )}
         </div>
       </div>
