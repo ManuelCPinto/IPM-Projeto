@@ -55,19 +55,19 @@ INSERT INTO descriptors (id, name) VALUES
 
 -- Insert albums
 INSERT INTO albums (name, artist, type, release_date, recorded, rating, rated, ranked, cover, language) VALUES
-                                                                                                                          ('Utopia', 'travisscott', 'album', '28 July 2023', '2019 - 2023', 3.44, 20229, '#253 for 2023', '/covers/utopia.webp', 'English'),
-                                                                                                                          ('Disintegration', 'thecure', 'album', 'May 2, 1989', '1988–1989', 4.5, 50000, 'Ranked #543', '/covers/cure.webp', 'English'),
-                                                                                                                          ('Chromakopia', 'tyler', 'album', '28 October 2024', '', 3.67, 19545, '', '/covers/tyler.webp', 'English'),
-                                                                                                                          ('Night Palace', 'mounteerie', 'album', '1 November 2024', '', 3.99, 6094, '', '/covers/mountEerie.webp', 'English'),
-                                                                                                                          ('Cool World', 'chatpile', 'album', '11 October 2024', '', 3.82, 6330, '', '/covers/coolworld.jpg', 'English');
+                                                                                                            ('Utopia', 'travisscott', 'album', '28 July 2023', '2019 - 2023', 3.44, 20229, '#253 for 2023', '/covers/utopia.webp', 'English'),
+                                                                                                            ('Disintegration', 'thecure', 'album', 'May 2, 1989', '1988–1989', 4.5, 50000, 'Ranked #543', '/covers/cure.webp', 'English'),
+                                                                                                            ('Chromakopia', 'tyler', 'album', '28 October 2024', '', 3.67, 19545, '', '/covers/tyler.webp', 'English'),
+                                                                                                            ('Night Palace', 'mounteerie', 'album', '1 November 2024', '', 3.99, 6094, '', '/covers/mountEerie.webp', 'English'),
+                                                                                                            ('Cool World', 'chatpile', 'album', '11 October 2024', '', 3.82, 6330, '', '/covers/coolworld.jpg', 'English');
 -- Insert users (artists)
-INSERT INTO users (username, name, email, password, type) VALUES
-                                 ('admin', 'MusicBox', 'admin@example.com', 'admin123', 'user'),
-                                 ('travisscott', 'Travis Scott', 'contact@travisscott.com','123123123', 'artist'),
-                                 ('thecure', 'The Cure', 'contact@thecure.com', '123123123', 'artist'),
-                                 ('tyler', 'Tyler, the Creator', 'contact@tyler.com', '123123123', 'artist'),
-                                 ('mounteerie', 'Mount Eerie', 'contact@mounteerie.com', '123123123', 'artist'),
-                                 ('chatpile', 'Chat Pile', 'contact@chatpile.com', '123123123', 'artist');
+INSERT INTO users (username, name, email, password, type, picture, followers, monthlyListeners, following) VALUES
+                                                              ('admin', 'MusicBox', 'admin@example.com', 'admin123', 'user', '/covers/utopia.webp', 0,0, 0),
+                                                              ('travisscott', 'Travis Scott', 'contact@travisscott.com','123123123', 'artist', '/covers/utopia.webp', 0, 0, 0),
+                                                              ('thecure', 'The Cure', 'contact@thecure.com', '123123123', 'artist', '/covers/utopia.webp',0 , 0,0),
+                                                              ('tyler', 'Tyler, the Creator', 'contact@tyler.com', '123123123', 'artist', '/covers/utopia.webp',0 , 0,0),
+                                                              ('mounteerie', 'Mount Eerie', 'contact@mounteerie.com', '123123123', 'artist', '/covers/utopia.webp',0 , 0,0),
+                                                              ('chatpile', 'Chat Pile', 'contact@chatpile.com', '123123123', 'artist', '/covers/utopia.webp',0 , 0,0);
 
 -- Insert songs for 'Utopia' (album_id:1)
 INSERT INTO songs (album_id, author, track_number, name, duration, feature) VALUES
@@ -78,7 +78,7 @@ INSERT INTO songs (album_id, author, track_number, name, duration, feature) VALU
                                                                                 (1, 'travisscott', 5, 'Gods Country', '2:08', NULL),
                                                                                 (1, 'travisscott', 6, 'Sirens', '3:24', NULL),
                                                                                 (1, 'travisscott', 7, 'Meltdown', '4:06', 'Drake'),
-                                                                                (1, 'travisscott', 8, 'Fe!n', '3:12', 'Playboi Carti'),
+                                                                                (1, 'travisscott', 8, 'FE!N', '3:12', 'Playboi Carti'),
                                                                                 (1, 'travisscott', 9, 'Delresto (Echoes)', '4:34', 'Beyoncé'),
                                                                                 (1, 'travisscott', 10, 'I Know ?', '3:32', NULL),
                                                                                 (1, 'travisscott', 11, 'Topia Twins', '3:43', 'Rob49 & 21 Savage'),
@@ -147,86 +147,85 @@ INSERT INTO songs (album_id, author, track_number, name, duration, feature) VALU
 -- Link genres to albums
 -- Utopia (album_id:1)
 INSERT INTO tbc_album_genres (album_id, genre_id) VALUES
-                                                     (1, 1),
-                                                     (1, 2),
-                                                     (1, 3),
-                                                     (1, 4),
-                                                     (1, 5),
-                                                     (1, 6),
-                                                     (1, 7);
+                                                      (1, 1),
+                                                      (1, 2),
+                                                      (1, 3),
+                                                      (1, 4),
+                                                      (1, 5),
+                                                      (1, 6),
+                                                      (1, 7);
 
 -- Disintegration (album_id:2)
 INSERT INTO tbc_album_genres (album_id, genre_id) VALUES
-                                                     (2, 8),
-                                                     (2, 9);
+                                                      (2, 8),
+                                                      (2, 9);
 
 -- Chromakopia (album_id:3)
 INSERT INTO tbc_album_genres (album_id, genre_id) VALUES
-                                                     (3, 10),
-                                                     (3, 11);
+                                                      (3, 10),
+                                                      (3, 11);
 
 -- Night Palace (album_id:4)
 INSERT INTO tbc_album_genres (album_id, genre_id) VALUES
-                                                     (4, 12),
-                                                     (4, 13),
-                                                     (4, 14);
+                                                      (4, 12),
+                                                      (4, 13),
+                                                      (4, 14);
 
 -- Cool World (album_id:5)
 INSERT INTO tbc_album_genres (album_id, genre_id) VALUES
-                                                     (5, 15),
-                                                     (5, 16);
+                                                      (5, 15),
+                                                      (5, 16);
 
 -- Link descriptors to albums
 -- Utopia (album_id:1)
 INSERT INTO tbc_album_descriptors (album_id, descriptor_id) VALUES
-                                                               (1, 1),
-                                                               (1, 2),
-                                                               (1, 3),
-                                                               (1, 4),
-                                                               (1, 5),
-                                                               (1, 6),
-                                                               (1, 7),
-                                                               (1, 8),
-                                                               (1, 9),
-                                                               (1, 10),
-                                                               (1, 11),
-                                                               (1, 12),
-                                                               (1, 13),
-                                                               (1, 14),
-                                                               (1, 15),
-                                                               (1, 16),
-                                                               (1, 17),
-                                                               (1, 18),
-                                                               (1, 19),
-                                                               (1, 20);
+                                                                (1, 1),
+                                                                (1, 2),
+                                                                (1, 3),
+                                                                (1, 4),
+                                                                (1, 5),
+                                                                (1, 6),
+                                                                (1, 7),
+                                                                (1, 8),
+                                                                (1, 9),
+                                                                (1, 10),
+                                                                (1, 11),
+                                                                (1, 12),
+                                                                (1, 13),
+                                                                (1, 14),
+                                                                (1, 15),
+                                                                (1, 16),
+                                                                (1, 17),
+                                                                (1, 18),
+                                                                (1, 19),
+                                                                (1, 20);
 
 -- Disintegration (album_id:2)
 INSERT INTO tbc_album_descriptors (album_id, descriptor_id) VALUES
-                                                               (2, 21),
-                                                               (2, 8),
-                                                               (2, 22);
+                                                                (2, 21),
+                                                                (2, 8),
+                                                                (2, 22);
 
 -- Chromakopia (album_id:3)
 INSERT INTO tbc_album_descriptors (album_id, descriptor_id) VALUES
-                                                               (3, 23),
-                                                               (3, 24),
-                                                               (3, 25),
-                                                               (3, 26);
+                                                                (3, 23),
+                                                                (3, 24),
+                                                                (3, 25),
+                                                                (3, 26);
 
 -- Night Palace (album_id:4)
 INSERT INTO tbc_album_descriptors (album_id, descriptor_id) VALUES
-                                                               (4, 27),
-                                                               (4, 28),
-                                                               (4, 8),
-                                                               (4, 29);
+                                                                (4, 27),
+                                                                (4, 28),
+                                                                (4, 8),
+                                                                (4, 29);
 
 -- Cool World (album_id:5)
 INSERT INTO tbc_album_descriptors (album_id, descriptor_id) VALUES
-                                                               (5, 30),
-                                                               (5, 31),
-                                                               (5, 32),
-                                                               (5, 33);
-
+                                                                (5, 30),
+                                                                (5, 31),
+                                                                (5, 32),
+                                                                (5, 33);
 -- Insert reviews
 -- Utopia (album_id:1)
 INSERT INTO reviews (album_id, user, date, stars, content) VALUES
@@ -235,3 +234,29 @@ INSERT INTO reviews (album_id, user, date, stars, content) VALUES
 -- Disintegration (album_id:2)
 INSERT INTO reviews (album_id, user, date, stars, content) VALUES
     (2, 'musicfan123', 'Mar 21, 2023', 5, 'Disintegration is one of the best albums of all time...');
+
+-- (album_id:3)
+INSERT INTO reviews (album_id, user, date, stars, content) VALUES
+    (3, 'joao', 'Mar 22, 2023', 3.5, 'Its okay');
+
+-- (album_id:4)
+INSERT INTO reviews (album_id, user, date, stars, content) VALUES
+    (4, 'pedro', 'Mar 23, 2023', 4, 'Banger');
+
+INSERT INTO reviews (album_id, user, date, stars, content) VALUES
+    (5, 'gabriel', 'Mar 24, 2023', 2.5, 'mid');
+
+INSERT INTO follows (follower, following)
+VALUES
+    ('Manuel', 'admin'),
+    ('Manuel', 'travisscott'),
+    ('Manuel', 'thecure'),
+    ('Manuel', 'tyler'),
+    ('Manuel', 'mounteerie'),
+    ('Manuel', 'chatpile'),
+    ('admin', 'Manuel'),
+    ('travisscott', 'Manuel'),
+    ('thecure', 'Manuel'),
+    ('tyler', 'Manuel'),
+    ('mounteerie', 'Manuel'),
+    ('chatpile', 'Manuel');
