@@ -16,7 +16,7 @@ export async function GET(
     const album = await db
       .select()
       .from(albumsTable)
-      .where(eq(albumsTable.albumId, albumId))
+      .where(eq(albumsTable.id, parseInt(albumId)))
       .get();
 
     if (!album) {

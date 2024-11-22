@@ -16,7 +16,7 @@ export async function GET(request: Request) {
   try {
     // Fetch matching albums
     const albums = await db
-      .select({ id: albumsTable.albumId, name: albumsTable.name })
+      .select({ id: albumsTable.id, name: albumsTable.name })
       .from(albumsTable)
       .where(like(albumsTable.name, `%${query}%`))
       .then((rows) => rows.map((row) => ({ ...row, type: 'Album' })));
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
 
     // Fetch matching artists
     const artists = await db
-      .select({ id: usersTable.id, name: usersTable.username })
+      .select({ id: usersTable.username, name: usersTable.username })
       .from(usersTable)
       .where(like(usersTable.username, `%${query}%`))
       .then((rows) => rows.map((row) => ({ ...row, type: 'Artist' })));

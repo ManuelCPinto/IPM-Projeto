@@ -9,14 +9,14 @@ export async function GET(
   request: Request,
   { params }: { params: { albumId: string } }
 ) {
-  const { albumId } = params;
+   const { albumId } = params;
 
   try {
     // Fetch album to get internal ID
     const album = await db
       .select()
       .from(albumsTable)
-      .where(eq(albumsTable.albumId, albumId))
+      .where(eq(albumsTable.id, parseInt(albumId)))
       .get();
 
     if (!album) {

@@ -21,113 +21,81 @@ const RatingsPage: React.FC = () => {
   const isLoading = featuredReviewsLoading || newReleasesLoading;
 
   useEffect(() => {
-    // Fetch FeaturedReviews
     const fetchFeaturedReviews = async () => {
       try {
-        const featuredAlbumIds = ['utopia', 'cure'];
+        const featuredAlbumIds = [1, 2]; // Example album IDs
         const featuredData: FeaturedAlbumReview[] = [];
 
-        const fetchPromises = featuredAlbumIds.map(async (albumId) => {
-          // Fetch Album Data
+        for (const albumId of featuredAlbumIds) {
+          // Fetch album data
           const albumRes = await fetch(`/api/albums/${albumId}`);
           if (!albumRes.ok) {
-            const errorData = await albumRes.json();
-            throw new Error(errorData.error || `Error fetching album with ID: ${albumId}`);
+            throw new Error(`Failed to fetch album data for ID: ${albumId}`);
           }
           const album: Album = await albumRes.json();
 
-          // Fetch Genres
+          // Fetch genres
           const genresRes = await fetch(`/api/albums/${albumId}/genres`);
-          let genres: Genre[] = [];
-          if (genresRes.ok) {
-            genres = await genresRes.json();
-          } else {
-            console.error(`Error fetching genres for album ID: ${albumId}`);
-          }
+          const genres: Genre[]  = genresRes.ok ? await genresRes.json() : [];
 
-          // Fetch Descriptors
+          // Fetch descriptors
           const descriptorsRes = await fetch(`/api/albums/${albumId}/descriptors`);
-          let descriptors: Descriptor[] = [];
-          if (descriptorsRes.ok) {
-            descriptors = await descriptorsRes.json();
-          } else {
-            console.error(`Error fetching descriptors for album ID: ${albumId}`);
-          }
+          const descriptors: Descriptor[] = descriptorsRes.ok ? await descriptorsRes.json() : [];
 
-          // Fetch Reviews
+          // Fetch reviews
           const reviewsRes = await fetch(`/api/albums/${albumId}/reviews`);
-          let reviews: Review[] = [];
-          if (reviewsRes.ok) {
-            reviews = await reviewsRes.json();
-          } else {
-            console.error(`Error fetching reviews for album ID: ${albumId}`);
-          }
+          const albumReviews: { reviews: Review[] } = reviewsRes.ok ? await reviewsRes.json() : { reviews: [] };
 
-          // Choose the first review to be featured
-          const featuredReview = reviews.length > 0 ? reviews[0] : null;
+          // Choose the first review as the featured review
+          const featuredReview = albumReviews.reviews.length > 0 ? albumReviews.reviews[0] : null;
 
+          // Build FeaturedAlbumReview
           featuredData.push({
             album,
             genres,
             descriptors,
             featuredReview,
           });
-        });
+        }
 
-        await Promise.all(fetchPromises);
         setFeaturedReviews(featuredData);
       } catch (err: any) {
-        console.error('Error fetching featured reviews:', err.message || err);
         setFeaturedReviewsError(err.message || 'Error fetching featured reviews');
       } finally {
         setFeaturedReviewsLoading(false);
       }
     };
 
-    // Fetch New Releases
     const fetchNewReleases = async () => {
       try {
-        const newReleaseAlbumIds = ['tyler', 'mount-eerie', 'cool-world'];
+        const newReleaseAlbumIds = [3, 4, 5]; // Example album IDs
         const releasesData: (Album & { genres: Genre[]; descriptors: Descriptor[] })[] = [];
 
-        const fetchPromises = newReleaseAlbumIds.map(async (albumId) => {
-          // Fetch Album Data
+        for (const albumId of newReleaseAlbumIds) {
+          // Fetch album data
           const albumRes = await fetch(`/api/albums/${albumId}`);
           if (!albumRes.ok) {
-            const errorData = await albumRes.json();
-            throw new Error(errorData.error || `Error fetching album with ID: ${albumId}`);
+            throw new Error(`Failed to fetch album data for ID: ${albumId}`);
           }
           const album: Album = await albumRes.json();
 
-          // Fetch Genres
+          // Fetch genres
           const genresRes = await fetch(`/api/albums/${albumId}/genres`);
-          let genres: Genre[] = [];
-          if (genresRes.ok) {
-            genres = await genresRes.json();
-          } else {
-            console.error(`Error fetching genres for album ID: ${albumId}`);
-          }
-          
-          // Fetch Descriptors
+          const genres: Genre[] = genresRes.ok ? await genresRes.json() : [];
+
+          // Fetch descriptors
           const descriptorsRes = await fetch(`/api/albums/${albumId}/descriptors`);
-          let descriptors: Descriptor[] = [];
-          if (descriptorsRes.ok) {
-            descriptors = await descriptorsRes.json();
-          } else {
-            console.error(`Error fetching descriptors for album ID: ${albumId}`);
-          }
+          const descriptors: Descriptor[] = descriptorsRes.ok ? await descriptorsRes.json() : [];
 
           releasesData.push({
             ...album,
             genres,
             descriptors,
           });
-        });
+        }
 
-        await Promise.all(fetchPromises);
         setNewReleases(releasesData);
       } catch (err: any) {
-        console.error('Error fetching new releases:', err.message || err);
         setNewReleasesError(err.message || 'Error fetching new releases');
       } finally {
         setNewReleasesLoading(false);
@@ -147,9 +115,7 @@ const RatingsPage: React.FC = () => {
       </div>
 
       {/* Loading Spinner Overlay */}
-      {isLoading && (
-        <LoadingSpinner message="Loading reviews and releases..." />
-      )}
+      {isLoading && <LoadingSpinner message="Loading reviews and releases..." />}
 
       {/* Main Content */}
       <div className={`grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 ${isLoading ? 'opacity-50' : 'opacity-100'}`}>
