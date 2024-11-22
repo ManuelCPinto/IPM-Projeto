@@ -10,12 +10,12 @@ import { toast } from 'react-hot-toast'
 import { User } from '@/database/schema'
 
 const ProfilePage = () => {
-  const [user, setUser] = useState<User | null>(null) // Logged-in user
-  const [profile, setProfile] = useState<User | null>(null) // Profile being viewed
+  const [user, setUser] = useState<User | null>(null)
+  const [profile, setProfile] = useState<User | null>(null)
   const [playlists, setPlaylists] = useState<any[]>([])
   const [followers, setFollowers] = useState<User[]>([])
   const [following, setFollowing] = useState<User[]>([])
-  const [isFollowing, setIsFollowing] = useState(false) // Follow state
+  const [isFollowing, setIsFollowing] = useState(false)
   const [activeTab, setActiveTab] = useState('Public Playlists')
 
   const handleTabChange = (tab: string) => {
@@ -84,7 +84,7 @@ const ProfilePage = () => {
       toast.error('Failed to fetch profile')
     }
   }
-
+  
   // Check if the logged-in user is following the profile user
   const checkIfFollowing = async (follower: string, following: string) => {
     try {
@@ -124,7 +124,7 @@ const ProfilePage = () => {
         }
 
         toast.success(`You have unfollowed ${profile.name}`)
-        setIsFollowing(false) // Update follow state
+        setIsFollowing(false)
         fetchFollowers(profile.username) // Optionally refetch followers
       } catch (error) {
         console.error('Error unfollowing user:', error)
@@ -146,8 +146,8 @@ const ProfilePage = () => {
         }
 
         toast.success(`You are now following ${profile.name}`)
-        setIsFollowing(true) // Update follow state
-        fetchFollowers(profile.username) // Optionally refetch followers
+        setIsFollowing(true)
+        fetchFollowers(profile.username)
       } catch (error) {
         console.error('Error following user:', error)
         toast.error('Failed to follow user')
@@ -161,7 +161,7 @@ const ProfilePage = () => {
       const parsedUser: User = JSON.parse(storedUser)
       setUser(parsedUser)
 
-      const currentProfileUsername = window.location.pathname.split('/').pop() // Get the username from the URL
+      const currentProfileUsername = window.location.pathname.split('/').pop()
       if (currentProfileUsername) {
         fetchProfile(currentProfileUsername)
         fetchPlaylists(currentProfileUsername)

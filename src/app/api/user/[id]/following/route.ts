@@ -18,6 +18,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         name: usersTable.name,
         email: usersTable.email,
         picture: usersTable.picture,
+        type: usersTable.type,
         followers: usersTable.followers,
         monthlyListeners: usersTable.monthlyListeners,
       })

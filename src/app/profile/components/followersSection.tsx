@@ -29,7 +29,14 @@ const FollowersSection = ({ followers }: { followers: User[] }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {filteredFollowers.length > 0 ? (
           filteredFollowers.map((follower) => (
-            <Link key={follower.username} href={`/profile/${follower.username}`}>
+            <Link
+              key={follower.username}
+              href={
+                follower.type === 'artist'
+                  ? `/player/artist/${follower.username}`
+                  : `/profile/${follower.username}`
+              }
+            >
               <div className="flex flex-col items-center bg-gray-800 p-4 rounded-lg shadow hover:shadow-lg transition-transform cursor-pointer">
                 <div className="w-20 h-20 rounded-full overflow-hidden border-2 border-blue-600">
                   <Image

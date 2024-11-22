@@ -11,7 +11,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     if (!username) {
       return NextResponse.json({ success: false, message: 'User ID is required' }, { status: 400 })
     }
-    
+
     // Query followers for the given user
     const followers = await db
       .select({
@@ -19,6 +19,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         name: usersTable.name,
         email: usersTable.email,
         picture: usersTable.picture,
+        type: usersTable.type,
         followers: usersTable.followers,
         monthlyListeners: usersTable.monthlyListeners,
       })
