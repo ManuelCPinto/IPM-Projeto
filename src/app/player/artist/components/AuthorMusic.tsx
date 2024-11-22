@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface Song {
   name: string;
@@ -12,34 +12,63 @@ interface AuthorMusicTableProps {
 }
 
 export const AuthorMusic: React.FC<AuthorMusicTableProps> = ({ songs }) => {
-  const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
-  const [activePopup, setActivePopup] = useState<number | null>(null);
+    const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
+    const [activePopup, setActivePopup] = useState<number | null>(null);
+    const popupRef = useRef<HTMLDivElement | null>(null);
 
-  const togglePopup = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
-    if (activePopup === index) {
-      setActivePopup(null);
-      setPopupPosition(null);
-    } else {
-      const buttonRect = event.currentTarget.getBoundingClientRect();
+    const togglePopup = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
+        if (activePopup === index) {
+        setActivePopup(null);
+        setPopupPosition(null);
+        } else {
+        const buttonRect = event.currentTarget.getBoundingClientRect();
 
-      let top = buttonRect.bottom + window.scrollY;
-      let left = buttonRect.left + window.scrollX;
+        const popupWidth = 170;
+        const popupHeight = 176;
 
-      const popupWidth = 176;
-      const popupHeight = 176;
+        let top = buttonRect.bottom + window.scrollY;
+        let left = buttonRect.left + window.scrollX + popupWidth * 0.5;
 
-      if (left + popupWidth > window.innerWidth) {
-        left = window.innerWidth - popupWidth - 10;
-      }
+        if (left + popupWidth > window.innerWidth) {
+            left = window.innerWidth - popupWidth - 5;
+        }
 
-      if (top + popupHeight > window.innerHeight) {
-        top = window.innerHeight - popupHeight - 10;
-      }
+        if (top + popupHeight > window.innerHeight + window.scrollY) {
+            top = window.innerHeight + window.scrollY - popupHeight - 10;
+        }
 
-      setPopupPosition({ top, left });
-      setActivePopup(index);
-    }
-  };
+        setPopupPosition({ top, left });
+        setActivePopup(index);
+        }
+    };
+
+    const closePopup = () => {
+        setActivePopup(null);
+        setPopupPosition(null);
+    };
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+        if (
+            popupRef.current &&
+            !popupRef.current.contains(event.target as Node)
+        ) {
+            closePopup();
+        }
+        };
+
+        const handleScroll = () => {
+        closePopup();
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        window.addEventListener("scroll", handleScroll);
+
+        return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+        window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
 
   return (
     <div className="AuthorMusic-table">
@@ -75,6 +104,7 @@ export const AuthorMusic: React.FC<AuthorMusicTableProps> = ({ songs }) => {
             </button>
             {activePopup === index && popupPosition && (
               <div
+                ref={popupRef}
                 className="popup-menu"
                 style={{
                   top: popupPosition.top,
@@ -83,7 +113,7 @@ export const AuthorMusic: React.FC<AuthorMusicTableProps> = ({ songs }) => {
                 }}
               >
                 <div className="popup-item">Add to Liked</div>
-                <div className="popup-item">Add to AuthorMusic</div>
+                <div className="popup-item">Add to Playlist</div>
                 <div className="popup-item">Review</div>
                 <div className="popup-item">Go to Artist</div>
               </div>

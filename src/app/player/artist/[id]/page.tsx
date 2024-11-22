@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import '../components/styles/authorHeader.css';
+import '../components/styles/authorStyle.css';
 import { AuthorHeader } from "../components/AuthorHeader";
 import { AuthorInfo } from "../components/AuthorInfo";
 import { AuthorMusic } from "../components/AuthorMusic";
@@ -24,6 +24,7 @@ const songs = [
   { name: 'Contentores', author: 'Xutos e Pontapés', album: '88', duration: '3:30' },
 ];
 
+{/* Temporary base example */}
 const albums = [
   { title: '88', cover: '/playlistlogo.png' },
   { title: 'Circo de Feras', cover: '/playlistlogo.png' },
