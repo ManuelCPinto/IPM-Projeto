@@ -1,22 +1,22 @@
-import { NextResponse } from 'next/server';
-import { db } from '@/database';
-import { descriptorsTable, albumsTable, albumDescriptorsTable } from '@/database/schema';
-import { eq } from 'drizzle-orm';
+import { NextResponse } from 'next/server'
+import { db } from '@/database'
+import { descriptorsTable, albumsTable, albumDescriptorsTable } from '@/database/schema'
+import { eq } from 'drizzle-orm'
 
-export async function GET(request: Request, context: { params: { albumId: string } }) {
+export async function GET(request: Request, res: NextResponse, context) {
   try {
     // Wait for the params to be properly available
-    const { albumId } = await context.params;
+    const { albumId } = context.params
 
     // Fetch album to get internal ID
     const album = await db
       .select()
       .from(albumsTable)
       .where(eq(albumsTable.id, parseInt(albumId, 10)))
-      .get();
+      .get()
 
     if (!album) {
-      return NextResponse.json({ error: 'Album not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Album not found' }, { status: 404 })
     }
 
     // Fetch descriptors
@@ -25,13 +25,13 @@ export async function GET(request: Request, context: { params: { albumId: string
       .from(albumDescriptorsTable)
       .leftJoin(descriptorsTable, eq(albumDescriptorsTable.descriptorId, descriptorsTable.id))
       .where(eq(albumDescriptorsTable.albumId, album.id))
-      .all();
+      .all()
 
-    const descriptors = descriptorsData.map((d) => d.name);
+    const descriptors = descriptorsData.map((d) => d.name)
 
-    return NextResponse.json(descriptors);
+    return NextResponse.json(descriptors)
   } catch (error) {
-    console.error('Error fetching descriptors:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    console.error('Error fetching descriptors:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

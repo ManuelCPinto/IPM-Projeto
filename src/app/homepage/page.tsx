@@ -20,8 +20,8 @@ const Homepage: React.FC = () => {
         const response = await fetch('/api/mainController', {
           method: 'GET',
           headers: {
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         })
 
         if (!response.ok) {
@@ -31,7 +31,7 @@ const Homepage: React.FC = () => {
 
         const data = await response.json()
         setData(data)
-      } catch (err: any) {
+      } catch (err) {
         setError(err.message || 'Failed to load homepage data.')
         console.error('Error fetching homepage data:', err)
       } finally {

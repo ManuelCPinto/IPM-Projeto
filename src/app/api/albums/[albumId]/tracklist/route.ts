@@ -1,14 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/database';
-import { songsTable, albumsTable } from '@/database/schema';
-import { eq } from 'drizzle-orm';
+import { NextRequest, NextResponse } from 'next/server'
+import { db } from '@/database'
+import { songsTable, albumsTable } from '@/database/schema'
+import { eq } from 'drizzle-orm'
 
-export async function GET(
-  request: NextRequest,
-  context: { params: { albumId: string } }
-) {
-  const { params } = context;
-  const { albumId } = await params;
+export async function GET(request: NextRequest, res: NextResponse, context) {
+  const { params } = context
+  const { albumId } = await params
 
   try {
     // Fetch album to get internal ID
@@ -16,10 +13,10 @@ export async function GET(
       .select()
       .from(albumsTable)
       .where(eq(albumsTable.id, parseInt(albumId)))
-      .get();
+      .get()
 
     if (!album) {
-      return NextResponse.json({ error: 'Album not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Album not found' }, { status: 404 })
     }
 
     // Fetch songs (tracklist)
@@ -28,14 +25,11 @@ export async function GET(
       .from(songsTable)
       .where(eq(songsTable.albumId, album.id))
       .orderBy(songsTable.trackNumber)
-      .all();
+      .all()
 
-    return NextResponse.json(tracks);
+    return NextResponse.json(tracks)
   } catch (error) {
-    console.error('Error fetching tracklist:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('Error fetching tracklist:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
