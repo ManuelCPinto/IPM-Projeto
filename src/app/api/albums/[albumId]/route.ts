@@ -3,12 +3,9 @@ import { db } from '@/database';
 import { albumsTable} from '@/database/schema';
 import { eq } from 'drizzle-orm';
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { albumId: string } }
-) {
+export async function GET(request: NextRequest, context) {
   const { params } = context;
-  const { albumId } = params;
+  const { albumId } = await params;
 
   try {
     const album = await db
