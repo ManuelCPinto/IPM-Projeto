@@ -5,9 +5,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const user = (await req.json()) as User;
+    const user = await req.json();
 
-    // Check if the username or email already exists
     const existingUser = await db
       .select()
       .from(usersTable)
@@ -17,25 +16,30 @@ export async function POST(req: NextRequest) {
       .get();
 
     if (existingUser) {
-      return NextResponse.json({ success: false, message: 'Username or email already exists' }, { status: 409 })
+      return NextResponse.json(
+        { success: false, message: 'Username or email already exists' },
+        { status: 409 }
+      );
     }
 
-    // Insert new user into the database
     await db.insert(usersTable).values({
       username: user.username,
       email: user.email,
-      password: user.password, // Assume encryption happens elsewhere
+      password: user.password, 
       name: user.name || user.username,
-      type: user.type || 'user', // Default to 'user' if not provided
-      picture: '/covers/default-user.png', // Default profile picture
+      type: user.type || 'user',
+      picture: '/covers/default-user.png',
       followers: 0,
       following: 0,
-      monthlyListeners: user.type === 'artist' ? 0 : undefined, // Only relevant for artists
+      monthlyListeners: user.type === 'artist' ? 0 : null
     });
 
-    return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error registering user:', error)
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })
+    console.error('Error registering user:', error);
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
