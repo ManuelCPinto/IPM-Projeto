@@ -48,7 +48,7 @@ const PlaylistCarousel = ({ playlists }: { playlists: Playlist[] }) => {
         className="flex space-x-6 overflow-x-auto scrollbar-hide p-2"
       >
         {playlists.map((playlist) => (
-          <Link key={playlist.id} href={`/playlist/${playlist.id}`}>
+          <Link key={playlist.id} href={`/player/playlist/${playlist.id}`}>
             <div className="min-w-[200px] flex-shrink-0 bg-gray-800 rounded-lg shadow hover:shadow-lg transition-transform cursor-pointer">
               {/* Playlist Cover */}
               <div className="relative w-full h-36">

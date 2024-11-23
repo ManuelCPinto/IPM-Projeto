@@ -38,7 +38,7 @@ export default function Login() {
       });
   
       const response = await ky
-        .get('/api/user/login', { searchParams }) // Use transformed searchParams
+        .get('/api/user/login', { searchParams })
         .json<{ success: boolean; message?: string; user?: { username: string; name: string; email: string; type: string; password: string } }>();
   
       if (response.success && response.user) {

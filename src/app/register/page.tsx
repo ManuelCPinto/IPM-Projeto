@@ -6,8 +6,8 @@ import { Field, Form, Formik } from 'formik';
 import Center from '@/components/Center';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-hot-toast';
-import { Button } from '@mui/material';
-import { TextField } from 'formik-mui';
+import { Button, MenuItem } from '@mui/material';
+import { TextField, Select } from 'formik-mui';
 import { clsx } from 'clsx';
 import Link from 'next/link';
 
@@ -15,12 +15,14 @@ interface RegisterForm {
   username: string;
   email: string;
   password: string;
+  type: string; // "user" or "artist"
 }
 
 const initialValues: RegisterForm = {
-  username: 'Manuel',
-  email: 'manuelcoelhopinto@gmail.com',
-  password: 'password123',
+  username: '',
+  email: '',
+  password: '',
+  type: 'user', // Default user type
 };
 
 const validationSchema: Yup.ObjectSchema<RegisterForm> = Yup.object().shape({
@@ -29,6 +31,7 @@ const validationSchema: Yup.ObjectSchema<RegisterForm> = Yup.object().shape({
   password: Yup.string()
     .required('Password is required')
     .min(6, 'Password must be at least 6 characters'),
+  type: Yup.string().oneOf(['user', 'artist'], 'Invalid user type').required('User type is required'),
 });
 
 export default function Register() {
@@ -64,6 +67,16 @@ export default function Register() {
             <Field type="text" label="Username" name="username" component={TextField} />
             <Field type="email" label="Email" name="email" component={TextField} />
             <Field type="password" label="Password" name="password" component={TextField} />
+            <Field
+              name="type"
+              label="Account Type"
+              component={Select}
+              variant="outlined"
+              inputProps={{ 'aria-label': 'User Type' }}
+            >
+              <MenuItem value="user">User</MenuItem>
+              <MenuItem value="artist">Artist</MenuItem>
+            </Field>
             <Button type="submit" variant="contained" disabled={isSubmitting}>
               Register
             </Button>
