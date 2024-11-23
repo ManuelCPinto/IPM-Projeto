@@ -4,17 +4,25 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'next/navigation'
 import { User, Song, Album } from '@/database/schema'
 import Image from 'next/image'
+import Link from 'next/link'
 import { toast } from 'react-hot-toast'
 import LoadingSpinner from '@/components/loading'
+import { LikeButton } from '@/components/LikeButton'
 
 export default function ArtistPage() {
   const { id: username } = useParams()
+  const [user, setUser] = useState<User | null>(null)
   const [artist, setArtist] = useState<User | null>(null)
   const [songs, setSongs] = useState<Song[]>([])
   const [albums, setAlbums] = useState<Album[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+    const storedUser = localStorage.getItem('user')
+    if (storedUser) {
+      const parsedUser: User = JSON.parse(storedUser)
+      setUser(parsedUser)
+    }
     if (username) {
       fetchArtistData(username as string)
     } else {
@@ -99,30 +107,33 @@ export default function ArtistPage() {
                 </div>
                 <p className="text-sm text-gray-400">{song.duration}</p>
               </div>
-              <button className="ml-4 px-4 py-2 bg-gray-600 rounded-lg hover:bg-gray-500">♥</button>
+              <LikeButton songId={song.id} initialLiked={false} userId={user.username} />
             </div>
           ))}
         </div>
       </section>
+
+      {/* Albums Section */}
       <section className="p-8">
         <h2 className="text-2xl font-bold mb-4">Albums</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
           {albums.map((album, index) => (
-            <div
-              key={index}
-              className="flex flex-col items-center bg-gray-800 p-3 rounded-md shadow-lg hover:bg-gray-700 transition"
-              style={{ width: '180px' }}
-            >
-              <Image
-                src={album.cover || '/default-album.png'}
-                alt={`Cover of ${album.name}`}
-                width={150}
-                height={150}
-                className="rounded-lg mb-2"
-              />
-              <p className="text-center font-semibold text-sm">{album.name}</p>
-              <p className="text-center text-xs text-gray-400">{album.type}</p>
-            </div>
+            <Link href={`/player/album/${album.id}`} key={index}>
+              <div
+                className="flex flex-col items-center bg-gray-800 p-3 rounded-md shadow-lg hover:bg-gray-700 transition"
+                style={{ width: '180px' }}
+              >
+                <Image
+                  src={album.cover || '/default-album.png'}
+                  alt={`Cover of ${album.name}`}
+                  width={150}
+                  height={150}
+                  className="rounded-lg mb-2"
+                />
+                <p className="text-center font-semibold text-sm">{album.name}</p>
+                <p className="text-center text-xs text-gray-400">{album.type}</p>
+              </div>
+            </Link>
           ))}
         </div>
       </section>
