@@ -3,10 +3,9 @@ import { db } from '@/database';
 import { playlistTable, songsTable, playlistSongsTable } from '@/database/schema';
 import { and, eq } from 'drizzle-orm';
 
-export async function GET(req: NextRequest, { params }: { params: { name: string } }) {
+export async function GET(req: NextRequest, context ) {
   try {
-    const playlistId = params.name
-
+    const { name: playlistId } = context.params;
     if (!playlistId) {
       return NextResponse.json({ success: false, message: 'User ID is required' }, { status: 400 })
     }
@@ -86,7 +85,7 @@ export async function POST(req: NextRequest, { params }: { params: { name: strin
     }
 
     return NextResponse.json({ success: true }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error inserting review:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
