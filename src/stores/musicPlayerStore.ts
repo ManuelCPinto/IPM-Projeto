@@ -75,7 +75,7 @@ export const useMusicPlayerStore = create(
       return new Promise<number | null>((resolve) => {
         const oldCurrentTime = audio.currentTime
         audio.currentTime = 0
-        if (oldCurrentTime < 3) return resolve(get().currentMusicIndex)
+        if (oldCurrentTime >= 3) return resolve(get().currentMusicIndex)
 
         set((state) => {
           const newCurrentMusicIndex =
