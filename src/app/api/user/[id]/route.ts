@@ -4,7 +4,7 @@ import { usersTable } from '@/database/schema'
 import { eq } from 'drizzle-orm'
 
 // GET User Profile by ID
-export async function GET(req: NextRequest, res: NextResponse, { params }) {
+export async function GET(req: NextRequest, { params }) {
   try {
     const { id } = params
 

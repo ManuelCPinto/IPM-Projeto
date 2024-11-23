@@ -3,7 +3,7 @@ import { db } from '@/database'
 import { reviewsTable, albumsTable } from '@/database/schema'
 import { eq } from 'drizzle-orm'
 
-export async function GET(request: NextRequest, res: NextResponse, context) {
+export async function GET(request: NextRequest, context) {
   const { params } = context
   const { albumId } = await params
 
@@ -39,7 +39,7 @@ export async function GET(request: NextRequest, res: NextResponse, context) {
   }
 }
 
-export async function POST(request: NextRequest, res: NextResponse, context) {
+export async function POST(request: NextRequest, context) {
   const { params } = context
   const { albumId } = await params
 

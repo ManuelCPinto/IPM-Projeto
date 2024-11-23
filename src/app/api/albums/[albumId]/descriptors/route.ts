@@ -3,7 +3,7 @@ import { db } from '@/database'
 import { descriptorsTable, albumsTable, albumDescriptorsTable } from '@/database/schema'
 import { eq } from 'drizzle-orm'
 
-export async function GET(request: Request, res: NextResponse, context) {
+export async function GET(request: Request, context) {
   try {
     // Wait for the params to be properly available
     const { albumId } = context.params

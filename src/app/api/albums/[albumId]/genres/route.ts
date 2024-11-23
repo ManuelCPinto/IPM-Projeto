@@ -3,7 +3,7 @@ import { db } from '@/database'
 import { genresTable, albumsTable, albumGenresTable } from '@/database/schema'
 import { eq } from 'drizzle-orm'
 
-export async function GET(request: NextRequest, res: NextResponse, context) {
+export async function GET(request: NextRequest, context) {
   const { params } = context
   const { albumId } = await params
 

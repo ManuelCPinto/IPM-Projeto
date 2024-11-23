@@ -4,7 +4,7 @@ import { followsTable, usersTable } from '@/database/schema'
 import { db } from '@/database'
 import { and, eq, sql } from 'drizzle-orm'
 
-export async function POST(req: NextRequest, res: NextResponse, { params }) {
+export async function POST(req: NextRequest, { params }) {
   try {
     const follower = req.headers.get('x-username') // Assume the logged-in username is passed in headers
     const following = params.id // The user being followed
@@ -40,7 +40,7 @@ export async function POST(req: NextRequest, res: NextResponse, { params }) {
   }
 }
 
-export async function DELETE(req: NextRequest, res: NextResponse, { params }) {
+export async function DELETE(req: NextRequest, { params }) {
   try {
     const follower = req.headers.get('x-username') // Assume the logged-in username is passed in headers
     const following = params.id // The user being unfollowed
