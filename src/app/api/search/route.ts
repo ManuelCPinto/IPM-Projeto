@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
 import { albumsTable, songsTable, usersTable, playlistTable } from '@/database/schema';
-import { like } from 'drizzle-orm';
+import { eq, like, and } from 'drizzle-orm';
 
 export async function GET(req: NextRequest) {
   const { searchParams } = req.nextUrl;
@@ -26,11 +26,18 @@ export async function GET(req: NextRequest) {
       .where(like(songsTable.name, `%${query}%`))
       .then((rows) => rows.map((row) => ({ ...row, type: 'Song' })));
 
-    // Fetch matching artists
+    // Fetch matching users with type 'User'
+    const users = await db
+      .select({ id: usersTable.username, name: usersTable.name, picture: usersTable.picture })
+      .from(usersTable)
+      .where(and(eq(usersTable.type, 'user'), like(usersTable.name, `%${query}%`)))
+      .then((rows) => rows.map((row) => ({ ...row, type: 'User' })));
+
+    // Fetch matching artists with type 'Artist'
     const artists = await db
       .select({ id: usersTable.username, name: usersTable.name, picture: usersTable.picture })
       .from(usersTable)
-      .where(like(usersTable.name, `%${query}%`))
+      .where(and(eq(usersTable.type, 'artist'), like(usersTable.name, `%${query}%`)))
       .then((rows) => rows.map((row) => ({ ...row, type: 'Artist' })));
 
     // Fetch matching playlists
@@ -40,7 +47,8 @@ export async function GET(req: NextRequest) {
       .where(like(playlistTable.name, `%${query}%`))
       .then((rows) => rows.map((row) => ({ ...row, type: 'Playlist' })));
 
-    const results = [...albums, ...songs, ...artists, ...playlists];
+    // Combine all results
+    const results = [...albums, ...songs, ...users, ...artists, ...playlists];
 
     return NextResponse.json({ results });
   } catch (error) {
