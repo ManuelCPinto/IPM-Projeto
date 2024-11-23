@@ -18,10 +18,11 @@ export default function ArtistPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user')
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
-      const parsedUser: User = JSON.parse(storedUser)
-      setUser(parsedUser)
+      setUser(JSON.parse(storedUser));
+    } else {
+      toast.error("User not logged in");
     }
     if (username) {
       fetchArtistData(username as string)
@@ -109,7 +110,9 @@ export default function ArtistPage() {
               </div>
               <LikeButton
                 songId={song.id}
-                userId={user.username} initialLiked={false}              />            </div>
+                userId={user.username} 
+                initialLiked={false}/>            
+                </div>
           ))}
         </div>
       </section>

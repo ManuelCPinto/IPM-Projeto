@@ -21,6 +21,7 @@ export async function GET(req: NextRequest, { params }) {
     // Fetch songs by the artist
     const songs = await db
       .select({
+        id: songsTable.id,
         name: songsTable.name,
         author: songsTable.author,
         albumName: albumsTable.name,
