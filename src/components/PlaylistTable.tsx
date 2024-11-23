@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { Playlist, User } from "@/database/schema";
+import { LikeButton } from "./LikeButton";
 
 export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -172,6 +173,14 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
               <div className="song-album">{entry.album}</div>
               <div className="song-duration">{entry.song.duration}</div>
             </div>
+            {/* Only render LikeButton if user is not null */}
+            {user && (
+              <LikeButton
+                songId={entry.song.id}
+                userId={user.username}
+                initialLiked={entry.song.isLiked}
+              />
+            )}
             <button
               className="options-button"
               onClick={(e) => togglePopup(entry.song.id, e)}
