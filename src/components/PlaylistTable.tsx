@@ -1,18 +1,13 @@
-import { User } from "@/database/entities/user";
-import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-import { toast } from 'react-hot-toast';
-import { Song } from '@/database/schema';
+import { toast } from "react-hot-toast";
+import Link from "next/link";
+import { Playlist, User } from "@/database/schema";
 
-interface PlaylistTableProps {
-  songs: Song[];
-}
-
-export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
+export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
   const [user, setUser] = useState<User | null>(null);
   const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
   const [activePopup, setActivePopup] = useState<number | null>(null);
-  const [userPlaylists, setPlaylists] = useState<any[]>([]);
+  const [userPlaylists, setPlaylists] = useState<Playlist[]>([]);
   const [playlistPopupPosition, setPlaylistPopupPosition] = useState<{ top: number; left: number } | null>(null);
   const [activePlaylistPopup, setActivePlaylistPopup] = useState<number | null>(null);
   const popupRef = useRef<HTMLDivElement | null>(null);
@@ -20,63 +15,56 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
 
   // Fetch user data from localStorage
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem("user");
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     } else {
-      toast.error('User not logged in');
+      toast.error("User not logged in");
     }
   }, []);
 
   const fetchPlaylists = async () => {
-    if (!user) {
-      toast.error('User not logged in');
-      return;
-    }
+    if (!user) return;
 
     try {
-      const res = await fetch(`/api/user/${user.username}/playlists`);
-      if (!res.ok) {
-        throw new Error('Failed to fetch playlists');
+      const response = await fetch(`/api/user/${user.username}/playlists`); // Replace with your API endpoint
+      if (!response.ok) {
+        throw new Error("Failed to fetch playlists");
       }
-      const data = await res.json();
-      setPlaylists(data.playlists || []);
+      const data = await response.json();
+      setPlaylists(data.playlists || []); // Ensure playlists are set in the state
     } catch (error) {
-      console.error('Error fetching playlists:', error);
-      toast.error('Error fetching playlists');
+      console.error("Error fetching playlists:", error);
+      toast.error("Failed to load playlists");
     }
   };
 
-  // Fetch playlists whenever the user is set
   useEffect(() => {
-    if (user) {
-      fetchPlaylists();
-    }
+    if (user) fetchPlaylists();
   }, [user]);
 
-  const addSongToPlaylist = async (playlistId: string, songIdentifyer: number) => {
+  const addSongToPlaylist = async (playlistId: number, songId: number) => {
     try {
-      console.log('Adding song with ID:', songIdentifyer); // Debugging log
       const res = await fetch(`/api/playlist/${playlistId}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ songId: songIdentifyer }),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ songId }),
       });
 
       if (!res.ok) {
-        throw new Error('Failed to add song to playlist');
+        throw new Error("Failed to add song to playlist");
       }
 
-      toast.success('Song added to playlist!');
+      toast.success("Song added to playlist!");
       setActivePlaylistPopup(null);
     } catch (error) {
-      console.error('Error adding song to playlist:', error);
-      toast.error('Failed to add song to playlist');
+      console.error("Error adding song to playlist:", error);
+      toast.error("Failed to add song to playlist");
     }
   };
 
-  const togglePopup = (index: number, event: React.MouseEvent<HTMLButtonElement>) => {
-    if (activePopup === index) {
+  const togglePopup = (songId: number, event: React.MouseEvent<HTMLButtonElement>) => {
+    if (activePopup === songId) {
       setActivePopup(null);
       setPopupPosition(null);
     } else {
@@ -96,12 +84,12 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
       }
 
       setPopupPosition({ top, left });
-      setActivePopup(index);
+      setActivePopup(songId);
     }
   };
 
-  const togglePlaylistPopup = (index: number, event: React.MouseEvent<HTMLDivElement>) => {
-    if (activePlaylistPopup === index) {
+  const togglePlaylistPopup = (songId: number, event: React.MouseEvent<HTMLDivElement>) => {
+    if (activePlaylistPopup === songId) {
       setActivePlaylistPopup(null);
       setPlaylistPopupPosition(null);
     } else {
@@ -121,7 +109,7 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
       }
 
       setPlaylistPopupPosition({ top, left });
-      setActivePlaylistPopup(index);
+      setActivePlaylistPopup(songId);
     }
   };
 
@@ -142,9 +130,7 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
       }
     };
 
-    const handleScroll = () => {
-      closePopups();
-    };
+    const handleScroll = () => closePopups();
 
     document.addEventListener("mousedown", handleClickOutside);
     window.addEventListener("scroll", handleScroll);
@@ -154,6 +140,10 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (!songs || songs.length === 0) {
+    return <div className="playlist-container">No songs available.</div>;
+  }
 
   return (
     <div className="playlist-table">
@@ -171,25 +161,24 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
 
       {/* Playlist Body */}
       <div className="playlist-container">
-        {songs.map((song, index) => (
+        {songs.map((entry, index) => (
           <div key={index} className="song-item">
             <button className="circle-play-button">
               <div className="triangle-icon"></div>
             </button>
             <div className="song-info">
-              <div className="song-name">{song.name}</div>
-              <div className="song-author">{song.author}</div>
-              <div className="song-album">{song.albumId}</div>
-              <div className="song-duration">{song.duration}</div>
+              <div className="song-name">{entry.song.name}</div>
+              <div className="song-artist">{entry.artist}</div>
+              <div className="song-album">{entry.album}</div>
+              <div className="song-duration">{entry.song.duration}</div>
             </div>
-            <button className="like-button">♥</button>
             <button
               className="options-button"
-              onClick={(e) => togglePopup(index, e)}
+              onClick={(e) => togglePopup(entry.song.id, e)}
             >
               ⋮
             </button>
-            {activePopup === index && popupPosition && (
+            {activePopup === entry.song.id && popupPosition && (
               <div
                 ref={popupRef}
                 className="popup-menu"
@@ -201,33 +190,39 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs }) => {
               >
                 <div
                   className="popup-item"
-                  onClick={(e) => togglePlaylistPopup(index, e)}
+                  onClick={(e) => togglePlaylistPopup(entry.song.id, e)}
                 >
                   Add to Playlist
                 </div>
-                <Link href={`/player/author/${song.author}`} className="popup-item">Go to Artist</Link>
+                <Link href={`/player/author/${entry.artist}`} className="popup-item">
+                  Go to Artist
+                </Link>
               </div>
             )}
-            {activePlaylistPopup === index && playlistPopupPosition && (
+            {activePlaylistPopup === entry.song.id && playlistPopupPosition && (
               <div
                 ref={playlistPopupRef}
                 className="playlist-popup-menu"
                 style={{
-                  top: playlistPopupPosition.top - 20, // Adjust top dynamically
-                  left: playlistPopupPosition.left - 85, // Adjust left dynamically
+                  top: playlistPopupPosition.top,
+                  left: playlistPopupPosition.left,
                   position: "absolute",
-                  zIndex: 2000, // Ensure it appears above other elements
+                  zIndex: 1000,
                 }}
               >
-                {userPlaylists.map((playlist) => (
-                  <div
-                    key={playlist.id}
-                    className="playlist-item"
-                    onClick={() => addSongToPlaylist(playlist.id, song.id)}
-                  >
-                    {playlist.name}
-                  </div>
-                ))}
+                {userPlaylists.length > 0 ? (
+                  userPlaylists.map((playlist) => (
+                    <div
+                      key={playlist.id}
+                      className="playlist-item"
+                      onClick={() => addSongToPlaylist(playlist.id, entry.song.id)}
+                    >
+                      {playlist.name}
+                    </div>
+                  ))
+                ) : (
+                  <div className="no-playlists">No playlists found</div>
+                )}
               </div>
             )}
           </div>

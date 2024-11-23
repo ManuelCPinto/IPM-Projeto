@@ -260,3 +260,25 @@ VALUES
     ('tyler', 'Manuel'),
     ('mounteerie', 'Manuel'),
     ('chatpile', 'Manuel');
+
+
+INSERT INTO tbc_playlist_songs (playlist_id, song_id) VALUES
+                                                          (10, 1),
+                                                          (10, 2),
+                                                          (10, 3),
+                                                          (10, 4),
+                                                          (10, 5),
+                                                          (10, 6),
+                                                          (10, 7),
+                                                          (10, 8),
+                                                          (10, 9),
+                                                          (10, 10),
+                                                          (10, 11),
+                                                          (10, 12),
+                                                          (10, 13),
+                                                          (10, 14),
+                                                          (10, 15),
+                                                          (10, 16),
+                                                          (10, 17),
+                                                          (10, 18),
+                                                          (10, 19);

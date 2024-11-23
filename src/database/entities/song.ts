@@ -1,6 +1,6 @@
 // song.ts
 
-import { sqliteTable, integer, text } from 'drizzle-orm/sqlite-core'
+import { sqliteTable, integer, text, unique } from 'drizzle-orm/sqlite-core'
 import { albumsTable } from './album'
 import { usersTable } from '@/database/entities/user'
 
@@ -18,6 +18,9 @@ export const songsTable = sqliteTable('songs', {
     .references(() => usersTable.username, { onDelete: 'cascade' }),
   cover: text(),
   audio: text()
-})
+},
+(table) => ({
+  uniqueFollow: unique().on(table.id, table.id), // Ensures unique follow relationships
+}));
 
 export type Song = typeof songsTable.$inferSelect
