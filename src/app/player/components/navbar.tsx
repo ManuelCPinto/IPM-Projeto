@@ -38,13 +38,6 @@ const Navbar: React.FC = () => {
           </Link>
         </div>
 
-        {/* Logo */}
-        <Link href="/player">
-          <div className="flex items-center cursor-pointer">
-            <Image src="/logo.png" alt="Logo" width={40} height={40} />
-          </div>
-        </Link>
-
         {/* Search Bar */}
         <div className="flex-1 mx-4">
           <SearchBar />
