@@ -8,7 +8,7 @@ import Image from 'next/image';
 interface SearchResult {
   id: number | string;
   name: string;
-  type: 'Album' | 'Song' | 'Artist' | 'Playlist';
+  type: 'Album' | 'Song' | 'Artist' | 'Playlist' | 'User';
   cover?: string;
   picture?: string;
 }
@@ -49,6 +49,9 @@ const SearchBar: React.FC = () => {
         break;
       case 'Artist':
         router.push(`/player/artist/${item.id}`);
+        break;
+      case 'User':
+        router.push(`/profile/${item.id}`);
         break;
       case 'Playlist':
         router.push(`/player/playlists/${item.id}`);
