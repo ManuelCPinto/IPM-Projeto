@@ -42,7 +42,7 @@ const SearchBar: React.FC = () => {
   const handleResultClick = (item: SearchResult) => {
     switch (item.type) {
       case 'Album':
-        router.push(`/player/ratings/albums/${item.id}`);
+        router.push(`/player/album/${item.id}`);
         break;
       case 'Song':
         router.push(`/player/songs/${item.id}`);

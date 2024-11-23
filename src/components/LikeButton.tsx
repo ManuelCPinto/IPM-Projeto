@@ -19,7 +19,7 @@ export const LikeButton: React.FC<LikeButtonProps> = ({ songId, initialLiked, us
           throw new Error("Failed to fetch like status");
         }
         const data = await response.json();
-        setLiked(data.isLiked); // Expecting { isLiked: boolean }
+        setLiked(data.isLiked);
       } catch (error) {
         console.error("Error fetching like status:", error);
         toast.error("Failed to fetch like status");

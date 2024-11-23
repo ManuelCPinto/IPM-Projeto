@@ -18,13 +18,6 @@ interface PlaylistProps {
   }[];
 }
 
-interface PlaylistProps {
-  name: string;
-  author: string;
-  imageURL: string;
-  songs: { name: string; author: string; album: string; duration: string }[];
-}
-
 {/* Temporary base example */}
 const songs = [
   { name: 'A Minha Casinha', author: 'Xutos e Pontapés', album: '88', duration: '2:24' },
