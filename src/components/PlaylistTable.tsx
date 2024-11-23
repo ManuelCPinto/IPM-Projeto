@@ -168,8 +168,8 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
             </button>
             <div className="song-info">
               <div className="song-name">{entry.song.name}</div>
-              <div className="song-artist">{entry.artist}</div>
-              <div className="song-album">{entry.album}</div>
+              <div className="song-artist">{entry.artist.name}</div>
+              <div className="song-album">{entry.album.name}</div>
               <div className="song-duration">{entry.song.duration}</div>
             </div>
             {/* Only render LikeButton if user is not null */}

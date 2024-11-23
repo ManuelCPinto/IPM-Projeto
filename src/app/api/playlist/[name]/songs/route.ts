@@ -29,8 +29,8 @@ export async function GET(req: NextRequest, context: { params: { name: string } 
     const songsData = await db
       .select({
         song: songsTable,
-        artist: usersTable.name,
-        album: albumsTable.name,
+        artist: usersTable,
+        album: albumsTable,
       })
       .from(playlistSongsTable)
       .leftJoin(songsTable, eq(playlistSongsTable.songId, songsTable.id))

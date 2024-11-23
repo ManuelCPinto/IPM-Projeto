@@ -14,8 +14,8 @@ export async function GET(
     const songs = await db
     .select({
       song: songsTable,
-      artist: usersTable.name,
-      album: albumsTable.name,
+      artist: usersTable,
+      album: albumsTable,
       })
       .from(albumsTable)
       .leftJoin(songsTable, eq(albumsTable.id, songsTable.albumId))

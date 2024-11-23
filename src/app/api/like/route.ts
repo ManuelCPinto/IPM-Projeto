@@ -56,8 +56,8 @@ export async function GET(req: NextRequest) {
       const likedSongs = await db
         .select({
             song: songsTable,
-            artist: usersTable.name,
-            album: albumsTable.name,
+            artist: usersTable,
+            album: albumsTable,
         })
         .from(likesTable)
         .leftJoin(songsTable, eq(likesTable.songId, songsTable.id))
