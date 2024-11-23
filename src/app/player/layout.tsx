@@ -1,15 +1,10 @@
 import '../globals.css'
-import React, { ReactNode } from 'react'
+import React, { PropsWithChildren } from 'react'
 import Navbar from './components/navbar'
 import MusicPlayerBar from '@/app/player/components/MusicPlayerBar'
 import Sidebar from './components/sidebar'
 
-interface LayoutProps {
-  children: ReactNode
-  title?: string
-}
-
-const Layout: React.FC<LayoutProps> = ({ children }) => (
+const Layout = ({ children }: PropsWithChildren) => (
   <div className="grid h-screen grid-rows-[max-content_1fr_max-content] grid-cols-[max-content_1fr] gap-0">
     {/* Navbar */}
     <div className="col-span-2">

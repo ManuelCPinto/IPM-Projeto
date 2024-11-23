@@ -38,7 +38,7 @@ export async function POST(req: NextRequest, { params }: { params: { name: strin
       .select()
       .from(playlistTable)
       .where(eq(playlistTable.id, parseInt(playlistId)))
-      .get();
+      .get()
 
     if (!album) {
       return NextResponse.json({ error: 'Playlist not found' }, { status: 404 });

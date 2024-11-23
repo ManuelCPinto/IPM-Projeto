@@ -22,7 +22,7 @@ export async function GET(req: NextRequest, context: { params: { name: string } 
       .get();
 
     if (!playlist) {
-      return NextResponse.json({ error: 'Playlist not found' }, { status: 404 });
+      return NextResponse.json({ error: 'Playlist not found' }, { status: 404 })
     }
 
     // Fetch songs with artist and album details

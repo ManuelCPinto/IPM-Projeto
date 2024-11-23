@@ -17,10 +17,7 @@ export async function POST(req: NextRequest) {
       .get();
 
     if (existingUser) {
-      return NextResponse.json(
-        { success: false, message: 'Username or email already exists' },
-        { status: 409 }
-      );
+      return NextResponse.json({ success: false, message: 'Username or email already exists' }, { status: 409 })
     }
 
     // Insert new user into the database
@@ -36,12 +33,9 @@ export async function POST(req: NextRequest) {
       monthlyListeners: user.type === 'artist' ? 0 : undefined, // Only relevant for artists
     });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('Error registering user:', error);
-    return NextResponse.json(
-      { success: false, message: 'Internal server error' },
-      { status: 500 }
-    );
+    console.error('Error registering user:', error)
+    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })
   }
 }
