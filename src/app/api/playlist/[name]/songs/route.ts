@@ -9,9 +9,8 @@ import {
 } from '@/database/schema';
 import { eq } from 'drizzle-orm';
 
-export async function GET(req: NextRequest, context: { params: { name: string } }) {
-  const { params } = context;
-  const { name } = params;
+export async function GET(req: NextRequest, context) {
+  const { name: name } = context.params;
 
   try {
     // Fetch playlist to validate existence
