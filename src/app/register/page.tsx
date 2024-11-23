@@ -19,9 +19,9 @@ interface RegisterForm {
 }
 
 const initialValues: RegisterForm = {
-  username: 'Manuel',
-  email: 'manuelcoelhopinto@gmail.com',
-  password: 'password123',
+  username: '',
+  email: '',
+  password: '',
 };
 
 const validationSchema: Yup.ObjectSchema<RegisterForm> = Yup.object().shape({

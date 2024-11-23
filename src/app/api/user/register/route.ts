@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       email: user.email,
       password: user.password,
       name: user.name || user.username,
-      picture: 'covers/manuel.png',
+      picture: 'covers/default.png',
       followers: 0,
       following: 0,
       monthlyListeners: 0
