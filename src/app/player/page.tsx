@@ -12,6 +12,7 @@ import { getExtendedAlbum } from '@/database/utils/getExtendedAlbum'
 import Center from '@/components/Center'
 import { AlbumCard } from './components/AlbumCard'
 import { ArtistCard } from './components/ArtistCard'
+import Link from 'next/link'
 
 async function getSongs(albumId?: number, limit = 10) {
   return (await ky
@@ -93,9 +94,11 @@ export default function Home() {
             albums.value?.map(({ album, artist }, idx) => {
               const extendedAlbum = getExtendedAlbum(album, artist)
               return (
-                <div key={idx} onClick={() => playAlbumSongs(album.id)}>
-                  <AlbumCard album={extendedAlbum} />
-                </div>
+                <Link key={idx} href={`/player/album/${album.id}`}>
+                  <div onClick={() => playAlbumSongs(album.id)}>
+                    <AlbumCard album={extendedAlbum} />
+                  </div>
+                </Link>
               )
             })
           )}
@@ -108,9 +111,11 @@ export default function Home() {
             <p className="opacity-50">Loading...</p>
           ) : (
             artists.value?.map((artist, idx) => (
-              <div key={idx}>
-                <ArtistCard artist={artist} />
-              </div>
+              <Link key={idx} href={`/player/artist/${artist.username}`}>
+                <div>
+                  <ArtistCard artist={artist} />
+                </div>
+              </Link>
             ))
           )}
         </div>
