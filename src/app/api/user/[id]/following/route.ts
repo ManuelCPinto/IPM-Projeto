@@ -4,7 +4,7 @@ import { followsTable, usersTable } from '@/database/schema' // Import your tabl
 import { eq } from 'drizzle-orm'
 
 // GET Method: Fetch Users the User is Following
-export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, res: NextResponse, { params }) {
   try {
     const username = params.id
 

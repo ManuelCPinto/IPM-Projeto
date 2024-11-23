@@ -3,7 +3,7 @@ import { db } from '@/database'
 import { playlistTable } from '@/database/schema'
 import { eq } from 'drizzle-orm'
 
-export async function GET(req: NextRequest, res: NextResponse, context: { params: { playlistId: string } }) {
+export async function GET(req: NextRequest, res: NextResponse, context) {
   const { params } = context
   const { playlistId } = await params
 

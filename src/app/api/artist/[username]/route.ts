@@ -3,7 +3,7 @@ import { db } from '@/database'
 import { usersTable, songsTable, albumsTable } from '@/database/schema'
 import { eq } from 'drizzle-orm'
 
-export async function GET(req: NextRequest, res: NextResponse, { params }: { params: { username: string } }) {
+export async function GET(req: NextRequest, res: NextResponse, { params }) {
   const username = params.username
 
   if (!username) {
