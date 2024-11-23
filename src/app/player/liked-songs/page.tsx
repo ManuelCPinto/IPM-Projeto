@@ -6,9 +6,10 @@ import '@/components/styles/playlistHeader.css';
 import { toast } from 'react-hot-toast';
 import { PlaylistTable } from '@/components/PlaylistTable';
 import { FaRegHeart } from 'react-icons/fa';
+import { Song } from '@/database/schema';
 
 const LikedSongsPage = () => {
-  const [likedSongs, setLikedSongs] = useState<any[]>([]);
+  const [likedSongs, setLikedSongs] = useState<Song[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

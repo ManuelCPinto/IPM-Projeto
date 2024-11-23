@@ -86,7 +86,7 @@ export async function POST(req: NextRequest, { params }: { params: { name: strin
     }
 
     return NextResponse.json({ success: true }, { status: 201 });
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error inserting review:', error);
     return NextResponse.json(
       { error: 'Internal server error' },

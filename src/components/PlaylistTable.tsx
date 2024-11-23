@@ -1,11 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
-import { Playlist, User } from "@/database/schema";
+import { Playlist, User, Song, Album } from "@/database/schema"; // Importing types
 import { LikeButton } from "./LikeButton";
 import PlayButton from "./PlayButton";
 
-export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
+interface SongEntry {
+  song: Song;
+  artist: User;
+  album: Album;
+}
+
+export const PlaylistTable: React.FC<{ songs: SongEntry[] }> = ({ songs }) => {
   const [user, setUser] = useState<User | null>(null);
   const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
   const [activePopup, setActivePopup] = useState<number | null>(null);
@@ -28,16 +34,16 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
     if (!user) return;
 
     try {
-      const response = await fetch(`/api/user/${user.username}/playlists`); // Replace with your API endpoint
+      const response = await fetch(`/api/user/${user.username}/playlists`);
       if (!response.ok) {
         throw new Error("Failed to fetch playlists");
       }
       const data = await response.json();
-      setPlaylists(data.playlists || []); // Ensure playlists are set in the state
+      setPlaylists(data.playlists || []);
     } catch (error) {
       console.error("Error fetching playlists:", error);
       toast.error("Failed to load playlists");
-    } 
+    }
   };
 
   useEffect(() => {
@@ -148,7 +154,6 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
 
   return (
     <div className="playlist-table">
-      {/* Table Header */}
       <div className="table-header-container">
         <div className="table-header-item">
           <div className="table-header-row">
@@ -160,27 +165,20 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
         </div>
       </div>
 
-      {/* Playlist Body */}
       <div className="playlist-container">
         {songs.map((entry, index) => (
           <div key={index} className="song-item">
-            <PlayButton
-              song={entry.song}
-              album={entry.album}
-              author={entry.artist}
-            />
+            <PlayButton song={entry.song} album={entry.album} author={entry.artist} />
             <div className="song-info">
               <div className="song-name">{entry.song.name}</div>
               <div className="song-artist">{entry.artist.name}</div>
               <div className="song-album">{entry.album.name}</div>
               <div className="song-duration">{entry.song.duration}</div>
             </div>
-            {/* Only render LikeButton if user is not null */}
             {user && (
               <LikeButton
                 songId={entry.song.id}
                 userId={user.username}
-                initialLiked={entry.song.isLiked}
               />
             )}
             <button

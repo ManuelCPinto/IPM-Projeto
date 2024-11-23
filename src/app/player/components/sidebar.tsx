@@ -1,8 +1,7 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import { FaHome, FaCompass, FaMusic, FaHeart, FaStar, FaRegHeart } from 'react-icons/fa'
-import { IoMdMusicalNotes, IoMdPerson } from 'react-icons/io'
+import { FaHome, FaStar, FaRegHeart } from 'react-icons/fa'
 import { FiPlusSquare, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import Link from 'next/link'
 import { toast } from 'react-hot-toast'

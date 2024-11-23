@@ -7,7 +7,7 @@ interface LikeButtonProps {
   userId: string; // User ID
 }
 
-export const LikeButton: React.FC<LikeButtonProps> = ({ songId, initialLiked, userId }) => {
+export const LikeButton: React.FC<LikeButtonProps> = ({ songId, userId }) => {
   const [liked, setLiked] = useState<boolean | null>(null);
 
   // Fetch the initial liked status
