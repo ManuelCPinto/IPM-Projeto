@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { toast } from "react-hot-toast";
 import Link from "next/link";
-import { Playlist, User, Song, Album } from "@/database/schema"; // Importing types
+import { Playlist, User, Song, Album } from "@/database/schema";
 import { LikeButton } from "./LikeButton";
 import PlayButton from "./PlayButton";
 

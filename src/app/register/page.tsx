@@ -15,14 +15,14 @@ interface RegisterForm {
   username: string;
   email: string;
   password: string;
-  type: string; // "user" or "artist"
+  type: string;
 }
 
 const initialValues: RegisterForm = {
   username: '',
   email: '',
   password: '',
-  type: 'user', // Default user type
+  type: 'user', 
 };
 
 const validationSchema: Yup.ObjectSchema<RegisterForm> = Yup.object().shape({

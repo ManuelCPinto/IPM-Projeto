@@ -56,7 +56,7 @@ export default function PlaylistPage() {
       <PlaylistHeader
         name={playlist.name}
         author={playlist.author}
-        imageURL={playlist.cover || '/default-cover.png'} // Default cover if none exists
+        imageURL={playlist.cover || '/default-cover.png'}
       />
       <PlaylistTable songs={songs} />
     </div>
