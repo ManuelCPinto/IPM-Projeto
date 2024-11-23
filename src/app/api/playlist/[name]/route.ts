@@ -19,9 +19,9 @@ export async function GET(req: NextRequest, context ) {
   }
 }
 
-export async function POST(req: NextRequest, { params }: { params: { name: string } }) {
+export async function POST(req: NextRequest, context ) {
   try {
-    const playlistId = params.name;
+    const { name: playlistId } = context.params;
     const { songId } = await req.json();
 
     console.log("song id to add " + { songId });
