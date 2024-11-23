@@ -178,7 +178,7 @@ export const PlaylistTable: React.FC<{ songs: SongEntry[] }> = ({ songs }) => {
             {user && (
               <LikeButton
                 songId={entry.song.id}
-                userId={user.username}/>
+                userId={user.username} initialLiked={false}              />
             )}
             <button
               className="options-button"

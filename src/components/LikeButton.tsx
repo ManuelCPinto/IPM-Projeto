@@ -3,6 +3,7 @@ import { toast } from "react-hot-toast";
 
 interface LikeButtonProps {
   songId: number;
+  initialLiked: boolean; // If the song is already liked
   userId: string; // User ID
 }
 

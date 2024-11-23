@@ -107,8 +107,9 @@ export default function ArtistPage() {
                 </div>
                 <p className="text-sm text-gray-400">{song.duration}</p>
               </div>
-              <LikeButton songId={song.id} userId={user.username} />
-            </div>
+              <LikeButton
+                songId={song.id}
+                userId={user.username} initialLiked={false}              />            </div>
           ))}
         </div>
       </section>
