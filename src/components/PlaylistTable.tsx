@@ -3,6 +3,7 @@ import { toast } from "react-hot-toast";
 import Link from "next/link";
 import { Playlist, User } from "@/database/schema";
 import { LikeButton } from "./LikeButton";
+import PlayButton from "./PlayButton";
 
 export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
   const [user, setUser] = useState<User | null>(null);
@@ -163,9 +164,11 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
       <div className="playlist-container">
         {songs.map((entry, index) => (
           <div key={index} className="song-item">
-            <button className="circle-play-button">
-              <div className="triangle-icon"></div>
-            </button>
+            <PlayButton
+              song={entry.song}
+              album={entry.album}
+              author={entry.artist}
+            />
             <div className="song-info">
               <div className="song-name">{entry.song.name}</div>
               <div className="song-artist">{entry.artist.name}</div>
@@ -202,7 +205,7 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
                 >
                   Add to Playlist
                 </div>
-                <Link href={`/player/author/${entry.artist}`} className="popup-item">
+                <Link href={`/player/author/${entry.artist.name}`} className="popup-item">
                   Go to Artist
                 </Link>
               </div>
