@@ -1,29 +1,93 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
-import { playlistTable } from '@/database/schema';
-import { eq } from 'drizzle-orm';
+import { playlistTable, songsTable, playlistSongsTable } from '@/database/schema';
+import { and, eq } from 'drizzle-orm';
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { playlistId: string } }
-) {
-  const { params } = context;
-  const { playlistId } = await params;
-
+export async function GET(req: NextRequest, { params }: { params: { name: string } }) {
   try {
-    const playlist = await db
+    const playlistId = params.name
+
+    if (!playlistId) {
+      return NextResponse.json({ success: false, message: 'User ID is required' }, { status: 400 })
+    }
+
+    const playlists = await db.select().from(playlistTable).where(eq(playlistTable.id, parseInt(playlistId))).all()
+
+    return NextResponse.json({ success: true, playlists })
+  } catch (error) {
+    console.error('Error fetching playlists:', error)
+    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })
+  }
+}
+
+export async function POST(req: NextRequest, { params }: { params: { name: string } }) {
+  try {
+    const playlistId = params.name;
+    const { songId } = await req.json();
+
+    console.log("song id to add " + { songId });
+
+    if (!songId) {
+      return NextResponse.json(
+        { error: 'Missing required fields' },
+        { status: 400 }
+      );
+    }
+
+    const album = await db
       .select()
       .from(playlistTable)
       .where(eq(playlistTable.id, parseInt(playlistId)))
       .get();
 
-    if (!playlist) {
+    if (!album) {
       return NextResponse.json({ error: 'Playlist not found' }, { status: 404 });
     }
 
-    return NextResponse.json(playlist);
-  } catch (error) {
-    console.error('Error fetching playlist:', error);
+    const song = await db
+      .select()
+      .from(songsTable)
+      .where(eq(songsTable.id, songId))
+      .get();
+
+    if (!song) {
+      return NextResponse.json({ error: 'Song not found' }, { status: 404 });
+    }
+
+    const exists = await db
+      .select()
+      .from(playlistSongsTable)
+      .where(
+        and(
+          eq(playlistSongsTable.playlistId, parseInt(playlistId)),
+          eq(playlistSongsTable.songId, songId)
+        )
+      )
+      .get();
+    
+    if (exists) {
+      //remove song from playlist
+      await db
+        .delete(playlistSongsTable)
+        .where(
+          and(
+            eq(playlistSongsTable.playlistId, parseInt(playlistId)),
+            eq(playlistSongsTable.songId, songId)
+          )
+      );
+    } else {
+      //add song to playlist
+      await db
+        .insert(playlistSongsTable)
+        .values({
+        playlistId: parseInt(playlistId),
+        songId,
+      });
+    }
+
+    return NextResponse.json({ success: true }, { status: 201 });
+  } catch (error: any) {
+    console.error('Error inserting review:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }
