@@ -1,76 +1,66 @@
 'use client';
 
-import React from 'react';
-import '@/components/styles/PlaylistTable.css';
+import React, { useState, useEffect } from 'react';
+import '@/components/styles/playlistTable.css';
 import '@/components/styles/playlistHeader.css';
 import { PlaylistHeader } from "@/components/PlaylistHeader";
 import { PlaylistTable } from "@/components/PlaylistTable";
+import { useParams } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { Album, Song } from '@/database/schema';
 
-interface PlaylistProps {
-  name: string;
-  author: string;
-  imageURL: string;
-  songs: {
-    name: string;
-    author: string;
-    album: string;
-    duration: string;
-  }[];
-}
-
-{/* Temporary base example */}
-const songs = [
-  { name: 'A Minha Casinha', author: 'Xutos e Pontapés', album: '88', duration: '2:24' },
-  { name: 'Contentores', author: 'Xutos e Pontapés', album: '88', duration: '3:30' },
-  { name: 'Circo de Feras', author: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
-  { name: 'A Minha Casinha', author: 'Xutos e Pontapés', album: '88', duration: '2:24' },
-  { name: 'Contentores', author: 'Xutos e Pontapés', album: '88', duration: '3:30' },
-  { name: 'Circo de Feras', author: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
-  { name: 'A Minha Casinha', author: 'Xutos e Pontapés', album: '88', duration: '2:24' },
-  { name: 'Contentores', author: 'Xutos e Pontapés', album: '88', duration: '3:30' },
-  { name: 'Circo de Feras', author: 'Xutos e Pontapés', album: 'Circo de Feras', duration: '4:12' },
-];
-
-{/* Temporary base example remove when implemented with the rest*/}
-export default function App() {
-  return (
-    <Playlist
-      name="88"
-      author="Xutos e Pontapés"
-      imageURL="/playlistlogo.png"
-      songs={songs}
-    />
-  );
-}
-
-/*
-const PlaylistPage = () => {
-    const { playlistId } = useParams();
-    const [playlist, setPlaylist] = useState<Playlist>(); 
-    const [songs, setSongs] = useState<Song[]>([]);
+export default function AlbumPage() {
+  const { albumId } = useParams();
+  const [album, setAlbum] = useState<Album | null>(null);
+  const [songs, setSongs] = useState<Song[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPlaylist();
-    fetchSongs();
-  }, [playlistId]);
+    if (albumId) {
+      fetchAlbumData();
+      fetchAlbumSongs();
+    }
+  }, [albumId]);
 
+  const fetchAlbumData = async () => {
+    try {
+      const response = await fetch(`/api/albums/${albumId}`);
+      if (!response.ok) throw new Error("Failed to fetch album data");
+      const data = await response.json();
 
-  const fetchPlaylist = async () =>  {
-    const response = await fetch(`/api/playlist/${playlistId}`);
-    const data = await response.json();
-    setPlaylist(data);
-  }
-}
-*/
+      setAlbum(data);
+    } catch (error) {
+      console.error("Error fetching album:", error);
+      toast.error("Failed to load album details");
+    }
+  };
 
-function Playlist({ name, author, imageURL, songs }: PlaylistProps) {
-  if (!songs) return <div>Loading...</div>;
-  if (songs.length === 0) return <div>No songs found</div>;
+  const fetchAlbumSongs = async () => {
+    try {
+      const response = await fetch(`/api/albums/${albumId}/songs`);
+      if (!response.ok) throw new Error("Failed to fetch album songs");
+      const data = await response.json();
+      setSongs(data);
+    } catch (error) {
+      console.error("Error fetching songs:", error);
+      toast.error("Failed to load songs");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) return <div className="loading-screen">Loading...</div>;
+
+  if (!album) return <div className="error-message">Album not found</div>;
 
   return (
     <div className="main">
-      <PlaylistHeader name={name} author={author} imageURL={imageURL} />
+      <PlaylistHeader
+        name={album.name}
+        author={album.artist}
+        imageURL={album.cover}
+      />
       <PlaylistTable songs={songs} />
     </div>
   );
-};
+}

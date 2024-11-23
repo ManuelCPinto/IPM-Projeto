@@ -14,7 +14,6 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
   const popupRef = useRef<HTMLDivElement | null>(null);
   const playlistPopupRef = useRef<HTMLDivElement | null>(null);
 
-  // Fetch user data from localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -37,7 +36,7 @@ export const PlaylistTable: React.FC<{ songs: any[] }> = ({ songs }) => {
     } catch (error) {
       console.error("Error fetching playlists:", error);
       toast.error("Failed to load playlists");
-    }
+    } 
   };
 
   useEffect(() => {

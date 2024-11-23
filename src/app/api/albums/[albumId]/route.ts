@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/database';
-import { albumsTable, usersTable } from '@/database/schema';
+import { albumsTable} from '@/database/schema';
 import { eq } from 'drizzle-orm';
 
 export async function GET(
@@ -8,35 +8,21 @@ export async function GET(
   context: { params: { albumId: string } }
 ) {
   const { params } = context;
-  const { albumId } = await params;
+  const { albumId } = params;
 
   try {
-    const albumWithArtist = await db
-      .select({
-        id: albumsTable.id,
-        name: albumsTable.name,
-        artist: usersTable.name,
-        type: albumsTable.type,
-        releaseDate: albumsTable.releaseDate,
-        recorded: albumsTable.recorded,
-        rating: albumsTable.rating,
-        rated: albumsTable.rated,
-        ranked: albumsTable.ranked,
-        cover: albumsTable.cover,
-        language: albumsTable.language,
-      })
-      .from(albumsTable)
-      .leftJoin(usersTable, eq(albumsTable.artist, usersTable.username))
-      .where(eq(albumsTable.id, parseInt(albumId)))
-      .limit(1);
+    const album = await db
+    .select()
+    .from(albumsTable)
+    .where(eq(albumsTable.id, parseInt(albumId)))
+    .get();
 
-    if (!albumWithArtist || albumWithArtist.length === 0) {
-      console.log(`Album not found: ${albumId}`);
-      return NextResponse.json({ error: 'Album not found' }, { status: 404 });
-    }
+  if (!album) {
+    return NextResponse.json({ error: 'Album not found' }, { status: 404 });
+  }
 
-    return NextResponse.json(albumWithArtist[0]);
-  } catch (error: any) {
+    return NextResponse.json(album);
+  } catch (error) {
     console.error('Error fetching album:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
