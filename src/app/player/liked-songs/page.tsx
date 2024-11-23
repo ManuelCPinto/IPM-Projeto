@@ -6,10 +6,16 @@ import '@/components/styles/playlistHeader.css';
 import { toast } from 'react-hot-toast';
 import { PlaylistTable } from '@/components/PlaylistTable';
 import { FaRegHeart } from 'react-icons/fa';
-import { Song } from '@/database/schema';
+import { Album, Song, User } from '@/database/schema';
+
+export interface SongEntry {
+  song: Song;
+  artist: User;
+  album: Album;
+}
 
 const LikedSongsPage = () => {
-  const [likedSongs, setLikedSongs] = useState<Song[]>([]);
+  const [likedSongs, setLikedSongs] = useState<SongEntry[]>([]); // Updated to SongEntry[]
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -30,7 +36,8 @@ const LikedSongsPage = () => {
         }
 
         const data = await response.json();
-        setLikedSongs(data.likedSongs || []);
+        const songsData: SongEntry[] = data.likedSongs || []; // Ensure data is SongEntry[]
+        setLikedSongs(songsData);
       } catch (error) {
         console.error('Error fetching liked songs:', error);
         toast.error('Failed to load liked songs');
@@ -65,7 +72,7 @@ const LikedSongsPage = () => {
       </div>
 
       <div className="bg-gray-800 rounded-lg p-4">
-        <PlaylistTable songs={likedSongs} />
+        <PlaylistTable songs={likedSongs} /> {/* Ensure PlaylistTable accepts SongEntry[] */}
       </div>
     </div>
   );

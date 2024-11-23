@@ -7,12 +7,18 @@ import { PlaylistHeader } from "@/components/PlaylistHeader";
 import { PlaylistTable } from "@/components/PlaylistTable";
 import { useParams } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { Album, Song } from '@/database/schema';
+import { Album, Song, User } from '@/database/schema';
+
+export interface SongEntry {
+  song: Song;
+  artist: User;
+  album: Album;
+}
 
 export default function AlbumPage() {
   const { albumId } = useParams();
   const [album, setAlbum] = useState<Album | null>(null);
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [songs, setSongs] = useState<SongEntry[]>([]); // Typed as SongEntry[]
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -39,8 +45,9 @@ export default function AlbumPage() {
     try {
       const response = await fetch(`/api/albums/${albumId}/songs`);
       if (!response.ok) throw new Error("Failed to fetch album songs");
-      const data = await response.json();
-      setSongs(data);
+      const data: SongEntry[] = await response.json(); // Correctly typed as SongEntry[]
+
+      setSongs(data); // Set songs as SongEntry[]
     } catch (error) {
       console.error("Error fetching songs:", error);
       toast.error("Failed to load songs");
@@ -57,10 +64,10 @@ export default function AlbumPage() {
     <div className="main">
       <PlaylistHeader
         name={album.name}
-        author={album.artist}
+        author={album.artist} // Assuming 'artist' is a string (username)
         imageURL={album.cover}
       />
-      <PlaylistTable songs={songs} />
+      <PlaylistTable songs={songs} /> {/* Ensure PlaylistTable accepts SongEntry[] */}
     </div>
   );
 }

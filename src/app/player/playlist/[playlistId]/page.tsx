@@ -7,12 +7,18 @@ import { PlaylistHeader } from "@/components/PlaylistHeader";
 import { PlaylistTable } from "@/components/PlaylistTable";
 import { useParams } from "next/navigation";
 import { toast } from "react-hot-toast";
-import { Playlist, Song } from '@/database/schema';
+import { Album, Playlist, Song, User } from '@/database/schema';
+
+interface SongEntry {
+  song: Song;
+  artist: User;
+  album: Album;
+}
 
 export default function PlaylistPage() {
   const { playlistId } = useParams();
   const [playlist, setPlaylist] = useState<Playlist | null>(null);
-  const [songs, setSongs] = useState<Song[]>([]);
+  const [songs, setSongs] = useState<SongEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,9 +42,9 @@ export default function PlaylistPage() {
       // Fetch the songs associated with the playlist
       const songsResponse = await fetch(`/api/playlist/${playlistId}/songs`);
       if (!songsResponse.ok) throw new Error('Failed to fetch songs');
-      const songsData: Song[] = await songsResponse.json();
+      const songsData: SongEntry[] = await songsResponse.json(); // Correctly typed as SongEntry[]
 
-      setSongs(songsData); // Set songs directly from the API
+      setSongs(songsData); // Set songs as SongEntry[]
     } catch (error) {
       console.error('Error fetching playlist or songs:', error);
       toast.error('Failed to load playlist.');
