@@ -18,11 +18,11 @@ export interface SongEntry {
 
 export default function ArtistPage() {
   const { id: usernameParam } = useParams();
-  const username = Array.isArray(usernameParam) ? usernameParam[0] : usernameParam; // Ensure username is a string
+  const username = Array.isArray(usernameParam) ? usernameParam[0] : usernameParam;
   const [artist, setArtist] = useState<User | null>(null);
   const [songs, setSongs] = useState<SongEntry[]>([]);
   const [albums, setAlbums] = useState<Album[]>([]);
-  const [loggedInUser, setLoggedInUser] = useState<User | null>(null); // Store the current logged-in user
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

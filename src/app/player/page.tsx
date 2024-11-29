@@ -95,7 +95,7 @@ export default function Home() {
               const extendedAlbum = getExtendedAlbum(album, artist)
               return (
                 <Link key={idx} href={`/player/album/${album.id}`}>
-                  <div onClick={() => playAlbumSongs(album.id)}>
+                  <div>
                     <AlbumCard album={extendedAlbum} />
                   </div>
                 </Link>
