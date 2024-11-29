@@ -51,8 +51,6 @@ export async function GET(req: NextRequest) {
           { status: 400 }
         );
       }
-  
-      // Fetch liked songs for the user, including artist and album details
       const likedSongs = await db
         .select({
             song: songsTable,

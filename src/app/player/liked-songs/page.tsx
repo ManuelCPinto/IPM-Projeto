@@ -27,7 +27,7 @@ const LikedSongsPage = () => {
         }
 
         const user = JSON.parse(storedUser);
-
+        
         const response = await fetch(`/api/like?userId=${user.username}`);
         if (!response.ok) {
           throw new Error('Failed to fetch liked songs');

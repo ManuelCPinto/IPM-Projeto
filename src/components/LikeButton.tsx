@@ -3,14 +3,12 @@ import { toast } from "react-hot-toast";
 
 interface LikeButtonProps {
   songId: number;
-  initialLiked: boolean; // If the song is already liked
-  userId: string; // User ID
+  userId: string;
 }
 
 export const LikeButton: React.FC<LikeButtonProps> = ({ songId, userId }) => {
   const [liked, setLiked] = useState<boolean | null>(null);
 
-  // Fetch the initial liked status
   useEffect(() => {
     const fetchLikedStatus = async () => {
       try {

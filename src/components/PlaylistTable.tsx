@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Song, User, Album } from "@/database/schema";
 import PlayButton from "./PlayButton";
 import { LikeButton } from "./LikeButton";
@@ -16,6 +16,24 @@ interface PlaylistTableProps {
 }
 
 export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs, currentPlaylistId }) => {
+  const [user, setUser] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser.username); // Assuming the `username` field identifies the user
+    }
+  }, []);
+
+  if (!user) {
+    return (
+      <div className="text-gray-400 text-center">
+        Loading user data...
+      </div>
+    );
+  }
+
   return (
     <div className="w-full bg-gray-900 text-white p-6 rounded-lg">
       {/* Header */}
@@ -56,8 +74,7 @@ export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs, currentPlay
             <div className="flex items-center space-x-4 justify-end">
               <LikeButton
                 songId={entry.song.id}
-                userId={entry.artist.username}
-                initialLiked={false}
+                userId={user} 
               />
               <OptionsButton 
                 song={entry.song} 
