@@ -18,7 +18,7 @@ export interface SongEntry {
 export default function AlbumPage() {
   const { albumId } = useParams();
   const [album, setAlbum] = useState<Album | null>(null);
-  const [songs, setSongs] = useState<SongEntry[]>([]); // Typed as SongEntry[]
+  const [songs, setSongs] = useState<SongEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

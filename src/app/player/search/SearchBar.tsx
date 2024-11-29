@@ -45,7 +45,7 @@ const SearchBar: React.FC = () => {
         router.push(`/player/album/${item.id}`);
         break;
       case 'Song':
-        router.push(`/player/songs/${item.id}`);
+        router.push(`/player/song/${item.id}`);
         break;
       case 'Artist':
         router.push(`/player/artist/${item.id}`);
@@ -73,7 +73,7 @@ const SearchBar: React.FC = () => {
           value={query}
           onChange={(e) => handleSearch(e.target.value)}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setTimeout(() => setIsFocused(false), 200)} // Delay to allow clicking results
+          onBlur={() => setTimeout(() => setIsFocused(false), 200)} 
           className="bg-transparent text-white focus:outline-none w-full placeholder-gray-500 text-sm"
         />
       </div>
