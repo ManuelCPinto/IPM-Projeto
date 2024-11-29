@@ -20,7 +20,7 @@ export const songsTable = sqliteTable('songs', {
   audio: text()
 },
 (table) => ({
-  uniqueFollow: unique().on(table.id, table.id), // Ensures unique follow relationships
+  uniqueFollow: unique().on(table.id, table.id),
 }));
 
 export type Song = typeof songsTable.$inferSelect

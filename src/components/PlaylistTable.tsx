@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { toast } from "react-hot-toast";
-import Link from "next/link";
-import { Playlist, User, Song, Album } from "@/database/schema";
-import { LikeButton } from "./LikeButton";
+import React from "react";
+import { Song, User, Album } from "@/database/schema";
 import PlayButton from "./PlayButton";
+import { LikeButton } from "./LikeButton";
+import OptionsButton from "./OptionsButton";
 
 interface SongEntry {
   song: Song;
@@ -11,228 +10,61 @@ interface SongEntry {
   album: Album;
 }
 
-export const PlaylistTable: React.FC<{ songs: SongEntry[] }> = ({ songs }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [popupPosition, setPopupPosition] = useState<{ top: number; left: number } | null>(null);
-  const [activePopup, setActivePopup] = useState<number | null>(null);
-  const [userPlaylists, setPlaylists] = useState<Playlist[]>([]);
-  const [playlistPopupPosition, setPlaylistPopupPosition] = useState<{ top: number; left: number } | null>(null);
-  const [activePlaylistPopup, setActivePlaylistPopup] = useState<number | null>(null);
-  const popupRef = useRef<HTMLDivElement | null>(null);
-  const playlistPopupRef = useRef<HTMLDivElement | null>(null);
+interface PlaylistTableProps {
+  songs: SongEntry[];
+  currentPlaylistId?: number; // Optional: Current playlist ID
+}
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    } else {
-      toast.error("User not logged in");
-    }
-  }, []);
-
-  const fetchPlaylists = async () => {
-    if (!user) return;
-
-    try {
-      const response = await fetch(`/api/user/${user.username}/playlists`);
-      if (!response.ok) {
-        throw new Error("Failed to fetch playlists");
-      }
-      const data = await response.json();
-      setPlaylists(data.playlists || []);
-    } catch (error) {
-      console.error("Error fetching playlists:", error);
-      toast.error("Failed to load playlists");
-    }
-  };
-
-  useEffect(() => {
-    if (user) fetchPlaylists();
-  }, [user]);
-
-  const addSongToPlaylist = async (playlistId: number, songId: number) => {
-    try {
-      const res = await fetch(`/api/playlist/${playlistId}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ songId }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to add song to playlist");
-      }
-
-      toast.success("Song added to playlist!");
-      setActivePlaylistPopup(null);
-    } catch (error) {
-      console.error("Error adding song to playlist:", error);
-      toast.error("Failed to add song to playlist");
-    }
-  };
-
-  const togglePopup = (songId: number, event: React.MouseEvent<HTMLButtonElement>) => {
-    if (activePopup === songId) {
-      setActivePopup(null);
-      setPopupPosition(null);
-    } else {
-      const buttonRect = event.currentTarget.getBoundingClientRect();
-      const popupWidth = 170;
-      const popupHeight = 176;
-
-      let top = buttonRect.bottom + window.scrollY;
-      let left = buttonRect.left + window.scrollX + popupWidth * 0.5;
-
-      if (left + popupWidth > window.innerWidth) {
-        left = window.innerWidth - popupWidth - 5;
-      }
-
-      if (top + popupHeight > window.innerHeight + window.scrollY) {
-        top = window.innerHeight + window.scrollY - popupHeight - 10;
-      }
-
-      setPopupPosition({ top, left });
-      setActivePopup(songId);
-    }
-  };
-
-  const togglePlaylistPopup = (songId: number, event: React.MouseEvent<HTMLDivElement>) => {
-    if (activePlaylistPopup === songId) {
-      setActivePlaylistPopup(null);
-      setPlaylistPopupPosition(null);
-    } else {
-      const buttonRect = event.currentTarget.getBoundingClientRect();
-      const popupWidth = 200;
-      const popupHeight = 200;
-
-      let top = buttonRect.bottom + window.scrollY;
-      let left = buttonRect.left + window.scrollX;
-
-      if (left + popupWidth > window.innerWidth) {
-        left = window.innerWidth - popupWidth - 5;
-      }
-
-      if (top + popupHeight > window.innerHeight + window.scrollY) {
-        top = window.innerHeight + window.scrollY - popupHeight - 10;
-      }
-
-      setPlaylistPopupPosition({ top, left });
-      setActivePlaylistPopup(songId);
-    }
-  };
-
-  const closePopups = () => {
-    setActivePopup(null);
-    setPopupPosition(null);
-    setActivePlaylistPopup(null);
-    setPlaylistPopupPosition(null);
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        (popupRef.current && !popupRef.current.contains(event.target as Node)) &&
-        (playlistPopupRef.current && !playlistPopupRef.current.contains(event.target as Node))
-      ) {
-        closePopups();
-      }
-    };
-
-    const handleScroll = () => closePopups();
-
-    document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  if (!songs || songs.length === 0) {
-    return <div className="playlist-container">No songs available.</div>;
-  }
-
+export const PlaylistTable: React.FC<PlaylistTableProps> = ({ songs, currentPlaylistId }) => {
   return (
-    <div className="playlist-table">
-      <div className="table-header-container">
-        <div className="table-header-item">
-          <div className="table-header-row">
-            <div className="table-header-title">Title</div>
-            <div className="table-header-artist">Artist</div>
-            <div className="table-header-album">Album</div>
-            <div className="table-header-duration">Duration</div>
-          </div>
-        </div>
+    <div className="w-full bg-gray-900 text-white p-6 rounded-lg">
+      {/* Header */}
+      <div className="grid grid-cols-[50px_3fr_2fr_2fr_1fr_50px] text-sm font-semibold uppercase border-b border-gray-700 pb-2">
+        <span></span> {/* Empty space for Play Button */}
+        <span>Title</span>
+        <span>Artist</span>
+        <span>Album</span>
+        <span className="text-right">Duration</span>
+        <span></span> {/* Empty space for Actions */}
       </div>
 
-      <div className="playlist-container">
+      {/* Songs */}
+      <div className="divide-y divide-gray-700">
         {songs.map((entry, index) => (
-          <div key={index} className="song-item">
-            <PlayButton song={entry.song} album={entry.album} author={entry.artist} />
-            <div className="song-info">
-              <div className="song-name">{entry.song.name}</div>
-              <div className="song-artist">{entry.artist.name}</div>
-              <div className="song-album">{entry.album.name}</div>
-              <div className="song-duration">{entry.song.duration}</div>
+          <div
+            key={index}
+            className="grid grid-cols-[50px_3fr_2fr_2fr_1fr_50px] items-center py-4"
+          >
+            {/* Play Button */}
+            <div className="flex items-center justify-center">
+              <PlayButton song={entry.song} album={entry.album} author={entry.artist} />
             </div>
-            {user && (
+
+            {/* Song Title */}
+            <div className="font-bold text-gray-300">{entry.song.name}</div>
+
+            {/* Artist */}
+            <div className="text-gray-400">{entry.artist.name}</div>
+
+            {/* Album */}
+            <div className="text-gray-400">{entry.album.name}</div>
+
+            {/* Duration */}
+            <div className="text-right text-gray-400">{entry.song.duration}</div>
+
+            {/* Options */}
+            <div className="flex items-center space-x-4 justify-end">
               <LikeButton
                 songId={entry.song.id}
-                userId={user.username} initialLiked={false}              />
-            )}
-            <button
-              className="options-button"
-              onClick={(e) => togglePopup(entry.song.id, e)}
-            >
-              ⋮
-            </button>
-            {activePopup === entry.song.id && popupPosition && (
-              <div
-                ref={popupRef}
-                className="popup-menu"
-                style={{
-                  top: popupPosition.top,
-                  left: popupPosition.left,
-                  position: "absolute",
-                }}
-              >
-                <div
-                  className="popup-item"
-                  onClick={(e) => togglePlaylistPopup(entry.song.id, e)}
-                >
-                  Add to Playlist
-                </div>
-                <Link href={`/player/author/${entry.artist.name}`} className="popup-item">
-                  Go to Artist
-                </Link>
-              </div>
-            )}
-            {activePlaylistPopup === entry.song.id && playlistPopupPosition && (
-              <div
-                ref={playlistPopupRef}
-                className="playlist-popup-menu"
-                style={{
-                  top: playlistPopupPosition.top,
-                  left: playlistPopupPosition.left,
-                  position: "absolute",
-                  zIndex: 1000,
-                }}
-              >
-                {userPlaylists.length > 0 ? (
-                  userPlaylists.map((playlist) => (
-                    <div
-                      key={playlist.id}
-                      className="playlist-item"
-                      onClick={() => addSongToPlaylist(playlist.id, entry.song.id)}
-                    >
-                      {playlist.name}
-                    </div>
-                  ))
-                ) : (
-                  <div className="no-playlists">No playlists found</div>
-                )}
-              </div>
-            )}
+                userId={entry.artist.username}
+                initialLiked={false}
+              />
+              <OptionsButton 
+                song={entry.song} 
+                artist={entry.artist} 
+                currentPlaylistId={currentPlaylistId} 
+              />
+            </div>
           </div>
         ))}
       </div>

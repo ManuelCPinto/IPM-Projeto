@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import '@/components/styles/playlistTable.css';
-import '@/components/styles/playlistHeader.css';
 import { toast } from 'react-hot-toast';
 import { PlaylistTable } from '@/components/PlaylistTable';
 import { FaRegHeart } from 'react-icons/fa';
@@ -15,7 +13,7 @@ export interface SongEntry {
 }
 
 const LikedSongsPage = () => {
-  const [likedSongs, setLikedSongs] = useState<SongEntry[]>([]); // Updated to SongEntry[]
+  const [likedSongs, setLikedSongs] = useState<SongEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -72,7 +70,7 @@ const LikedSongsPage = () => {
       </div>
 
       <div className="bg-gray-800 rounded-lg p-4">
-        <PlaylistTable songs={likedSongs} /> {/* Ensure PlaylistTable accepts SongEntry[] */}
+        <PlaylistTable songs={likedSongs} />
       </div>
     </div>
   );

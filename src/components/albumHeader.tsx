@@ -1,14 +1,19 @@
 import React from "react";
 import { FaShuffle } from "react-icons/fa6";
 import Image from "next/image";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
-interface PlaylistHeaderProps {
+interface AlbumHeaderProps {
   name: string;
   author: string;
   imageURL: string;
 }
 
-export const PlaylistHeader: React.FC<PlaylistHeaderProps> = ({ name, author, imageURL }) => {
+
+export const AlbumHeader: React.FC<AlbumHeaderProps> = ({ name, author, imageURL }) => {
+  const { albumId } = useParams();
+
   if (!name || !author || !imageURL) {
     return <div>Missing album details</div>;
   }
@@ -35,6 +40,12 @@ export const PlaylistHeader: React.FC<PlaylistHeaderProps> = ({ name, author, im
           <button className="text-white text-2xl hover:text-gray-400 transition">
             ♥
           </button>
+          <Link
+              href={`/player/ratings/albums/${albumId}`}
+              className="text-white text-lg font-medium bg-gray-700 hover:bg-gray-600 transition rounded-lg px-4 py-2"
+            >
+            Review
+            </Link>
         </div>
       </div>
 

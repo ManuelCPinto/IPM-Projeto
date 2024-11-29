@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import '@/components/styles/playlistTable.css';
-import '@/components/styles/playlistHeader.css';
 import { PlaylistHeader } from "@/components/PlaylistHeader";
 import { PlaylistTable } from "@/components/PlaylistTable";
 import { useParams } from "next/navigation";
@@ -64,7 +62,10 @@ export default function PlaylistPage() {
         author={playlist.author}
         imageURL={playlist.cover || '/default-cover.png'}
       />
-      <PlaylistTable songs={songs} />
+      <PlaylistTable 
+        songs={songs} 
+        currentPlaylistId={playlist.id} 
+      />
     </div>
   );
 }

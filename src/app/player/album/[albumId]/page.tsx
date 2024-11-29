@@ -1,10 +1,8 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import '@/components/styles/playlistTable.css';
-import '@/components/styles/playlistHeader.css';
-import { PlaylistHeader } from "@/components/PlaylistHeader";
 import { PlaylistTable } from "@/components/PlaylistTable";
+import { AlbumHeader } from "@/components/albumHeader";
 import { useParams } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Album, Song, User } from '@/database/schema';
@@ -17,6 +15,7 @@ export interface SongEntry {
 
 export default function AlbumPage() {
   const { albumId } = useParams();
+  const [user, setUser] = useState<User>(null)
   const [album, setAlbum] = useState<Album | null>(null);
   const [songs, setSongs] = useState<SongEntry[]>([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +47,7 @@ export default function AlbumPage() {
       const data: SongEntry[] = await response.json(); // Correctly typed as SongEntry[]
 
       setSongs(data); // Set songs as SongEntry[]
+      setUser(data[0].artist)
     } catch (error) {
       console.error("Error fetching songs:", error);
       toast.error("Failed to load songs");
@@ -62,9 +62,9 @@ export default function AlbumPage() {
 
   return (
     <div className="main">
-      <PlaylistHeader
+      <AlbumHeader
         name={album.name}
-        author={album.artist} // Assuming 'artist' is a string (username)
+        author={user.name} 
         imageURL={album.cover}
       />
       <PlaylistTable songs={songs} /> {/* Ensure PlaylistTable accepts SongEntry[] */}
