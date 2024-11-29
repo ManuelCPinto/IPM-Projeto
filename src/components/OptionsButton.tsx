@@ -21,7 +21,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ song, artist, currentPlay
 
   const toggleMenu = () => {
     setShowMenu((prev) => !prev);
-    setSubMenuVisible(false);
+    setSubMenuVisible(false); // Reset submenu visibility when toggling
   };
 
   const closeMenu = (event: MouseEvent) => {
@@ -68,7 +68,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ song, artist, currentPlay
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ songId: song.id }),
       });
-  
+
       if (!res.ok) {
         const errorData = await res.json();
         if (errorData.error === 'Song already exists in the playlist') {
@@ -77,7 +77,7 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ song, artist, currentPlay
         }
         throw new Error(errorData.message || 'Failed to add song to playlist');
       }
-  
+
       toast.success(`Added "${song.name}" to playlist successfully!`);
       if (currentPlaylistId) {
         window.location.reload();
@@ -120,12 +120,25 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ song, artist, currentPlay
 
   return (
     <div className="relative">
+      {/* Options Button */}
       <button ref={buttonRef} className="text-gray-400 hover:text-white transition" onClick={toggleMenu}>
         ⋮
       </button>
 
+      {/* First Menu */}
       {showMenu && (
-        <div ref={menuRef} className="absolute right-0 bg-gray-800 shadow-lg rounded-md p-2 z-50 w-48">
+        <div
+          ref={menuRef}
+          className="absolute bg-gray-800 shadow-lg rounded-md p-2 z-50 w-48"
+          style={{
+            top:
+              buttonRef.current &&
+              window.innerHeight - buttonRef.current.getBoundingClientRect().bottom < 200
+                ? '-200%' // Adjust to appear above if close to the bottom
+                : '100%', // Default to below the button
+            right: '0',
+          }}
+        >
           <div
             className="cursor-pointer p-2 rounded text-white hover:bg-gray-700 flex items-center justify-between"
             onClick={handleAddToPlaylistClick}
@@ -149,10 +162,19 @@ const OptionsButton: React.FC<OptionsButtonProps> = ({ song, artist, currentPlay
         </div>
       )}
 
+      {/* Second Submenu */}
       {subMenuVisible && (
         <div
           ref={submenuRef}
-          className="absolute top-0 right-full bg-gray-800 shadow-lg rounded-md p-2 z-50 w-48"
+          className="absolute bg-gray-800 shadow-lg rounded-md p-2 z-50 w-48 max-h-48 overflow-y-auto"
+          style={{
+            top:
+              buttonRef.current &&
+              window.innerHeight - buttonRef.current.getBoundingClientRect().bottom < 200
+                ? '-200%' // Adjust to appear above if close to the bottom
+                : '100%', // Default to below the button
+            right: '0',
+          }}
           onMouseDown={() => {
             submenuClicked.current = true;
           }}

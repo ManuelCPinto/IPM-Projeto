@@ -234,9 +234,6 @@ const ProfilePage = () => {
           <div>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-2xl font-semibold">Playlists</h3>
-              <Link href={`/profile/${profile.username}/stats`}>
-                <button className="px-4 py-2 bg-blue-600 rounded-md hover:bg-purple-700 transition">See All</button>
-              </Link>
             </div>
             <PlaylistCarousel playlists={playlists} />
           </div>
