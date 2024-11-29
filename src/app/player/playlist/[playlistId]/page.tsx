@@ -1,11 +1,10 @@
 'use client'
 
 import React, { useState, useEffect } from 'react';
-import { PlaylistHeader } from "@/components/PlaylistHeader";
-import { PlaylistTable } from "@/components/PlaylistTable";
 import { useParams } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { Album, Playlist, Song, User } from '@/database/schema';
+import CollectionView from '@/components/CollectionView';
 
 interface SongEntry {
   song: Song;
@@ -56,16 +55,12 @@ export default function PlaylistPage() {
   if (!playlist) return <div>Playlist not found</div>;
 
   return (
-    <div className="main">
-      <PlaylistHeader
-        name={playlist.name}
-        author={playlist.author}
-        imageURL={playlist.cover || '/default-cover.png'}
-      />
-      <PlaylistTable 
-        songs={songs} 
-        currentPlaylistId={playlist.id} 
-      />
-    </div>
+    <CollectionView
+      name={playlist.name}
+      author={playlist.author}
+      imageURL={playlist.cover || '/default-cover.png'}
+      songs={songs} // Pass the SongEntry[] directly
+      currentPlaylistId={playlist.id} 
+    />
   );
 }

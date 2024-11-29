@@ -1,71 +1,77 @@
-'use client'
+'use client';
 
-import React, { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
-import { User, Song, Album } from '@/database/schema'
-import Image from 'next/image'
-import Link from 'next/link'
-import { toast } from 'react-hot-toast'
-import LoadingSpinner from '@/components/loading'
-import { LikeButton } from '@/components/LikeButton'
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import Image from 'next/image';
+import Link from 'next/link';
+import { toast } from 'react-hot-toast';
+import PlayButton from '@/components/PlayButton';
+import { LikeButton } from '@/components/LikeButton';
+import OptionsButton from '@/components/OptionsButton';
+import { Album, Song, User } from '@/database/schema';
+
+export interface SongEntry {
+  song: Song;
+  artist: User;
+  album: Album;
+}
 
 export default function ArtistPage() {
-  const { id: username } = useParams()
-  const [user, setUser] = useState<User | null>(null)
-  const [artist, setArtist] = useState<User | null>(null)
-  const [songs, setSongs] = useState<Song[]>([])
-  const [albums, setAlbums] = useState<Album[]>([])
-  const [loading, setLoading] = useState(true)
+  const { id: usernameParam } = useParams();
+  const username = Array.isArray(usernameParam) ? usernameParam[0] : usernameParam; // Ensure username is a string
+  const [artist, setArtist] = useState<User | null>(null);
+  const [songs, setSongs] = useState<SongEntry[]>([]);
+  const [albums, setAlbums] = useState<Album[]>([]);
+  const [loggedInUser, setLoggedInUser] = useState<User | null>(null); // Store the current logged-in user
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    // Fetch the logged-in user
+    const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      setLoggedInUser(JSON.parse(storedUser));
     } else {
-      toast.error("User not logged in");
+      toast.error('User not logged in');
     }
+
     if (username) {
-      fetchArtistData(username as string)
-    } else {
-      console.error('Username not found in URL parameters')
-      setLoading(false)
+      fetchArtistData(username);
     }
-  }, [username])
+  }, [username]);
 
   const fetchArtistData = async (username: string) => {
     try {
-      const response = await fetch(`/api/artist/${username}`)
+      const response = await fetch(`/api/artist/${username}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch artist data')
+        throw new Error('Failed to fetch artist data');
       }
-      const data = await response.json()
+      const data = await response.json();
 
-      setArtist(data.artist)
-      setSongs(data.songs.slice(0, 5))
-      setAlbums(data.albums)
+      setArtist(data.artist);
+      setSongs(data.songs.slice(0, 5)); // Limit the songs to the top 5
+      setAlbums(data.albums);
     } catch (error) {
-      console.error('Error fetching artist data:', error)
-      toast.error('Failed to load artist information.')
+      console.error('Error fetching artist data:', error);
+      toast.error('Failed to load artist information.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <LoadingSpinner />
-        <p className="mt-4 text-white">Loading artist information...</p>
+      <div className="flex justify-center items-center min-h-screen text-gray-400">
+        Loading artist information...
       </div>
-    )
+    );
   }
 
   if (!artist) {
     return (
-      <div className="flex justify-center items-center min-h-screen">
-        <p className="text-white">Artist not found</p>
+      <div className="flex justify-center items-center min-h-screen text-white">
+        Artist not found
       </div>
-    )
+    );
   }
 
   return (
@@ -75,13 +81,13 @@ export default function ArtistPage() {
         <div className="flex items-center space-x-6">
           <Image
             src={artist.picture || '/default-profile.png'}
-            alt={`${artist.name}'s profile picture`}
+            alt={`${artist.name}'s profile`}
             width={200}
             height={200}
             className="rounded-full shadow-lg"
           />
           <div>
-            <h1 className="text-4xl font-bold">{artist.name}</h1>
+            <h1 className="text-5xl font-bold">{artist.name}</h1>
             <p className="text-sm text-gray-400 mt-2">{artist.email || 'No biography available.'}</p>
             <p className="text-sm text-gray-400 mt-1">
               {artist.followers} followers • {artist.monthlyListeners} monthly listeners
@@ -94,25 +100,47 @@ export default function ArtistPage() {
       {/* Top Songs Section */}
       <section className="p-10 bg-gradient-to-b from-gray-900 to-gray-800">
         <h2 className="text-2xl font-bold mb-4">Top Songs</h2>
-        <div className="space-y-4">
-          {songs.map((song, index) => (
+        <div className="grid grid-cols-[50px_3fr_2fr_1fr_50px] text-sm font-semibold uppercase border-b border-gray-700 pb-2">
+          <span></span> {/* Empty space for Play Button */}
+          <span>Title</span>
+          <span>Album</span>
+          <span className="text-right">Duration</span>
+          <span></span> {/* Empty space for Actions */}
+        </div>
+
+        <div className="divide-y divide-gray-700">
+          {songs.map(({ song, album, artist: songArtist }, index) => (
             <div
               key={index}
-              className="flex items-center justify-between p-4 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700 transition"
+              className="grid grid-cols-[50px_3fr_2fr_1fr_50px] items-center py-4"
             >
-              <button className="w-10 h-10 bg-blue-600 rounded-full flex justify-center items-center mr-4">▶</button>
-              <div className="flex-grow flex justify-between items-center">
-                <div>
-                  <p className="font-semibold">{song.name}</p>
-                  <p className="text-sm text-gray-400">{song.albumId}</p>
-                </div>
-                <p className="text-sm text-gray-400">{song.duration}</p>
+              {/* Play Button */}
+              <div className="flex items-center justify-center">
+                <PlayButton song={song} album={album} author={songArtist} />
               </div>
-              <LikeButton
-                songId={song.id}
-                userId={user.username} 
-               />            
-                </div>
+
+              {/* Song Title */}
+              <div className="font-bold text-gray-300">{song.name}</div>
+
+              {/* Album */}
+              <div className="text-gray-400">
+                <Link
+                  href={`/player/album/${album.id}`}
+                  className="text-gray-300 hover:underline"
+                >
+                  {album.name || 'Unknown Album'}
+                </Link>
+              </div>
+
+              {/* Duration */}
+              <div className="text-right text-gray-400">{song.duration}</div>
+
+              {/* Options */}
+              <div className="flex items-center space-x-4 justify-end">
+                <LikeButton songId={song.id} userId={loggedInUser?.username || ''} />
+                <OptionsButton song={song} artist={songArtist} />
+              </div>
+            </div>
           ))}
         </div>
       </section>
@@ -142,5 +170,5 @@ export default function ArtistPage() {
         </div>
       </section>
     </div>
-  )
+  );
 }
