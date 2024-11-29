@@ -111,7 +111,7 @@ export default function ArtistPage() {
               <LikeButton
                 songId={song.id}
                 userId={user.username} 
-                initialLiked={false}/>            
+               />            
                 </div>
           ))}
         </div>
