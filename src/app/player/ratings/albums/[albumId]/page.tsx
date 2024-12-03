@@ -8,6 +8,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
 import { Album, Descriptor, Genre, Review, Song } from '@/database/schema';
 import Image from 'next/image';
 import LoadingSpinner from '@/components/loading';
+import toast from 'react-hot-toast';
 
 const formatDate = (dateString: string) => {
   const date = new Date(dateString);
@@ -156,7 +157,7 @@ const AlbumPage = () => {
         alert('An error occurred while submitting your review.');
       }
     } else {
-      alert('Please write a review before submitting.');
+      toast.error('Please write a review before submitting.');
     }
   };
   

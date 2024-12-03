@@ -31,7 +31,6 @@ export default function Login() {
 
   async function loginUser(values: LoginForm) {
     try {
-      // Convert `LoginForm` to a compatible format for `searchParams`
       const searchParams = new URLSearchParams({
         username: values.username,
         password: values.password,
@@ -49,7 +48,7 @@ export default function Login() {
         toast.error(response.message || 'Invalid username or password');
       }
     } catch (error) {
-      toast.error('Network error or server unavailable');
+      toast.error('Login unsuccessful');
       console.error(error);
     }
   }
