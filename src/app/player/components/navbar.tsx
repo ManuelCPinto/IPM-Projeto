@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation'; // Import usePathname
 import { FaHome, FaUser, FaArrowLeft, FaSignOutAlt } from 'react-icons/fa';
 import SearchBar from '@/app/player/search/SearchBar';
 import { useEffect, useState } from 'react';
@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 const Navbar: React.FC = () => {
   const [username, setUsername] = useState<string | null>(null);
   const router = useRouter();
+  const pathname = usePathname(); // Get the current path
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -29,13 +30,15 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto flex items-center justify-between py-3 px-4">
         {/* Left Section */}
         <div className="flex items-center gap-4">
-          {/* Go Back Arrow */}
-          <button
-            onClick={() => router.back()}
-            className="text-white hover:text-gray-300 focus:outline-none"
-          >
-            <FaArrowLeft size={20} />
-          </button>
+          {/* Go Back Arrow - only show if not on /player */}
+          {pathname !== '/player' && ( 
+            <button
+              onClick={() => router.back()}
+              className="text-white hover:text-gray-300 focus:outline-none"
+            >
+              <FaArrowLeft size={20} />
+            </button>
+          )}
 
           {/* Logo */}
           <Link href="/player">

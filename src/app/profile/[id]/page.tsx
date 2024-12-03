@@ -1,26 +1,27 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import ProfileHeader from '../components/profileHeader'
 import PlaylistCarousel from '../components/playlistCarousel'
 import Link from 'next/link'
 import FollowersSection from '../components/followersSection'
 import FollowingSection from '../components/followingSection'
 import { toast } from 'react-hot-toast'
+import { FaArrowLeft } from 'react-icons/fa'
 import { User } from '@/database/schema'
 
 const ProfilePage = () => {
-  const [user, setUser] = useState<User | null>(null)
-  const [profile, setProfile] = useState<User | null>(null)
-  const [playlists, setPlaylists] = useState([])
-  const [followers, setFollowers] = useState<User[]>([])
-  const [following, setFollowing] = useState<User[]>([])
-  const [isFollowing, setIsFollowing] = useState(false)
-  const [activeTab, setActiveTab] = useState('Public Playlists')
+  const router = useRouter();
+  const [user, setUser] = useState(null);
+  const [profile, setProfile] = useState(null);
+  const [playlists, setPlaylists] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [activeTab, setActiveTab] = useState('Public Playlists');
 
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab)
-  }
+  const handleTabChange = (tab) => setActiveTab(tab);
 
   // Fetch playlists
   const fetchPlaylists = async (username: string) => {
@@ -181,6 +182,16 @@ const ProfilePage = () => {
   return (
     <div className="min-h-screen bg-neutral-900 bg-[radial-gradient(ellipse_75%_75%_at_50%_50%,rgba(30,30,50,0.6),rgba(15,15,30,1),rgba(5,5,15,1))] shadow-lg text-white p-8">
       {/* Profile Header */}
+      
+       {/* Back Button */}
+       <button
+        onClick={() => router.back()}
+        className="flex items-center text-white hover:text-gray-300 focus:outline-none gap-2 mb-4"
+      >
+        <FaArrowLeft size={20} />
+        <span className="text-sm font-medium">Go Back</span>
+      </button>
+
       <div className="relative">
         <ProfileHeader user={profile} />
         {/* Buttons inside Header */}
@@ -193,7 +204,7 @@ const ProfilePage = () => {
               }`}
             >
               {isFollowing ? 'Following' : 'Follow'}
-            </button>
+            </button> 
           )}
           {profile.type === 'artist' && user?.username === profile.username && (
             <Link href={`/profile/${profile.username}/stats`}>
