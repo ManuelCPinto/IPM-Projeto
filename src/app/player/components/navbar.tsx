@@ -20,8 +20,8 @@ const Navbar: React.FC = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('user'); // Remove user data
-    router.push('/login'); // Redirect to the login page
+    localStorage.removeItem('user'); 
+    router.push('/login'); 
   };
 
   return (

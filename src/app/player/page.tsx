@@ -55,11 +55,6 @@ export default function Home() {
   const albums = useAsync(getAlbums)
   const artists = useAsync(getArtists)
 
-  async function playAlbumSongs(albumId: number) {
-    const songs = await getSongs(albumId, undefined)
-    set(songs.map(({ song, album, author }) => getExtendedSong(song, album, author)))
-  }
-
   return (
     <div className="flex flex-col gap-4 p-10 overflow-x-hidden">
       <Center className="p-10">
